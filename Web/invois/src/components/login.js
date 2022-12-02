@@ -31,10 +31,10 @@ function login() {
 
                         <select className='mb-4 mx-5 w-100' id='formControlLg' size="1" style={{ padding: '10px', color: '#8c847a' }} required>
                             <option value={0}>User Type</option>
-                            <option value={1}>Admin</option>
-                            <option value={2}>Super Admin</option>
+                            <option value={1}>Management Level 1</option>
+                            <option value={2}>Management Level 2</option>
                             <option value={3}>Finance</option>
-                            <option value={4}>Head</option>
+                            <option value={4}>User Level 1</option>
                         </select>
 
                         <MDBValidation className='row g-3'>
