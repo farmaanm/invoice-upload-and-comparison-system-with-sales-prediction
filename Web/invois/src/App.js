@@ -1,14 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
-import Login from './components/login';
-import File from './components/user';
-import History from './components/history';
+import Login from './pages/login';
+import Nav from './pages/nav'
+import User from './pages/user';
+import History from './pages/history';
 
 function App() {
   return (
     <div className="App">
       
-      <History />
+      <Nav />
     </div>
   );
 }
