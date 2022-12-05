@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { MDBBtn } from 'mdb-react-ui-kit';
+import {
+    MDBBtn,
+    MDBIcon,
+    MDBModal,
+    MDBModalDialog,
+    MDBModalContent,
+    MDBModalHeader,
+    MDBModalTitle,
+    MDBModalBody,
+    MDBModalFooter,
+} from 'mdb-react-ui-kit';
 
 function contractSpotOnLoad() {
 
@@ -38,8 +48,7 @@ function spotData() {
 
 export default function App() {
 
-
-    /*Contract Button*/
+    /*Contract Button Hovering*/
     const [isContract, setIsContract] = useState(false);
 
     const handleMouseEnterContract = () => {
@@ -60,7 +69,7 @@ export default function App() {
         border: isContract ? '1px solid white' : '1px solid #4F4F4F'
     };
 
-    /*Spot Button */
+    /*Spot Button Hovering*/
     const [isSpot, setIsSpot] = useState(false);
 
     const handleMouseEnterSpot = () => {
@@ -81,7 +90,7 @@ export default function App() {
         border: isSpot ? '1px solid white' : '1px solid #4F4F4F'
     };
 
-    /*File Upload */
+    /*File Upload Style*/
     const fileUpload = {
         border: '1px solid #381ce4',
         color: '#4f4f4f',
@@ -91,7 +100,7 @@ export default function App() {
         fontFamily: 'Roboto'
     }
 
-    /*Contract File Validation*/
+    /*Contract, Button Validation Enable, Disable*/
     const [disabledContract, setDisabledContract] = useState(true)
 
     function fileValidateContract() {
@@ -102,7 +111,7 @@ export default function App() {
         }
     }
 
-    /*Spot File Validation*/
+    /*Spot, Button Validation Enable, Disable*/
     const [disabledSpot, setDisabledSpot] = useState(true)
 
     function fileValidateSpot() {
@@ -112,13 +121,45 @@ export default function App() {
         }
     }
 
-    function sendToDb() {
+    /*Success, Unsuccess Message */
+    const [centredModalSuccess, setCentredModalSuccess] = useState(false);  //Success Validation
+    const [centredModalUnuccess, setCentredModalUnuccess] = useState(false);  //Unuccess Validation
 
+    const toggleShowSuccess = () => setCentredModalSuccess(!centredModalSuccess);
+    const toggleShowUnuccess = () => setCentredModalUnuccess(!centredModalUnuccess);
+
+    /*Contract Validate Button Validation Success, Unsuccess Message*/
+    function validateContract() {
+
+        //if database success: 
+            toggleShowSuccess();
+            document.getElementById('customerInvoiceContract').value = "";
+            document.getElementById('paymentRequisitionContract').value = "";
+            document.getElementById('rateContract').value = 0;
+            setDisabledContract(true);
+            fileValidateContract();
+
+        //else:
+            //toggleShowUnuccess();
     }
 
-    
+    /*Spot Validate Button Validation Success, Unsuccess Message*/
+    function validateSpot() {
+
+        //if database success: 
+            toggleShowSuccess();
+            document.getElementById('customerInvoiceSpot').value = "";
+            document.getElementById('paymentRequisitionSpot').value = "";
+            setDisabledSpot(true);
+            fileValidateSpot();
+
+        //else:
+            //toggleShowUnuccess();
+    }
+
+
     return (
-        
+
         <div>
 
             <div style={{ padding: '10px' }}>
@@ -200,7 +241,7 @@ export default function App() {
                 <p><br /></p>
 
                 <div>
-                    <MDBBtn disabled={disabledContract}>VALIDATE</MDBBtn>
+                    <MDBBtn disabled={disabledContract} onClick={validateContract}>VALIDATE</MDBBtn>
                 </div>
             </div>
 
@@ -242,11 +283,56 @@ export default function App() {
                 <p><br /></p>
 
                 <div>
-                    <MDBBtn disabled={disabledSpot} type='submit' onClick={sendToDb}>VALIDATE</MDBBtn>
+                    <MDBBtn disabled={disabledSpot} type='submit' onClick={validateSpot}>VALIDATE</MDBBtn>
                 </div>
             </div>
 
+
+            <MDBModal tabIndex='-1' show={centredModalSuccess} setShow={setCentredModalSuccess}>
+                <MDBModalDialog centered>
+                    <MDBModalContent>
+                        <MDBModalHeader style={{ backgroundColor: '#dff0d5' }}>
+                            <MDBModalTitle>Confirmation</MDBModalTitle>
+                            <MDBBtn className='btn-close' color='none' onClick={toggleShowSuccess}></MDBBtn>
+                        </MDBModalHeader>
+
+                        <MDBModalBody style={{ backgroundColor: '#dff0d5' }}>
+                            <MDBIcon fas icon="clipboard-check" style={{ color: '#55804c', fontSize: '50px'}} />
+                            <p style={{ color: '#55804c', fontFamily: "Tahoma", fontSize: '20px' }}>
+                                <br/>
+                                Validation Successful!
+                            </p>
+                        </MDBModalBody>
+
+                        <MDBModalFooter style={{ backgroundColor: '#dff0d5' }} />
+
+                    </MDBModalContent>
+                </MDBModalDialog>
+            </MDBModal>
+
+            <MDBModal tabIndex='-1' show={centredModalUnuccess} setShow={setCentredModalUnuccess}>
+                <MDBModalDialog centered >
+                    <MDBModalContent >
+                        <MDBModalHeader style={{ backgroundColor: '#f2dede' }}>
+                            <MDBModalTitle>Confirmation</MDBModalTitle>
+                            <MDBBtn className='btn-close' color='none' onClick={toggleShowUnuccess}></MDBBtn>
+                        </MDBModalHeader>
+
+                        <MDBModalBody style={{ backgroundColor: '#f2dede' }}>
+                            <MDBIcon fas icon="clipboard" style={{ color: '#ab5473', fontSize: '50px'}} />
+                            <p style={{ color: '#ab5473', fontFamily: "Tahoma", fontSize: '20px' }}>
+                                <br/>
+                                Oops! Try Again
+                            </p>
+                        </MDBModalBody>
+
+                        <MDBModalFooter style={{ backgroundColor: '#f2dede' }} />
+
+                    </MDBModalContent>
+                </MDBModalDialog>
+            </MDBModal>
+
         </div>
-        
+
     );
 }
