@@ -1,9 +1,8 @@
 import React from 'react';
-import { Component } from 'react';
-import { MDBIcon, MDBBtn } from 'mdb-react-ui-kit';
+import { MDBIcon } from 'mdb-react-ui-kit';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import User from './user';
-import History from './history';
+import History from './History';
 
 
 export default function App() {

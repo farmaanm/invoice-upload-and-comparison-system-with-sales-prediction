@@ -29,50 +29,45 @@ function login() {
                         <h3 className="fw-normal mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Log in</h3>
 
 
-                        <select className='mb-4 mx-5 w-100' id='formControlLg' size="1" style={{ padding: '10px', color: '#8c847a' }} required>
-                            <option value={0}>User Type</option>
-                            <option value={1}>Management Level 1</option>
-                            <option value={2}>Management Level 2</option>
-                            <option value={3}>Finance</option>
-                            <option value={4}>User Level 1</option>
-                        </select>
+                        <form>
 
-                        <MDBValidation className='row g-3'>
+                            <MDBValidation className='row g-3'>
 
-                            <MDBValidationItem /*className='col-md-4'*/ feedback='Please enter Email address.'>
-                                <MDBInput
-                                    wrapperClass='mb-4 mx-5 w-100'
-                                    label='Email address'
-                                    id='formControlLg'
-                                    //id='validationCustom01'
-                                    type='email'
-                                    name='userEmail'
-                                    required
-                                    size="lg" />
-                            </MDBValidationItem>
+                                <MDBValidationItem /*className='col-md-4'*/ feedback='Please enter Email address.'>
+                                    <MDBInput
+                                        wrapperClass='mb-4 mx-5 w-100'
+                                        label='Email address'
+                                        id='formControlLg'
+                                        //id='validationCustom01'
+                                        type='email'
+                                        name='userEmail'
+                                        required
+                                        size="lg" />
+                                </MDBValidationItem>
 
 
-                            <MDBValidationItem /*className='col-md-4'*/ feedback='Please enter password.'>
-                                <MDBInput
-                                    wrapperClass='mb-4 mx-5 w-100'
-                                    label='Password'
-                                    id='formControlLg'
-                                    //id='validationCustom02'
-                                    type='password'
-                                    name='userPassword'
-                                    required
-                                    size="lg" />
-                            </MDBValidationItem>
+                                <MDBValidationItem /*className='col-md-4'*/ feedback='Please enter password.'>
+                                    <MDBInput
+                                        wrapperClass='mb-4 mx-5 w-100'
+                                        label='Password'
+                                        id='formControlLg'
+                                        //id='validationCustom02'
+                                        type='password'
+                                        name='userPassword'
+                                        required
+                                        size="lg" />
+                                </MDBValidationItem>
 
-                            <MDBBtn 
-                                type='submit' 
-                                className="mb-4 px-5 mx-5 w-100" 
-                                color='info' 
-                                size='lg' 
-                                style={{ backgroundColor: '#381ce4' }}>
+                                <MDBBtn type='submit'
+                                    className="mb-4 px-5 mx-5 w-100"
+                                    color='info'
+                                    size='lg'
+                                    style={{ backgroundColor: '#381ce4' }}>
                                     Login</MDBBtn>
 
-                        </MDBValidation>
+                            </MDBValidation>
+
+                        </form>
                     </div>
 
                 </MDBCol>
