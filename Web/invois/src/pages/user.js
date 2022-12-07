@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     MDBBtn,
     MDBIcon,
@@ -11,53 +11,36 @@ import {
     MDBModalFooter,
 } from 'mdb-react-ui-kit';
 
-function contractSpotOnLoad() {
 
-    var x = document.getElementById('contractDataDisplay');
-    var y = document.getElementById('spotDataDisplay');
-
-    x.style.display = "none";
-    y.style.display = "none";
-}
-
-function contractData() {
-
-    var x = document.getElementById('contractDataDisplay');
-    var y = document.getElementById('spotDataDisplay');
-
-    if (x.style.display === "none") {
-        x.style.display = "block";
-        y.style.display = "none";
-    } else {
-        x.style.display = "none";
-    }
-}
-
-function spotData() {
-
-    var x = document.getElementById('contractDataDisplay');
-    var y = document.getElementById('spotDataDisplay');
-
-    if (y.style.display === "none") {
-        x.style.display = "none";
-        y.style.display = "block";
-    } else {
-        y.style.display = "none";
-    }
-}
 
 export default function App() {
 
-    /*Contract Button Hovering*/
+    /*On Load Function*/
+    useEffect(() => {
+        contractData();
+    }, [])
+
+    /*Contract Button Select*/
     const [isContract, setIsContract] = useState(false);
 
-    const handleMouseEnterContract = () => {
-        setIsContract(true);
-    };
-    const handleMouseLeaveContract = () => {
-        setIsContract(false);
-    };
+    /*Display Contract Form*/
+    function contractData() {
 
+        var x = document.getElementById('contractDataDisplay');
+        var y = document.getElementById('spotDataDisplay');
+
+        if (x.style.display === "none") {
+            x.style.display = "block";
+            y.style.display = "none";
+            setIsContract(true);
+            setIsSpot(false);
+        } else {
+            x.style.display = "none";
+            setIsContract(false);
+        }
+    }
+
+    /*Contract Button Style*/
     const contract = {
         width: '280px',
         borderRadius: '5px',
@@ -69,16 +52,27 @@ export default function App() {
         border: isContract ? '1px solid white' : '1px solid #4F4F4F'
     };
 
-    /*Spot Button Hovering*/
+    /*Spot Button Select*/
     const [isSpot, setIsSpot] = useState(false);
 
-    const handleMouseEnterSpot = () => {
-        setIsSpot(true);
-    };
-    const handleMouseLeaveSpot = () => {
-        setIsSpot(false);
-    };
+    /*Display Spot Form*/
+    function spotData() {
 
+        var x = document.getElementById('contractDataDisplay');
+        var y = document.getElementById('spotDataDisplay');
+
+        if (y.style.display === "none") {
+            x.style.display = "none";
+            y.style.display = "block";
+            setIsSpot(true);
+            setIsContract(false);
+        } else {
+            y.style.display = "none";
+            setIsSpot(false);
+        }
+    }
+
+    /*Spot Button Style*/
     const spot = {
         width: '280px',
         borderRadius: '5px',
@@ -100,7 +94,7 @@ export default function App() {
         fontFamily: 'Roboto'
     }
 
-    /*Contract, Button Validation Enable, Disable*/
+    /*Contract, Validation Button Enable, Disable*/
     const [disabledContract, setDisabledContract] = useState(true)
 
     function fileValidateContract() {
@@ -111,7 +105,7 @@ export default function App() {
         }
     }
 
-    /*Spot, Button Validation Enable, Disable*/
+    /*Spot, Validation Button Enable, Disable*/
     const [disabledSpot, setDisabledSpot] = useState(true)
 
     function fileValidateSpot() {
@@ -131,30 +125,34 @@ export default function App() {
     /*Contract Validate Button Validation Success, Unsuccess Message*/
     function validateContract() {
 
+        //Send to Database
+
         //if database success: 
-            toggleShowSuccess();
-            document.getElementById('customerInvoiceContract').value = "";
-            document.getElementById('paymentRequisitionContract').value = "";
-            document.getElementById('rateContract').value = 0;
-            setDisabledContract(true);
-            fileValidateContract();
+        toggleShowSuccess();
+        document.getElementById('customerInvoiceContract').value = "";
+        document.getElementById('paymentRequisitionContract').value = "";
+        document.getElementById('rateContract').value = 0;
+        setDisabledContract(true);
+        fileValidateContract();
 
         //else:
-            //toggleShowUnuccess();
+        //toggleShowUnuccess();
     }
 
     /*Spot Validate Button Validation Success, Unsuccess Message*/
     function validateSpot() {
 
+        //Send to Database
+
         //if database success: 
-            toggleShowSuccess();
-            document.getElementById('customerInvoiceSpot').value = "";
-            document.getElementById('paymentRequisitionSpot').value = "";
-            setDisabledSpot(true);
-            fileValidateSpot();
+        toggleShowSuccess();
+        document.getElementById('customerInvoiceSpot').value = "";
+        document.getElementById('paymentRequisitionSpot').value = "";
+        setDisabledSpot(true);
+        fileValidateSpot();
 
         //else:
-            //toggleShowUnuccess();
+        //toggleShowUnuccess();
     }
 
 
@@ -171,8 +169,6 @@ export default function App() {
                     <tr>
                         <td>
                             <button
-                                onMouseEnter={handleMouseEnterContract}
-                                onMouseLeave={handleMouseLeaveContract}
                                 onClick={contractData}
                                 style={contract}
                                 id='contractBtn'>
@@ -180,8 +176,6 @@ export default function App() {
                         </td>
                         <td>
                             <button
-                                onMouseEnter={handleMouseEnterSpot}
-                                onMouseLeave={handleMouseLeaveSpot}
                                 onClick={spotData}
                                 style={spot}
                                 id='spotBtn'>
@@ -297,9 +291,9 @@ export default function App() {
                         </MDBModalHeader>
 
                         <MDBModalBody style={{ backgroundColor: '#dff0d5' }}>
-                            <MDBIcon fas icon="clipboard-check" style={{ color: '#55804c', fontSize: '50px'}} />
+                            <MDBIcon fas icon="clipboard-check" style={{ color: '#55804c', fontSize: '50px' }} />
                             <p style={{ color: '#55804c', fontFamily: "Tahoma", fontSize: '20px' }}>
-                                <br/>
+                                <br />
                                 Validation Successful!
                             </p>
                         </MDBModalBody>
@@ -319,9 +313,9 @@ export default function App() {
                         </MDBModalHeader>
 
                         <MDBModalBody style={{ backgroundColor: '#f2dede' }}>
-                            <MDBIcon fas icon="clipboard" style={{ color: '#ab5473', fontSize: '50px'}} />
+                            <MDBIcon fas icon="clipboard" style={{ color: '#ab5473', fontSize: '50px' }} />
                             <p style={{ color: '#ab5473', fontFamily: "Tahoma", fontSize: '20px' }}>
-                                <br/>
+                                <br />
                                 Oops! Try Again
                             </p>
                         </MDBModalBody>
