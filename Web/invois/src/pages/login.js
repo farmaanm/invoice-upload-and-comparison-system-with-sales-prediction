@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     MDBBtn,
     MDBContainer,
@@ -12,7 +12,7 @@ import {
     from 'mdb-react-ui-kit';
 
 
-function login() {
+function Login() {
     return (
         <MDBContainer fluid>
             <MDBRow>
@@ -29,52 +29,52 @@ function login() {
                         <h3 className="fw-normal mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Log in</h3>
 
 
-                        <form>
-
-                            <MDBValidation className='row g-3'>
-
-                                <MDBValidationItem /*className='col-md-4'*/ feedback='Please enter Email address.'>
-                                    <MDBInput
-                                        wrapperClass='mb-4 mx-5 w-100'
-                                        label='Email address'
-                                        id='formControlLg'
-                                        //id='validationCustom01'
-                                        type='email'
-                                        name='userEmail'
-                                        required
-                                        size="lg" />
-                                </MDBValidationItem>
 
 
-                                <MDBValidationItem /*className='col-md-4'*/ feedback='Please enter password.'>
-                                    <MDBInput
-                                        wrapperClass='mb-4 mx-5 w-100'
-                                        label='Password'
-                                        id='formControlLg'
-                                        //id='validationCustom02'
-                                        type='password'
-                                        name='userPassword'
-                                        required
-                                        size="lg" />
-                                </MDBValidationItem>
+                        <MDBValidation className='row g-3'>
 
-                                <MDBBtn type='submit'
-                                    className="mb-4 px-5 mx-5 w-100"
-                                    color='info'
-                                    size='lg'
-                                    style={{ backgroundColor: '#381ce4' }}>
-                                    Login</MDBBtn>
+                            <MDBValidationItem /*className='col-md-4'*/ feedback='Please enter Email address.'>
+                                <MDBInput
+                                    wrapperClass='mb-4 mx-5 w-100'
+                                    label='Email address'
+                                    id='formControlLg'
+                                    //id='validationCustom01'
+                                    type='email'
+                                    name='userEmail'
+                                    required
+                                    size="lg" />
+                            </MDBValidationItem>
 
-                            </MDBValidation>
 
-                        </form>
+                            <MDBValidationItem /*className='col-md-4'*/ feedback='Please enter password.'>
+                                <MDBInput
+                                    wrapperClass='mb-4 mx-5 w-100'
+                                    label='Password'
+                                    id='formControlLg'
+                                    //id='validationCustom02'
+                                    type='password'
+                                    name='userPassword'
+                                    required
+                                    size="lg" />
+                            </MDBValidationItem>
+
+                            <MDBBtn type='submit'
+                                className="mb-4 px-5 mx-5 w-100"
+                                color='info'
+                                size='lg'
+                                style={{ backgroundColor: '#381ce4' }}>
+                                Login</MDBBtn>
+
+                        </MDBValidation>
+
+
                     </div>
 
                 </MDBCol>
 
                 <MDBCol sm='6' className='d-none d-sm-block px-0'>
                     <img src="https://img.freepik.com/free-photo/aerial-view-cargo-ship-cargo-container-harbor_335224-1380.jpg?w=996&t=st=1663952861~exp=1663953461~hmac=8875f1d42542f15240c371c08595e0f51a8067043342a0b7b937ab29265fc0fa"
-                        alt="Login image" className="w-100" height={721} style={{ objectPosition: 'left' }} />
+                        alt="Login-port-cover" className="w-100" height={721} style={{ objectPosition: 'left' }} />
                 </MDBCol>
 
             </MDBRow>
@@ -83,4 +83,4 @@ function login() {
     );
 }
 
-export default login;
+export default Login;
