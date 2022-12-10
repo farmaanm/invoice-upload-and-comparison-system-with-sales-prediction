@@ -62,8 +62,12 @@ function Approve() {
                                 {showData.map((post) => {
                                     if (post.status === 'Pending') {
                                         return <div>
-                                            <i class="fas fa-circle fa-2x" id="approve" style={{ color: 'green' }}></i>
-                                            <i class="fas fa-circle fa-2x" id="reject" style={{ color: 'red' }}></i>
+                                            <MDBBadge pill color='success' light id='approve'>
+                                                Approve
+                                            </MDBBadge>
+                                            <MDBBadge pill className='mx-2' color='danger' light id='reject'>
+                                                Reject
+                                            </MDBBadge>
                                             <hr />
                                         </div>
                                     }
