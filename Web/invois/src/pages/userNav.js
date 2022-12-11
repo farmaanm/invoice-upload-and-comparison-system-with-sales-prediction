@@ -5,7 +5,7 @@ import Upload from './user/Upload';
 import History from './user/History';
 
 
-export default function App() {
+export default function UserNav() {
 
     return (
         <Router>

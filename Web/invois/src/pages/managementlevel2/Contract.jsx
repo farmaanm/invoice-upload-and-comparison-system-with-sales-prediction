@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { MDBAccordion, MDBAccordionItem, MDBTable, MDBTableHead, MDBTableBody, MDBCollapse, MDBBtn, MDBInput } from 'mdb-react-ui-kit';
+import {
+    MDBAccordion,
+    MDBAccordionItem,
+    MDBTable,
+    MDBTableHead,
+    MDBTableBody,
+    MDBCollapse,
+    MDBBtn,
+    MDBInput
+} from 'mdb-react-ui-kit';
 
 function Contract() {
 
@@ -22,14 +31,15 @@ function Contract() {
         setOther(event.target.value);
     };
 
-    /* Disabling Past Dates */
+    /* Disable Past Dates */
     const today = new Date();
     const day = today.getDate();
     const month = today.getMonth();
     const year = today.getFullYear();
 
     const todayDate = year + '-' + (month + 1) + '-' + day;
-    console.log(todayDate);
+
+    
 
     return (
         <div style={{ padding: '2%' }}>
