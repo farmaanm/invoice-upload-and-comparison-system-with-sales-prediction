@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     MDBBtn,
     MDBIcon,
@@ -16,15 +16,15 @@ import {
 export default function Upload() {
 
     /*On Load Function*/
-    useEffect(() => {
+    /*useEffect(() => {
         contractData();
-    }, [])
+    }, [])*/
 
     /*Contract Button Select*/
-    const [isContract, setIsContract] = useState(false);
+    //const [isContract, setIsContract] = useState(false);
 
     /*Display Contract Form*/
-    function contractData() {
+    /*function contractData() {
 
         var x = document.getElementById('contractDataDisplay');
         var y = document.getElementById('spotDataDisplay');
@@ -38,10 +38,10 @@ export default function Upload() {
             x.style.display = "none";
             setIsContract(false);
         }
-    }
+    }*/
 
     /*Contract Button Style*/
-    const contract = {
+    /*const contract = {
         width: '280px',
         borderRadius: '5px',
         padding: '20px',
@@ -50,13 +50,13 @@ export default function Upload() {
         color: isContract ? 'white' : '#4F4F4F',
         backgroundColor: isContract ? '#381ce4' : 'white',   //after, before
         border: isContract ? '1px solid white' : '1px solid #4F4F4F'
-    };
+    };*/
 
     /*Spot Button Select*/
-    const [isSpot, setIsSpot] = useState(false);
+    //const [isSpot, setIsSpot] = useState(false);
 
     /*Display Spot Form*/
-    function spotData() {
+    /*function spotData() {
 
         var x = document.getElementById('contractDataDisplay');
         var y = document.getElementById('spotDataDisplay');
@@ -70,10 +70,10 @@ export default function Upload() {
             y.style.display = "none";
             setIsSpot(false);
         }
-    }
+    }*/
 
     /*Spot Button Style*/
-    const spot = {
+    /*const spot = {
         width: '280px',
         borderRadius: '5px',
         padding: '20px',
@@ -82,7 +82,7 @@ export default function Upload() {
         color: isSpot ? 'white' : '#4F4F4F',
         backgroundColor: isSpot ? '#381ce4' : 'white',   //after, before
         border: isSpot ? '1px solid white' : '1px solid #4F4F4F'
-    };
+    };*/
 
     /*File Upload Style*/
     const fileUpload = {
@@ -158,8 +158,8 @@ export default function Upload() {
 
     return (
 
-        <div>
-
+        <div style={{ padding: '5%' }}>
+            { /*
             <div style={{ padding: '10px' }}>
 
                 <table width={'70%'} align='center'>
@@ -186,7 +186,7 @@ export default function Upload() {
                     </tbody>
                 </table>
 
-            </div>
+            </div> 
 
             <p><br /></p>
 
@@ -284,7 +284,7 @@ export default function Upload() {
                     <MDBBtn disabled={disabledSpot} type='submit' onClick={validateSpot}>VALIDATE</MDBBtn>
                 </div>
             </div>
-
+*/ }
 
             <MDBModal tabIndex='-1' show={centredModalSuccess} setShow={setCentredModalSuccess}>
                 <MDBModalDialog centered>
@@ -329,6 +329,143 @@ export default function Upload() {
                     </MDBModalContent>
                 </MDBModalDialog>
             </MDBModal>
+
+
+            <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                <li className="nav-item" role="presentation">
+                    <a className="nav-link active"
+                        id="ex3-tab-1"
+                        data-mdb-toggle="pill"
+                        href="#ex3-pills-1"
+                        role="tab"
+                        aria-controls="ex3-pills-1"
+                        aria-selected="true"
+                    >Contract</a>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <a className="nav-link"
+                        id="ex3-tab-2"
+                        data-mdb-toggle="pill"
+                        href="#ex3-pills-2"
+                        role="tab"
+                        aria-controls="ex3-pills-2"
+                        aria-selected="false"
+                    >Spot</a>
+                </li>
+            </ul>
+
+
+
+            <div className="tab-content" id="ex2-content">
+                <div className="tab-pane fade show active"
+                    id="ex3-pills-1"
+                    role="tabpanel"
+                    aria-labelledby="ex3-tab-1"
+                >
+                    <div style={{ padding: '10px' }} id="contractDataDisplay">
+                        <table width={'100%'}>
+                            <tbody>
+                                <tr style={{ height: '50px' }}>
+                                    <td width={'33%'} >
+                                        <label htmlFor='customerInvoiceContract'>Upload Customer Invoice:</label>
+                                    </td>
+                                    <td width={'33%'}>
+                                        <label htmlFor='paymentRequisitionContract'>Upload Payment Requisition:</label>
+                                    </td>
+                                    <td width={'33%'}>
+                                        Select Rate:
+                                    </td>
+                                </tr>
+                                <tr><td></td><td></td></tr>
+                                <tr>
+                                    <td>
+                                        <input type='file'
+                                            name='customerInvoiceContract'
+                                            width='50px'
+                                            accept='application/pdf'
+                                            style={fileUpload}
+                                            id='customerInvoiceContract'
+                                            onChange={fileValidateContract} />
+                                    </td>
+                                    <td>
+                                        <input type='file'
+                                            name='paymentRequisitionContract'
+                                            width='50px'
+                                            accept='application/pdf'
+                                            style={fileUpload}
+                                            id='paymentRequisitionContract'
+                                            onChange={fileValidateContract} />
+                                    </td>
+                                    <td>
+                                        <select style={fileUpload} id='rateContract' onChange={fileValidateContract} >
+                                            <option value={0}>Rate</option>
+                                            <option value={1}>Rate 1</option>
+                                            <option value={2}>Rate 2</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p><br /></p>
+
+                        <div>
+                            <MDBBtn disabled={disabledContract} onClick={validateContract}>VALIDATE</MDBBtn>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div
+                    className="tab-pane fade"
+                    id="ex3-pills-2"
+                    role="tabpanel"
+                    aria-labelledby="ex3-tab-2"
+                >
+                    <div style={{ padding: '10px' }} id="spotDataDisplay">
+                        <table width={'100%'}>
+                            <tbody>
+                                <tr>
+                                    <td width={'33%'} >
+                                        <label htmlFor='customerInvoiceSpot'>Upload Customer Invoice:</label>
+                                    </td>
+                                    <td width={'33%'}>
+                                        <label htmlFor='paymentRequisitionSpot'>Upload Payment Requisition:</label>
+                                    </td>
+                                </tr>
+                                <tr><td></td><td></td></tr>
+                                <tr>
+                                    <td>
+                                        <input type='file'
+                                            name='customerInvoiceSpot'
+                                            width='50px'
+                                            accept='application/pdf'
+                                            id="customerInvoiceSpot"
+                                            style={fileUpload}
+                                            onChange={fileValidateSpot} />
+                                    </td>
+                                    <td>
+                                        <input type='file'
+                                            name='paymentRequisitionSpot'
+                                            width='50px'
+                                            accept='application/pdf'
+                                            id="paymentRequisitionSpot"
+                                            style={fileUpload}
+                                            onChange={fileValidateSpot} />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p><br /></p>
+
+                        <div>
+                            <MDBBtn disabled={disabledSpot} type='submit' onClick={validateSpot}>VALIDATE</MDBBtn>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
         </div>
 
