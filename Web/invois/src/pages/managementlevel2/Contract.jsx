@@ -1,20 +1,6 @@
 import React, { useState } from 'react';
-import {
-    MDBAccordion,
-    MDBAccordionItem,
-    MDBTable,
-    MDBTableHead,
-    MDBTableBody,
-    MDBCollapse,
-    MDBBtn,
-    MDBInput
-} from 'mdb-react-ui-kit';
 
 function Contract() {
-
-    /* 'Add Customer' Toggle Button */
-    const [showShow, setShowShow] = useState(false);
-    const toggleShow = () => setShowShow(!showShow);
 
     /* Setting Rate(USD) Column */
     const [freight, setFreight] = useState(0);
@@ -36,49 +22,66 @@ function Contract() {
     const day = today.getDate();
     const month = today.getMonth();
     const year = today.getFullYear();
-
     const todayDate = year + '-' + (month + 1) + '-' + day;
 
-    
+
 
     return (
         <div style={{ padding: '2%' }}>
 
             Add Contract Page <br />
 
+            {/* Add Customer Toggle Button */}
+
             <div>
-                <div align="right" width="100%"><MDBBtn onClick={toggleShow}>Add Customer</MDBBtn></div>
+                <div align="right" width="100%">
+                    <button
+                        class="btn btn-primary"
+                        type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#collapseExample"
+                        aria-expanded="false"
+                        aria-controls="collapseExample"
+                    >
+                        ADD CUSTOMER
+                    </button>
+                </div>
 
-                <div>
-                    <MDBCollapse show={showShow}>
+                <div class="collapse mt-3" id="collapseExample">
 
-                        <MDBTable striped hover>
+                    <table className='table table-striped table-hover'>
+                        <thead>
+                            <tr>
+                                <th scope='col' colSpan={2}>
+                                    <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
+                                        <input type="text" id="customerName" class="form-control" />
+                                        <label class="form-label" for="customerName">Customer Name</label>
+                                    </div>
+                                </th>
+                                <th scope='col'>
+                                    <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
+                                        <input type="date" id="validity" class="form-control" min={todayDate} />
+                                        <label class="form-label" for="validity">Validity Period</label>
+                                    </div>
+                                </th>
+                                <th scope='col' colSpan={5}></th>
+                            </tr>
+                            <tr>
+                                <th scope='col'>Destination</th>
+                                <th scope='col'>Container Size</th>
+                                <th scope='col'>Freight</th>
+                                <th scope='col'>EFF / BAF</th>
+                                <th scope='col'>Other</th>
+                                <th scope='col'>Rate (USD)</th>
+                                <th scope='col'>Shipping Line</th>
+                            </tr>
+                        </thead>
 
-                            <MDBTableHead>
-                                <tr>
-                                    <th scope='col' colSpan={2}>
-                                        <MDBInput label='Customer Name' id='customerName' type='text' />
-                                    </th>
-                                    <th scope='col'>
-                                        <MDBInput label='Validity Period' id='validity' type='date' min={todayDate} />
-                                    </th>
-                                    <th scope='col' colSpan={5}></th>
-                                </tr>
-                                <tr>
-                                    <th scope='col'>Destination</th>
-                                    <th scope='col'>Container Size</th>
-                                    <th scope='col'>Freight</th>
-                                    <th scope='col'>EFF / BAF</th>
-                                    <th scope='col'>Other</th>
-                                    <th scope='col'>Rate (USD)</th>
-                                    <th scope='col'>Shipping Line</th>
-                                </tr>
-                            </MDBTableHead>
-
-                            <MDBTableBody>
-                                <tr>
-                                    <th scope='row'>
-                                        <select name="destination" id="destination">
+                        <tbody>
+                            <tr>
+                                <th scope='row'>
+                                    <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
+                                        <select name="destination" id="destination" class="form-control" >
                                             <option value="0">ALGECIRAS</option>
                                             <option value="1">BANGKOK</option>
                                             <option value="2">BARCELONA</option>
@@ -115,114 +118,218 @@ function Contract() {
                                             <option value="33">XIAMEN</option>
                                             <option value="34">YOKOHAMA</option>
                                         </select>
-                                    </th>
+                                    </div>
+                                </th>
 
-                                    <td>
-                                        <select name="containerSize" id="containerSize">
+                                <td>
+                                    <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
+                                        <select name="containerSize" id="containerSize" class="form-control" >
                                             <option value="0">20</option>
                                             <option value="1">40</option>
                                         </select>
-                                    </td>
+                                    </div>
+                                </td>
 
-                                    <td><MDBInput id='freightRate' type='number' min={0} onChange={handleChangeFreight} value={freight} /></td>
-                                    <td><MDBInput id='effRate' type='number' min={0} onChange={handleChangeEff} value={eff} /></td>
-                                    <td><MDBInput id='otherRate' type='number' min={0} onChange={handleChangeOther} value={other} /></td>
+                                <td>
+                                    <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
+                                        <input type="number" id="freightRate" class="form-control" min={0} onChange={handleChangeFreight} value={freight} />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
+                                        <input type="number" id="effRate" class="form-control" min={0} onChange={handleChangeEff} value={eff} />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
+                                        <input type="number" id="otherRate" class="form-control" min={0} onChange={handleChangeOther} value={other} />
+                                    </div>
+                                </td>
 
-                                    <td>{parseInt(freight) + parseInt(eff) + parseInt(other)}</td>
+                                <td>{parseInt(freight) + parseInt(eff) + parseInt(other)}</td>
 
-                                    <td>
-                                        <select name="shippingLine" id="shippingLine">
+                                <td>
+                                    <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
+                                        <select name="shippingLine" id="shippingLine" class="form-control">
                                             <option value="0">COSCO</option>
                                             <option value="1">DELMEGE</option>
                                             <option value="2">MCLARENS</option>
                                             <option value="3">ONE</option>
                                             <option value="4">OOCL</option>
                                         </select>
-                                    </td>
-                                </tr>
+                                    </div>
+                                </td>
+                            </tr>
 
-                            </MDBTableBody>
+                        </tbody>
+                    </table>
 
-                        </MDBTable>
+                    <div align="right" width="100%">
+                        <button class="btn btn-primary" type="button" >ADD RECORD</button>
+                    </div>
 
-                    </MDBCollapse>
                 </div>
+
             </div>
 
+            <br />
 
-            <MDBAccordion alwaysOpen initialActive={0}>
+            {/* Customer Records */}
 
-                <MDBAccordionItem collapseId={1} headerTitle='Customer #1' >
+            <div class="accordion" id="accordionExample">
 
-                    <MDBTable striped hover>
-                        <MDBTableHead>
-                            <tr>
-                                <th scope='col'>Destination</th>
-                                <th scope='col'>Container Size</th>
-                                <th scope='col'>Rate (USD)</th>
-                                <th scope='col'>Shipping Line</th>
-                            </tr>
-                        </MDBTableHead>
-                        <MDBTableBody>
-                            <tr>
-                                <th scope='row'>CNSHA</th>
-                                <td>20</td>
-                                <td>101</td>
-                                <td>ONE</td>
-                            </tr>
-                            <tr>
-                                <th scope='row'>JPNGO</th>
-                                <td>20</td>
-                                <td>250</td>
-                                <td>OOCL</td>
-                            </tr>
-                            <tr>
-                                <th scope='row'>HKHKG</th>
-                                <td >40</td>
-                                <td>523</td>
-                                <td>WHLC</td>
-                            </tr>
-                        </MDBTableBody>
-                    </MDBTable>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-mdb-toggle="collapse"
+                            data-mdb-target="#collapseOne"
+                            aria-expanded="false"
+                            aria-controls="collapseOne"
+                        >
+                            Customer #1
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-mdb-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <table className='table table-striped table-hover'>
+                                <thead>
+                                    <tr>
+                                        <th scope='col'>Destination</th>
+                                        <th scope='col'>Container Size</th>
+                                        <th scope='col'>Rate (USD)</th>
+                                        <th scope='col'>Shipping Line</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope='row'>CNSHA</th>
+                                        <td>20</td>
+                                        <td>101</td>
+                                        <td>ONE</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope='row'>JPNGO</th>
+                                        <td>20</td>
+                                        <td>250</td>
+                                        <td>OOCL</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope='row'>HKHKG</th>
+                                        <td >40</td>
+                                        <td>523</td>
+                                        <td>WHLC</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-                </MDBAccordionItem>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-mdb-toggle="collapse"
+                            data-mdb-target="#collapseTwo"
+                            aria-expanded="false"
+                            aria-controls="collapseTwo"
+                        >
+                            Customer #2
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-mdb-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="accordion-body">
+                                <table className='table table-striped table-hover'>
+                                    <thead>
+                                        <tr>
+                                            <th scope='col'>Destination</th>
+                                            <th scope='col'>Container Size</th>
+                                            <th scope='col'>Rate (USD)</th>
+                                            <th scope='col'>Shipping Line</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope='row'>CNSHA</th>
+                                            <td>20</td>
+                                            <td>101</td>
+                                            <td>ONE</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope='row'>JPNGO</th>
+                                            <td>20</td>
+                                            <td>250</td>
+                                            <td>OOCL</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope='row'>HKHKG</th>
+                                            <td >40</td>
+                                            <td>523</td>
+                                            <td>WHLC</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <MDBAccordionItem collapseId={2} headerTitle='Customer #2' >
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-mdb-toggle="collapse"
+                            data-mdb-target="#collapseThree"
+                            aria-expanded="false"
+                            aria-controls="collapseThree"
+                        >
+                            Customer #3
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-mdb-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="accordion-body">
+                                <table className='table table-striped table-hover'>
+                                    <thead>
+                                        <tr>
+                                            <th scope='col'>Destination</th>
+                                            <th scope='col'>Container Size</th>
+                                            <th scope='col'>Rate (USD)</th>
+                                            <th scope='col'>Shipping Line</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope='row'>CNSHA</th>
+                                            <td>20</td>
+                                            <td>101</td>
+                                            <td>ONE</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope='row'>JPNGO</th>
+                                            <td>20</td>
+                                            <td>250</td>
+                                            <td>OOCL</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope='row'>HKHKG</th>
+                                            <td >40</td>
+                                            <td>523</td>
+                                            <td>WHLC</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                    <MDBTable striped hover>
-                        <MDBTableHead>
-                            <tr>
-                                <th scope='col'>Destination</th>
-                                <th scope='col'>Container Size</th>
-                                <th scope='col'>Rate</th>
-                                <th scope='col'>Shipping Line</th>
-                            </tr>
-                        </MDBTableHead>
-                        <MDBTableBody>
-                            <tr>
-                                <th scope='row'>1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope='row'>2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope='row'>3</th>
-                                <td >Larry the</td>
-                                <td>Bird</td>
-                                <td>@twitter</td>
-                            </tr>
-                        </MDBTableBody>
-                    </MDBTable>
-
-                </MDBAccordionItem>
-
-            </MDBAccordion>
+            </div>
 
         </div>
     );

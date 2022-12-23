@@ -376,7 +376,9 @@ export default function Upload() {
                                         Select Rate:
                                     </td>
                                 </tr>
-                                <tr><td></td><td></td></tr>
+                                
+                                <tr></tr>
+                                
                                 <tr>
                                     <td>
                                         <input type='file'
@@ -410,7 +412,7 @@ export default function Upload() {
                         <p><br /></p>
 
                         <div>
-                            <MDBBtn disabled={disabledContract} onClick={validateContract}>VALIDATE</MDBBtn>
+                            <button class="btn btn-primary" disabled={disabledContract} onClick={validateContract}>VALIDATE</button>
                         </div>
                     </div>
                 </div>
@@ -433,7 +435,9 @@ export default function Upload() {
                                         <label htmlFor='paymentRequisitionSpot'>Upload Payment Requisition:</label>
                                     </td>
                                 </tr>
-                                <tr><td></td><td></td></tr>
+
+                                <tr></tr>
+
                                 <tr>
                                     <td>
                                         <input type='file'

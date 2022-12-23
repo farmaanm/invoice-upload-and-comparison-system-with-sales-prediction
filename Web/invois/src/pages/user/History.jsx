@@ -1,4 +1,4 @@
-import { MDBBadge, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import { MDBBadge } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase'
@@ -27,67 +27,46 @@ function History() {
 
             <div style={{ padding: '10px' }}>
 
-                <MDBTable align='middle'>
-                    <MDBTableHead>
-                        <tr>
-                            <th scope='col'>Vendor Invoice</th>
-                            <th scope='col'>Payment Requisition</th>
-                            <th scope='col'>Status</th>
-                            <th scope='col'>Uploaded At</th>
-                            <th scope='col'>Uploaded By</th>
-                        </tr>
-                    </MDBTableHead>
+                {showData.map((post) => {
+                    return <div>
+                        <table align='middle' className='table table-striped table-hover'>
+                            <thead>
+                                <tr>
+                                    <th scope='col'>Vendor Invoice</th>
+                                    <th scope='col'>Payment Requisition</th>
+                                    <th scope='col'>Status</th>
+                                    <th scope='col'>Uploaded At</th>
+                                    <th scope='col'>Uploaded By</th>
+                                </tr>
+                            </thead>
 
-                    <MDBTableBody>
-
-                        <tr>
-                            <td>
-                                {showData.map((post) => {
-                                    return <div>
+                            <tbody>
+                                <tr>
+                                    <td>
                                         <a href={post.vendorInvoiceUrl}><p className='fw-normal mb-1'>{post.vendorInvoiceName}</p></a>
-                                        <hr />
-                                    </div>
-                                })}
-
-                            </td>
-                            <td>
-                                {showData.map((post) => {
-                                    return <div>
+                                    </td>
+                                    <td>
                                         <a href={post.paymentRequisitionUrl}><p className='fw-normal mb-1'>{post.paymentRequisitionName}</p></a>
-                                        <hr />
-                                    </div>
-                                })}
-                            </td>
-                            <td>
-                                {showData.map((post) => {
-                                    return <div>
+                                    </td>
+                                    <td>
                                         <MDBBadge color={post.statusMessage} pill>
                                             {post.status}
                                         </MDBBadge>
-                                        <hr />
-                                    </div>
-                                })}
-                            </td>
-                            <td>
-                                {showData.map((post) => {
-                                    return <div>
+                                    </td>
+                                    <td>
                                         <p className='fw-normal mb-1'>{post.dateTime}</p>
-                                        <hr />
-                                    </div>
-                                })}
-                            </td>
-                            <td>
-                                {showData.map((post) => {
-                                    return <div>
+                                    </td>
+                                    <td>
                                         <p className='fw-normal mb-1'>{post.uploadedBy}</p>
-                                        <hr />
-                                    </div>
-                                })}
-                            </td>
-                        </tr>
-                    </MDBTableBody>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                })}
 
-                </MDBTable>
+
+
 
             </div>
 
