@@ -1,4 +1,4 @@
-import { MDBBadge, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import { MDBBadge } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase'
@@ -15,7 +15,7 @@ function Approve() {
     useEffect(() => {
         const getData = async () => {
             const data = await getDocs(getDataRefContract);
-            setShowData(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+            setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
         };
 
         getData();
@@ -32,8 +32,10 @@ function Approve() {
 
             <div style={{ padding: '10px' }}>
 
-                <MDBTable align='middle'>
-                    <MDBTableHead>
+
+
+                <table align='middle' className='table table-striped table-hover'>
+                    <thead>
                         <tr>
                             <th scope='col'>Vendor Invoice</th>
                             <th scope='col'>Payment Requisition</th>
@@ -41,72 +43,66 @@ function Approve() {
                             <th scope='col'>Uploaded At</th>
                             <th scope='col'>Uploaded By</th>
                         </tr>
-                    </MDBTableHead>
+                    </thead>
+                    <tbody>
 
-                    <MDBTableBody>
 
-                        <tr>
-                            <td>
-                                {showData.map((post) => {
-                                    return <div>
+                        {showData.map(({ id, post }) => {
+                            
+                            return (
+
+                                <tr key={id}>
+                                    <td>
                                         <a href={post.vendorInvoiceUrl}><p className='fw-normal mb-1'>{post.vendorInvoiceName}</p></a>
-                                        <hr />
-                                    </div>
-                                })}
-
-                            </td>
-                            <td>
-                                {showData.map((post) => {
-                                    return <div>
+                                    </td>
+                                    <td>
                                         <a href={post.paymentRequisitionUrl}><p className='fw-normal mb-1'>{post.paymentRequisitionName}</p></a>
-                                        <hr />
-                                    </div>
-                                })}
-                            </td>
-                            <td>
-                                {showData.map((post) => {
-                                    if (post.status === 'Pending') {
-                                        return <div>
-                                            <MDBBadge pill color='success' light id='approve' style={approve} >
-                                                Approve
-                                            </MDBBadge>
-                                            <MDBBadge pill color='danger' light id='reject' className='mx-2' style={approve} >
-                                                Reject
-                                            </MDBBadge>
-                                            <hr />
-                                        </div>
-                                    }
-                                    else {
-                                        return <div>
-                                            <MDBBadge color={post.statusMessage} pill>
-                                                {post.status}
-                                            </MDBBadge>
-                                            <hr />
-                                        </div>
-                                    }
+                                    </td>
+                                    <td>
 
-                                })}
-                            </td>
-                            <td>
-                                {showData.map((post) => {
-                                    return <div>
+
+                                        {/*<MDBBadge color={post.statusMessage} pill>
+                                            {post.status}
+                                        </MDBBadge>*/}
+
+
+                                        {() => {
+                                            if (post.status === 'Pending') {
+                                                return <div>
+                                                    <MDBBadge pill color='success' light id='approve' style={approve} >
+                                                        Approve
+                                                    </MDBBadge>
+                                                    <MDBBadge pill color='danger' light id='reject' className='mx-2' style={approve} >
+                                                        Reject
+                                                    </MDBBadge>
+                                                </div>
+                                            }
+                                            else {
+                                                return <div>
+                                                    <MDBBadge color={post.statusMessage} pill>
+                                                        {post.status}
+                                                    </MDBBadge>
+                                                </div>
+                                            }
+
+                                        }}
+
+                                    </td>
+                                    <td>
                                         <p className='fw-normal mb-1'>{post.dateTime}</p>
-                                        <hr />
-                                    </div>
-                                })}
-                            </td>
-                            <td>
-                                {showData.map((post) => {
-                                    return <div>
+                                    </td>
+                                    <td>
                                         <p className='fw-normal mb-1'>{post.uploadedBy}</p>
-                                        <hr />
-                                    </div>
-                                })}
-                            </td>
-                        </tr>
-                    </MDBTableBody>
+                                    </td>
+                                </tr>
 
-                </MDBTable>
+                            )
+                        })}
+
+
+
+                    </tbody>
+                </table>
 
             </div>
 

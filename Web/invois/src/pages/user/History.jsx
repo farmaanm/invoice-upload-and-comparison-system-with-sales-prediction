@@ -15,11 +15,23 @@ function History() {
     useEffect(() => {
         const getData = async () => {
             const data = await getDocs(getDataRefContract);
-            setShowData(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+            setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
         };
 
         getData();
     });
+
+    /*useEffect(() => {
+        db.collection("Contract").onSnapshot((snapshot) => {
+            setShowData(
+            snapshot.docs.map((doc) => ({
+              id: doc.id,
+              data: doc.data(),
+            }))
+          );
+        });
+        console.log({ showData });
+      }, []);*/
 
 
     return (
@@ -27,21 +39,23 @@ function History() {
 
             <div style={{ padding: '10px' }}>
 
-                {showData.map((post) => {
-                    return <div>
-                        <table align='middle' className='table table-striped table-hover'>
-                            <thead>
-                                <tr>
-                                    <th scope='col'>Vendor Invoice</th>
-                                    <th scope='col'>Payment Requisition</th>
-                                    <th scope='col'>Status</th>
-                                    <th scope='col'>Uploaded At</th>
-                                    <th scope='col'>Uploaded By</th>
-                                </tr>
-                            </thead>
+                <table align='middle' className='table table-striped table-hover'>
+                    <thead>
+                        <tr>
+                            <th scope='col'>Vendor Invoice</th>
+                            <th scope='col'>Payment Requisition</th>
+                            <th scope='col'>Status</th>
+                            <th scope='col'>Uploaded At</th>
+                            <th scope='col'>Uploaded By</th>
+                        </tr>
+                    </thead>
 
-                            <tbody>
-                                <tr>
+                    <tbody>
+
+                        {showData.map(({ id, post }) => {
+                            return (
+
+                                <tr key={id}>
                                     <td>
                                         <a href={post.vendorInvoiceUrl}><p className='fw-normal mb-1'>{post.vendorInvoiceName}</p></a>
                                     </td>
@@ -60,11 +74,11 @@ function History() {
                                         <p className='fw-normal mb-1'>{post.uploadedBy}</p>
                                     </td>
                                 </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                })}
 
+                            )
+                        })}
+                    </tbody>
+                </table>
 
 
 
