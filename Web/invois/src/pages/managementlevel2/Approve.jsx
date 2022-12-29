@@ -1,4 +1,4 @@
-import { MDBBadge, MDBIcon } from 'mdb-react-ui-kit';
+import { MDBIcon } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase'
@@ -19,12 +19,6 @@ function Approve() {
 
         getData();
     });
-
-    const approve = {
-        cursor: 'pointer',
-        padding: '5px'
-    }
-
 
     return (
         <>
@@ -61,8 +55,6 @@ function Approve() {
 
                 <div style={{ padding: '10px' }}>
 
-
-
                     <table align='middle' className='table table-striped table-hover'>
                         <thead>
                             <tr>
@@ -89,12 +81,8 @@ function Approve() {
                                                 <a href={post.paymentRequisitionUrl}><p className='fw-normal mb-1'>{post.paymentRequisitionName}</p></a>
                                             </td>
                                             <td>
-                                                <MDBBadge pill color='success' light id='approve' style={approve} >
-                                                    Approve
-                                                </MDBBadge>
-                                                <MDBBadge pill color='danger' light id='reject' className='mx-2' style={approve} >
-                                                    Reject
-                                                </MDBBadge>
+                                                <button type="button" class="btn btn-success btn-rounded btn-sm">Approve</button>
+                                                <button type="button" class="btn btn-danger btn-rounded btn-sm">Reject</button>
                                             </td>
                                             <td>
                                                 <p className='fw-normal mb-1'>{post.dateTime}</p>
@@ -117,9 +105,7 @@ function Approve() {
                                                 <a href={post.paymentRequisitionUrl}><p className='fw-normal mb-1'>{post.paymentRequisitionName}</p></a>
                                             </td>
                                             <td>
-                                                <MDBBadge color={post.statusMessage} pill>
-                                                    {post.status}
-                                                </MDBBadge>
+                                                <span className={"badge rounded-pill badge-" + post.statusMessage}>{post.status}</span>
                                             </td>
                                             <td>
                                                 <p className='fw-normal mb-1'>{post.dateTime}</p>

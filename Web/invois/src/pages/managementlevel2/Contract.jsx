@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MDBIcon } from 'mdb-react-ui-kit';
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../../firebase'
 
 function Contract() {
 
@@ -26,6 +28,33 @@ function Contract() {
     const todayDate = year + '-' + (month + 1) + '-' + day;
 
 
+    /*DB Refrence*/
+    const getDataRefContract = collection(db, "Customer");
+
+    const [showData, setShowData] = useState([]);
+
+    /*To retrieve data */
+    useEffect(() => {
+        const getData = async () => {
+            const data = await getDocs(getDataRefContract);
+            setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
+        };
+
+        getData();
+
+    });
+
+    showData.map(({ id, post }) => {
+        const destination = []
+
+        for (var i = 0; i < post.records.length; i++) {
+            //console.log(post.records[i].destination)
+            destination.push(post.records[i].destination)
+
+        }
+        //console.log(post.records[0].destination)
+        console.log(destination)
+    })
 
     return (
         <>
@@ -82,12 +111,15 @@ function Contract() {
                         <table className='table table-striped table-hover'>
                             <thead>
                                 <tr>
+                                    {/* Customer Name */}
                                     <th scope='col' colSpan={2}>
                                         <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
                                             <input type="text" id="customerName" class="form-control" />
                                             <label class="form-label" for="customerName">Customer Name</label>
                                         </div>
                                     </th>
+
+                                    {/* Validity Period */}
                                     <th scope='col'>
                                         <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
                                             <input type="date" id="validity" class="form-control" min={todayDate} />
@@ -109,6 +141,7 @@ function Contract() {
 
                             <tbody>
                                 <tr>
+                                    {/* Destination */}
                                     <th scope='row'>
                                         <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
                                             <select name="destination" id="destination" class="form-control" >
@@ -151,6 +184,7 @@ function Contract() {
                                         </div>
                                     </th>
 
+                                    {/* Container Size */}
                                     <td>
                                         <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
                                             <select name="containerSize" id="containerSize" class="form-control" >
@@ -160,24 +194,31 @@ function Contract() {
                                         </div>
                                     </td>
 
+                                    {/* Freight */}
                                     <td>
                                         <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
                                             <input type="number" id="freightRate" class="form-control" min={0} onChange={handleChangeFreight} value={freight} />
                                         </div>
                                     </td>
+
+                                    {/* EFF/BAF */}
                                     <td>
                                         <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
                                             <input type="number" id="effRate" class="form-control" min={0} onChange={handleChangeEff} value={eff} />
                                         </div>
                                     </td>
+
+                                    {/* Other */}
                                     <td>
                                         <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
                                             <input type="number" id="otherRate" class="form-control" min={0} onChange={handleChangeOther} value={other} />
                                         </div>
                                     </td>
 
+                                    {/* Total */}
                                     <td>{parseInt(freight) + parseInt(eff) + parseInt(other)}</td>
 
+                                    {/* Shipping Line */}
                                     <td>
                                         <div class="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
                                             <select name="shippingLine" id="shippingLine" class="form-control">
@@ -194,6 +235,7 @@ function Contract() {
                             </tbody>
                         </table>
 
+                        {/* Add Button */}
                         <div align="right" width="100%">
                             <button class="btn btn-primary" type="button" >ADD RECORD</button>
                         </div>
@@ -208,54 +250,62 @@ function Contract() {
 
                 <div class="accordion" id="accordionExample">
 
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button
-                                class="accordion-button collapsed"
-                                type="button"
-                                data-mdb-toggle="collapse"
-                                data-mdb-target="#collapseOne"
-                                aria-expanded="false"
-                                aria-controls="collapseOne"
-                            >
-                                Customer #1
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-mdb-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <table className='table table-striped table-hover'>
-                                    <thead>
-                                        <tr>
-                                            <th scope='col'>Destination</th>
-                                            <th scope='col'>Container Size</th>
-                                            <th scope='col'>Rate (USD)</th>
-                                            <th scope='col'>Shipping Line</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope='row'>CNSHA</th>
-                                            <td>20</td>
-                                            <td>101</td>
-                                            <td>ONE</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope='row'>JPNGO</th>
-                                            <td>20</td>
-                                            <td>250</td>
-                                            <td>OOCL</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope='row'>HKHKG</th>
-                                            <td >40</td>
-                                            <td>523</td>
-                                            <td>WHLC</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    {showData.map(({ id, post }) => {
+                        const destination = [];
+                        const containerSize = [];
+                        const rate = [];
+                        const shippingLine = [];
+
+                        for (var i = 0; i < post.records.length; i++) {
+                            destination.push(post.records[i].destination)
+                            containerSize.push(post.records[i].containerSize)
+                            rate.push(post.records[i].rate)
+                            shippingLine.push(post.records[i].shippingLine)
+
+
+                            return (
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button
+                                            class="accordion-button collapsed"
+                                            type="button"
+                                            data-mdb-toggle="collapse"
+                                            data-mdb-target={"#" + id}
+                                            aria-expanded="false"
+                                            aria-controls="collapseOne"
+                                        >
+                                            {post.customerName}
+                                        </button>
+                                    </h2>
+                                    <div id={id} class="accordion-collapse collapse" aria-labelledby="headingOne" data-mdb-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <table className='table table-striped table-hover'>
+                                                <thead>
+                                                    <tr>
+                                                        <th scope='col'>Destination</th>
+                                                        <th scope='col'>Container Size</th>
+                                                        <th scope='col'>Rate (USD)</th>
+                                                        <th scope='col'>Shipping Line</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        destination.map(destination => (
+                                                            <tr>
+                                                                <th scope='row'>{destination}</th>
+                                                                <td>{containerSize}</td>
+                                                                <td>{post.records[0].rate}</td>
+                                                                <td>{post.records[0].shippingLine}</td>
+                                                            </tr>
+                                                        ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        }
+                    })}
 
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
