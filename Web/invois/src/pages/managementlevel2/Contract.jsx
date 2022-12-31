@@ -33,7 +33,7 @@ function Contract() {
 
     const [showData, setShowData] = useState([]);
 
-    /*To retrieve data */
+    /*To retrieve Customer contract data */
     useEffect(() => {
         const getData = async () => {
             const data = await getDocs(getDataRefContract);
@@ -43,18 +43,6 @@ function Contract() {
         getData();
 
     });
-
-    showData.map(({ id, post }) => {
-        const destination = []
-
-        for (var i = 0; i < post.records.length; i++) {
-            //console.log(post.records[i].destination)
-            destination.push(post.records[i].destination)
-
-        }
-        //console.log(post.records[0].destination)
-        console.log(destination)
-    })
 
     return (
         <>
@@ -261,6 +249,7 @@ function Contract() {
                             containerSize.push(post.records[i].containerSize)
                             rate.push(post.records[i].rate)
                             shippingLine.push(post.records[i].shippingLine)
+                        }
 
 
                             return (
@@ -290,24 +279,26 @@ function Contract() {
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        destination.map(destination => (
-                                                            <tr>
-                                                                <th scope='row'>{destination}</th>
-                                                                <td>{containerSize}</td>
-                                                                <td>{post.records[0].rate}</td>
-                                                                <td>{post.records[0].shippingLine}</td>
-                                                            </tr>
-                                                        ))}
+                                                        post.records.map((rows, index) => {
+                                                            return (
+                                                                <tr key={rows.destination}>
+                                                                    <th scope='row'>{rows.destination}</th>
+                                                                    <td>{rows.containerSize}</td>
+                                                                    <td>{rows.rate}</td>
+                                                                    <td>{rows.shippingLine}</td>
+                                                                </tr>
+                                                            )
+                                                        })}
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
                             )
-                        }
+                        
                     })}
 
-                    <div class="accordion-item">
+                    {/*<div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
                             <button
                                 class="accordion-button collapsed"
@@ -407,7 +398,7 @@ function Contract() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                </div>*/}
 
                 </div>
 
