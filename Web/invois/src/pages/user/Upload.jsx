@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     MDBBtn,
     MDBIcon,
@@ -10,9 +10,17 @@ import {
     MDBModalBody,
     MDBModalFooter,
 } from 'mdb-react-ui-kit';
+import LoadingScreen from '../../loading/LoadingScreen';
 
 
 export default function Upload() {
+
+    /* Loading Screen */
+    const [loading, setLoading] = useState(true)
+    useEffect(() => {
+        /* Timeout for Loadin Screen */
+        setTimeout(() => setLoading(false), 1000) //1s
+    });
 
     /*On Load Function*/
     /*useEffect(() => {
@@ -157,37 +165,39 @@ export default function Upload() {
 
     return (
         <>
-            {/* Navigation Bar */}
-            <div>
-                <div style={{
-                    position: 'relative',
-                    height: '100px',
-                    width: '100%'
-                }}>
+            {loading === false ? (
+                <div>
+                    {/* Navigation Bar */}
+                    <div>
+                        <div style={{
+                            position: 'relative',
+                            height: '100px',
+                            width: '100%'
+                        }}>
 
-                    <div style={{ position: 'absolute', top: '20px', left: '60px' }}>
-                        <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                        <span className="h1 fw-bold mb-0">Invois</span>
+                            <div style={{ position: 'absolute', top: '20px', left: '60px' }}>
+                                <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
+                                <span className="h1 fw-bold mb-0">Invois</span>
+                            </div>
+
+                            <div style={{ position: 'absolute', bottom: '10px', right: '250px' }}>
+                                <a href='/upload'>Upload File</a>
+                            </div>
+
+                            <div style={{ position: 'absolute', bottom: '10px', right: '150px' }}>
+                                <a href="/history">History</a>
+                            </div>
+
+                            <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>
+                                <a href="/">Log out</a>
+                            </div>
+                        </div>
+                        <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '250px' }}>
-                        <a href='/upload'>Upload File</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '10px', right: '150px' }}>
-                        <a href="/history">History</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>
-                        <a href="/">Log out</a>
-                    </div>
-                </div>
-                <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-            </div>
-
-            {/* File Upload */}
-            <div style={{ padding: '5%' }}>
-                { /*
+                    {/* File Upload */}
+                    <div style={{ padding: '5%' }}>
+                        { /*
             <div style={{ padding: '10px' }}>
 
                 <table width={'70%'} align='center'>
@@ -314,192 +324,196 @@ export default function Upload() {
             </div>
 */ }
 
-                <MDBModal tabIndex='-1' show={centredModalSuccess} setShow={setCentredModalSuccess}>
-                    <MDBModalDialog centered>
-                        <MDBModalContent>
-                            <MDBModalHeader style={{ backgroundColor: '#dff0d5' }}>
-                                <MDBModalTitle>Confirmation</MDBModalTitle>
-                                <MDBBtn className='btn-close' color='none' onClick={toggleShowSuccess}></MDBBtn>
-                            </MDBModalHeader>
+                        <MDBModal tabIndex='-1' show={centredModalSuccess} setShow={setCentredModalSuccess}>
+                            <MDBModalDialog centered>
+                                <MDBModalContent>
+                                    <MDBModalHeader style={{ backgroundColor: '#dff0d5' }}>
+                                        <MDBModalTitle>Confirmation</MDBModalTitle>
+                                        <MDBBtn className='btn-close' color='none' onClick={toggleShowSuccess}></MDBBtn>
+                                    </MDBModalHeader>
 
-                            <MDBModalBody style={{ backgroundColor: '#dff0d5' }}>
-                                <MDBIcon fas icon="clipboard-check" style={{ color: '#55804c', fontSize: '50px' }} />
-                                <p style={{ color: '#55804c', fontFamily: "Tahoma", fontSize: '20px' }}>
-                                    <br />
-                                    Validation Successful!
-                                </p>
-                            </MDBModalBody>
+                                    <MDBModalBody style={{ backgroundColor: '#dff0d5' }}>
+                                        <MDBIcon fas icon="clipboard-check" style={{ color: '#55804c', fontSize: '50px' }} />
+                                        <p style={{ color: '#55804c', fontFamily: "Tahoma", fontSize: '20px' }}>
+                                            <br />
+                                            Validation Successful!
+                                        </p>
+                                    </MDBModalBody>
 
-                            <MDBModalFooter style={{ backgroundColor: '#dff0d5' }} />
+                                    <MDBModalFooter style={{ backgroundColor: '#dff0d5' }} />
 
-                        </MDBModalContent>
-                    </MDBModalDialog>
-                </MDBModal>
+                                </MDBModalContent>
+                            </MDBModalDialog>
+                        </MDBModal>
 
-                <MDBModal tabIndex='-1' show={centredModalUnuccess} setShow={setCentredModalUnuccess}>
-                    <MDBModalDialog centered >
-                        <MDBModalContent >
-                            <MDBModalHeader style={{ backgroundColor: '#f2dede' }}>
-                                <MDBModalTitle>Confirmation</MDBModalTitle>
-                                <MDBBtn className='btn-close' color='none' onClick={toggleShowUnuccess}></MDBBtn>
-                            </MDBModalHeader>
+                        <MDBModal tabIndex='-1' show={centredModalUnuccess} setShow={setCentredModalUnuccess}>
+                            <MDBModalDialog centered >
+                                <MDBModalContent >
+                                    <MDBModalHeader style={{ backgroundColor: '#f2dede' }}>
+                                        <MDBModalTitle>Confirmation</MDBModalTitle>
+                                        <MDBBtn className='btn-close' color='none' onClick={toggleShowUnuccess}></MDBBtn>
+                                    </MDBModalHeader>
 
-                            <MDBModalBody style={{ backgroundColor: '#f2dede' }}>
-                                <MDBIcon fas icon="clipboard" style={{ color: '#ab5473', fontSize: '50px' }} />
-                                <p style={{ color: '#ab5473', fontFamily: "Tahoma", fontSize: '20px' }}>
-                                    <br />
-                                    Oops! Try Again
-                                </p>
-                            </MDBModalBody>
+                                    <MDBModalBody style={{ backgroundColor: '#f2dede' }}>
+                                        <MDBIcon fas icon="clipboard" style={{ color: '#ab5473', fontSize: '50px' }} />
+                                        <p style={{ color: '#ab5473', fontFamily: "Tahoma", fontSize: '20px' }}>
+                                            <br />
+                                            Oops! Try Again
+                                        </p>
+                                    </MDBModalBody>
 
-                            <MDBModalFooter style={{ backgroundColor: '#f2dede' }} />
+                                    <MDBModalFooter style={{ backgroundColor: '#f2dede' }} />
 
-                        </MDBModalContent>
-                    </MDBModalDialog>
-                </MDBModal>
-
-
-                <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-                    <li className="nav-item" role="presentation">
-                        <a className="nav-link active"
-                            id="ex3-tab-1"
-                            data-mdb-toggle="pill"
-                            href="#ex3-pills-1"
-                            role="tab"
-                            aria-controls="ex3-pills-1"
-                            aria-selected="true"
-                        >Contract</a>
-                    </li>
-                    <li className="nav-item" role="presentation">
-                        <a className="nav-link"
-                            id="ex3-tab-2"
-                            data-mdb-toggle="pill"
-                            href="#ex3-pills-2"
-                            role="tab"
-                            aria-controls="ex3-pills-2"
-                            aria-selected="false"
-                        >Spot</a>
-                    </li>
-                </ul>
+                                </MDBModalContent>
+                            </MDBModalDialog>
+                        </MDBModal>
 
 
+                        <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                            <li className="nav-item" role="presentation">
+                                <a className="nav-link active"
+                                    id="ex3-tab-1"
+                                    data-mdb-toggle="pill"
+                                    href="#ex3-pills-1"
+                                    role="tab"
+                                    aria-controls="ex3-pills-1"
+                                    aria-selected="true"
+                                >Contract</a>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                                <a className="nav-link"
+                                    id="ex3-tab-2"
+                                    data-mdb-toggle="pill"
+                                    href="#ex3-pills-2"
+                                    role="tab"
+                                    aria-controls="ex3-pills-2"
+                                    aria-selected="false"
+                                >Spot</a>
+                            </li>
+                        </ul>
 
-                <div className="tab-content" id="ex2-content">
-                    <div className="tab-pane fade show active"
-                        id="ex3-pills-1"
-                        role="tabpanel"
-                        aria-labelledby="ex3-tab-1"
-                    >
-                        <div style={{ padding: '10px' }} id="contractDataDisplay">
-                            <table width={'100%'}>
-                                <tbody>
-                                    <tr style={{ height: '50px' }}>
-                                        <td width={'33%'} >
-                                            <label htmlFor='customerInvoiceContract'>Upload Customer Invoice:</label>
-                                        </td>
-                                        <td width={'33%'}>
-                                            <label htmlFor='paymentRequisitionContract'>Upload Payment Requisition:</label>
-                                        </td>
-                                        <td width={'33%'}>
-                                            Select Rate:
-                                        </td>
-                                    </tr>
 
-                                    <tr></tr>
 
-                                    <tr>
-                                        <td>
-                                            <input type='file'
-                                                name='customerInvoiceContract'
-                                                width='50px'
-                                                accept='application/pdf'
-                                                style={fileUpload}
-                                                id='customerInvoiceContract'
-                                                onChange={fileValidateContract} />
-                                        </td>
-                                        <td>
-                                            <input type='file'
-                                                name='paymentRequisitionContract'
-                                                width='50px'
-                                                accept='application/pdf'
-                                                style={fileUpload}
-                                                id='paymentRequisitionContract'
-                                                onChange={fileValidateContract} />
-                                        </td>
-                                        <td>
-                                            <select style={fileUpload} id='rateContract' onChange={fileValidateContract} >
-                                                <option value={0}>Rate</option>
-                                                <option value={1}>Rate 1</option>
-                                                <option value={2}>Rate 2</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div className="tab-content" id="ex2-content">
+                            <div className="tab-pane fade show active"
+                                id="ex3-pills-1"
+                                role="tabpanel"
+                                aria-labelledby="ex3-tab-1"
+                            >
+                                <div style={{ padding: '10px' }} id="contractDataDisplay">
+                                    <table width={'100%'}>
+                                        <tbody>
+                                            <tr style={{ height: '50px' }}>
+                                                <td width={'33%'} >
+                                                    <label htmlFor='customerInvoiceContract'>Upload Customer Invoice:</label>
+                                                </td>
+                                                <td width={'33%'}>
+                                                    <label htmlFor='paymentRequisitionContract'>Upload Payment Requisition:</label>
+                                                </td>
+                                                <td width={'33%'}>
+                                                    Select Rate:
+                                                </td>
+                                            </tr>
 
-                            <p><br /></p>
+                                            <tr></tr>
 
-                            <div>
-                                <button class="btn btn-primary" disabled={disabledContract} onClick={validateContract}>VALIDATE</button>
+                                            <tr>
+                                                <td>
+                                                    <input type='file'
+                                                        name='customerInvoiceContract'
+                                                        width='50px'
+                                                        accept='application/pdf'
+                                                        style={fileUpload}
+                                                        id='customerInvoiceContract'
+                                                        onChange={fileValidateContract} />
+                                                </td>
+                                                <td>
+                                                    <input type='file'
+                                                        name='paymentRequisitionContract'
+                                                        width='50px'
+                                                        accept='application/pdf'
+                                                        style={fileUpload}
+                                                        id='paymentRequisitionContract'
+                                                        onChange={fileValidateContract} />
+                                                </td>
+                                                <td>
+                                                    <select style={fileUpload} id='rateContract' onChange={fileValidateContract} >
+                                                        <option value={0}>Rate</option>
+                                                        <option value={1}>Rate 1</option>
+                                                        <option value={2}>Rate 2</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <p><br /></p>
+
+                                    <div>
+                                        <button class="btn btn-primary" disabled={disabledContract} onClick={validateContract}>VALIDATE</button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
 
-                    <div
-                        className="tab-pane fade"
-                        id="ex3-pills-2"
-                        role="tabpanel"
-                        aria-labelledby="ex3-tab-2"
-                    >
-                        <div style={{ padding: '10px' }} id="spotDataDisplay">
-                            <table width={'100%'}>
-                                <tbody>
-                                    <tr>
-                                        <td width={'33%'} >
-                                            <label htmlFor='customerInvoiceSpot'>Upload Customer Invoice:</label>
-                                        </td>
-                                        <td width={'33%'}>
-                                            <label htmlFor='paymentRequisitionSpot'>Upload Payment Requisition:</label>
-                                        </td>
-                                    </tr>
+                            <div
+                                className="tab-pane fade"
+                                id="ex3-pills-2"
+                                role="tabpanel"
+                                aria-labelledby="ex3-tab-2"
+                            >
+                                <div style={{ padding: '10px' }} id="spotDataDisplay">
+                                    <table width={'100%'}>
+                                        <tbody>
+                                            <tr>
+                                                <td width={'33%'} >
+                                                    <label htmlFor='customerInvoiceSpot'>Upload Customer Invoice:</label>
+                                                </td>
+                                                <td width={'33%'}>
+                                                    <label htmlFor='paymentRequisitionSpot'>Upload Payment Requisition:</label>
+                                                </td>
+                                            </tr>
 
-                                    <tr></tr>
+                                            <tr></tr>
 
-                                    <tr>
-                                        <td>
-                                            <input type='file'
-                                                name='customerInvoiceSpot'
-                                                width='50px'
-                                                accept='application/pdf'
-                                                id="customerInvoiceSpot"
-                                                style={fileUpload}
-                                                onChange={fileValidateSpot} />
-                                        </td>
-                                        <td>
-                                            <input type='file'
-                                                name='paymentRequisitionSpot'
-                                                width='50px'
-                                                accept='application/pdf'
-                                                id="paymentRequisitionSpot"
-                                                style={fileUpload}
-                                                onChange={fileValidateSpot} />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                            <tr>
+                                                <td>
+                                                    <input type='file'
+                                                        name='customerInvoiceSpot'
+                                                        width='50px'
+                                                        accept='application/pdf'
+                                                        id="customerInvoiceSpot"
+                                                        style={fileUpload}
+                                                        onChange={fileValidateSpot} />
+                                                </td>
+                                                <td>
+                                                    <input type='file'
+                                                        name='paymentRequisitionSpot'
+                                                        width='50px'
+                                                        accept='application/pdf'
+                                                        id="paymentRequisitionSpot"
+                                                        style={fileUpload}
+                                                        onChange={fileValidateSpot} />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
 
-                            <p><br /></p>
+                                    <p><br /></p>
 
-                            <div>
-                                <MDBBtn disabled={disabledSpot} type='submit' onClick={validateSpot}>VALIDATE</MDBBtn>
+                                    <div>
+                                        <MDBBtn disabled={disabledSpot} type='submit' onClick={validateSpot}>VALIDATE</MDBBtn>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
+                        </div>
+
+                    </div>
                 </div>
-
-            </div>
+            ) : (
+                <LoadingScreen />
+            )}
         </>
     );
 }

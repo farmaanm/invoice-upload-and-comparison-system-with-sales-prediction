@@ -2,16 +2,23 @@ import { MDBIcon } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase'
+import LoadingScreen from '../../loading/LoadingScreen';
 
 function Approve() {
+
+    /* Loading Screen */
+    const [loading, setLoading] = useState(true)
 
     /*DB Refrence*/
     const getDataRefContract = collection(db, "Contract");
 
     const [showData, setShowData] = useState([]);
 
-    /*To retrieve data */
     useEffect(() => {
+        /* Timeout for Loadin Screen */
+        setTimeout(() => setLoading(false), 4000) //4s
+
+        /*To retrieve data */
         const getData = async () => {
             const data = await getDocs(getDataRefContract);
             setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
@@ -22,6 +29,8 @@ function Approve() {
 
     return (
         <>
+        {loading === false ? (
+            <div>
             {/* Navigation Bar */}
             <div>
                 <div style={{
@@ -127,7 +136,10 @@ function Approve() {
                 </div>
 
             </div>
-
+            </div>
+            ) : (
+                <LoadingScreen />
+            )}
         </>
     );
 }
