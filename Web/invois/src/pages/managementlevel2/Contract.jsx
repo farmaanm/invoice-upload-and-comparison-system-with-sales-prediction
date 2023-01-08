@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MDBIcon } from 'mdb-react-ui-kit';
-import { collection, getDocs, addDoc, query, orderBy } from 'firebase/firestore'
+import { collection, doc, getDocs, addDoc, updateDoc, query, orderBy, where } from 'firebase/firestore'
 import { db } from '../../firebase'
 import LoadingScreen from '../../loading/LoadingScreen';
 
@@ -45,22 +45,53 @@ function Contract() {
     const [shippingLine, setShippingLine] = useState("");
 
 
-    async function addcustomer () {
-        
+    async function addcustomer() {
+
         const totalValue = parseInt(freight) + parseInt(eff) + parseInt(other);
         const record = [{ containerSize: containerSize, destination: destination, rate: totalValue, shippingLine: shippingLine }];
 
-        try {
-            const docRef = await addDoc(getDataRefContract, {
-                customerName: customerName,
-                validity: validity,
-                records: record
-            });
-            console.log("Document written with ID: ", docRef.id);
-          } catch (e) {
-            console.error("Error adding document: ", e);
-          }
+        const p = query(collection(db, "Customer"), where("customerName", "==", customerName));
+        const querySnapshot = await getDocs(p);
 
+        /* Checking if Customer name exists */
+        if (!querySnapshot.empty) {
+            //console.log("Found")
+            const recordAdd = { containerSize: containerSize, destination: destination, rate: totalValue, shippingLine: shippingLine };
+
+            querySnapshot.forEach(async (docFile) => {
+
+                const customerRef = doc(db, "Customer", docFile.id);
+
+                let records_array = docFile.data().records
+                //console.log("Records Array: ", records_array)
+                //console.log(typeof(records_array))
+
+                /* Appending new record to existing record */
+                let newRecord = records_array.push(recordAdd)
+
+                await updateDoc(customerRef, {
+                    records: records_array,
+                    validity: validity
+                });
+            });
+
+        } else {
+            /* If customer name does not exist, add new record */
+            //console.log("Not found")
+            try {
+                const docRef = await addDoc(getDataRefContract, {
+                    customerName: customerName,
+                    validity: validity,
+                    records: record
+                });
+                console.log("Document written with ID: ", docRef.id);
+            } catch (e) {
+                console.error("Error adding document: ", e);
+            }
+
+        }
+
+        /* Clearing text boxes after execution */
         setCustomerName("");
         setValidity("");
         setDestination("");
@@ -69,11 +100,18 @@ function Contract() {
         setFreight(0);
         setEff(0);
         setOther(0);
+
+        /*querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+        });*/
+        /************************************************************************** */
+
     };
 
     /* OnLoad */
     useEffect(() => {
-        /* Timeout for Loadin Screen */
+        /* Timeout for Loading Screen */
         setTimeout(() => setLoading(false), 4000) //4s
 
         /*To retrieve Customer contract data */
@@ -82,7 +120,7 @@ function Contract() {
 
         const getData = async () => {
             const data = await getDocs(q);
-            setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
+            setShowData(data.docs.map((docFiles) => ({ id: docFiles.id, post: docFiles.data() })));
         };
 
         getData();
@@ -294,6 +332,8 @@ function Contract() {
                                 const rate = [];
                                 const shippingLine = [];
 
+                                //console.log(typeof(post.records))
+
                                 for (var i = 0; i < post.records.length; i++) {
                                     destination.push(post.records[i].destination)
                                     containerSize.push(post.records[i].containerSize)
@@ -329,7 +369,7 @@ function Contract() {
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            post.records.map((rows, index) => {
+                                                            Object.values(post.records).map(( rows, index ) => {
                                                                 return (
                                                                     <tr key={rows.destination}>
                                                                         <th scope='row'>{rows.destination}</th>
