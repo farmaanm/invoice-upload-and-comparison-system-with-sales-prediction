@@ -353,7 +353,7 @@ function Contract() {
                                                 aria-expanded="false"
                                                 aria-controls="collapseOne"
                                             >
-                                                {post.customerName}
+                                                {post.customerName} | {post.validity}
                                             </button>
                                         </h2>
                                         <div id={id} className="accordion-collapse collapse" aria-labelledby="headingOne" data-mdb-parent="#accordionExample">
