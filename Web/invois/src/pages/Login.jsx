@@ -5,12 +5,30 @@ import {
     MDBCol,
     MDBIcon
 } from 'mdb-react-ui-kit';
-
+import { auth } from '../firebase'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
 
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
+    const [error, setError] = useState("");
+
+    const navigate = useNavigate()
+
+    function validateForm() {
+        return userEmail.length > 0 && userPassword.length > 0;
+    }
+
+    const login = e => {
+        e.preventDefault()
+        signInWithEmailAndPassword(auth, userEmail, userPassword)
+            .then(() => {
+                navigate('/upload')
+            })
+            .catch(err => setError(err.message))
+    }
 
     return (
 
@@ -30,7 +48,7 @@ function Login() {
 
                             <h3 className="fw-normal mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Log in</h3>
 
-                            <form>
+                            <form onSubmit={login}>
 
                                 {/*<!-- Email input -->*/}
                                 <div class="form-outline mb-4">
@@ -41,7 +59,7 @@ function Login() {
                                         name='userEmail'
                                         required
                                         value={userEmail}
-                                        onInput={e => setUserEmail(e.target.value)}
+                                        onChange={e => setUserEmail(e.target.value)}
                                         style={{ border: '1px solid #c4c4c4' }} />
                                     <label class="form-label" for="userEmail">Email</label>
                                 </div>
@@ -55,13 +73,13 @@ function Login() {
                                         name='userPassword'
                                         required
                                         value={userPassword}
-                                        onInput={e => setUserPassword(e.target.value)}
+                                        onChange={e => setUserPassword(e.target.value)}
                                         style={{ border: '1px solid #c4c4c4' }} />
                                     <label class="form-label" for="userPassword">Password</label>
                                 </div>
 
                                 {/*<!-- Submit button -->*/}
-                                <button type="submit" class="btn btn-primary btn-block mb-4 btn-lg" style={{ backgroundColor: '#381ce4' }}>Login</button>
+                                <button type="submit" class="btn btn-primary btn-block mb-4 btn-lg" style={{ backgroundColor: '#381ce4' }} disabled={!validateForm()}>Login</button>
 
                             </form>
 

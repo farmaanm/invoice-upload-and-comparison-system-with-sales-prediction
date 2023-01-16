@@ -22,4 +22,3 @@ export const provider = new GoogleAuthProvider();
 
 export const storage = getStorage(app);
 
-

@@ -2,6 +2,7 @@ import './App.css';
 import Approve from './pages/managementlevel2/Approve'
 import Contract from './pages/managementlevel2/Contract'
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import Upload from './pages/user/Upload'
 import History from './pages/user/History'
 import Payment from './pages/finance/Payment'
@@ -19,6 +20,8 @@ function App() {
 
                     <Routes>
                         <Route index element={< Login />}></Route>
+                        <Route exact path='/signup' element={< Signup />}></Route>
+                        
                         {/* User Level 1 */}
                         <Route exact path='/upload' element={< Upload />}></Route>
                         <Route exact path='/history' element={< History />}></Route>
