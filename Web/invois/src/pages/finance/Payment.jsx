@@ -6,12 +6,48 @@ import LoadingScreen from '../../loading/LoadingScreen';
 
 function Payment() {
 
+    const [userinfo, setUserInfo] = useState({
+        languages: [],
+        response: [],
+    });
+
+    const handleChange = (e) => {
+        // Destructuring
+        const { value, checked } = e.target;
+        const { languages } = userinfo;
+
+        console.log(`${value} is ${checked}`);
+
+        // Case 1 : The user checks the box
+        if (checked) {
+            setUserInfo({
+                languages: [...languages, value],
+                response: [...languages, value],
+            });
+        }
+
+        // Case 2  : The user unchecks the box
+        else {
+            setUserInfo({
+                languages: languages.filter((e) => e !== value),
+                response: languages.filter((e) => e !== value),
+            });
+        }
+
+        console.log(typeof(userinfo.response))
+        console.log(userinfo.response)
+    };
+
+    for (var key of Object.keys(userinfo.response)) {
+        console.log(key + " -> " + userinfo.response[key])
+    }
+    
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
 
     /*DB Refrence*/
     const getDataRefContract = collection(db, "Contract");
-    const qry = query(getDataRefContract, where("status", "==", "Pending"));
+    const qry = query(getDataRefContract, where("status", "==", "Approved"));
 
     const [showData, setShowData] = useState([]);
 
@@ -78,13 +114,20 @@ function Payment() {
                                 <tbody>
 
                                     {showData.map(({ id, post }) => {
+
                                         return (
 
                                             <tr key={id}>
                                                 <th scope="row">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value={id} id="flexCheckDefault" />
-                                                    </div>
+                                                    {post.paymentStatus === 'pending' ? (
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value={id} id="flexCheckDefault" onChange={handleChange}/>
+                                                        </div>
+                                                    ) : (
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value={id} id="flexCheckDefault" checked />
+                                                        </div>
+                                                    )}
                                                 </th>
                                                 <td>
                                                     <a href={post.vendorInvoiceUrl}><p className='fw-normal mb-1'>{post.vendorInvoiceName}</p></a>

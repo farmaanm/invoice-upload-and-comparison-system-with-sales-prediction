@@ -25,9 +25,22 @@ function Login() {
         e.preventDefault()
         signInWithEmailAndPassword(auth, userEmail, userPassword)
             .then(() => {
-                navigate('/upload')
+                if (userEmail.includes('@user.com')) {
+                    navigate('/upload')
+                } else if (userEmail.includes('@management.com')) {
+                    navigate('/approve')
+                } else if (userEmail.includes('@head.com')) {
+                    navigate('/sales')
+                } else if (userEmail.includes('@finance.com')) {
+                    navigate('/payment')
+                }
+
             })
             .catch(err => setError(err.message))
+
+        if (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -46,7 +59,7 @@ function Login() {
 
                         <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4' style={{ margin: 'auto' }}>
 
-                            <h3 className="fw-normal mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Log in</h3>
+                            <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
 
                             <form onSubmit={login}>
 

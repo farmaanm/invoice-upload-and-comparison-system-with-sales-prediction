@@ -1,4 +1,10 @@
 import React, { useState } from 'react'
+import {
+    MDBContainer,
+    MDBRow,
+    MDBCol,
+    MDBIcon
+} from 'mdb-react-ui-kit';
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 
@@ -25,25 +31,21 @@ const Signup = () => {
             })
             .catch(err => setError(err.message))
 
-        setEmail('')
-        setPassword('')
-        setRepeatPassword('')
+            if(error){
+                console.log(error)
+            }
+
+        setEmail("")
+        setPassword("")
+        setRepeatPassword("")
     }
 
-    const InputFields = {
-        padding: '0.5rem',
-        margin: '0.8rem',
-        borderRadius: '4px'
-    }
-    const ButtonStyle = {
-        borderRadius: '4px',
-        padding: '0.7rem',
-        margin: '0.5rem'
-    }
+
 
     return (
         <div>
 
+            {/*
             <section class="vh-100" style={{ backgroundColor: '#eee' }}>
                 <div class="container h-100">
                     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -90,8 +92,8 @@ const Signup = () => {
                                         </div>
                                         <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
 
-                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
-                                                class="img-fluid" alt="Sample image" />
+                                            <img src="https://images.pexels.com/photos/8777703/pexels-photo-8777703.jpeg"
+                                                class="img-fluid" className="w-100" height={600} style={{ objectPosition: 'left' }} />
 
                                         </div>
                                     </div>
@@ -101,7 +103,60 @@ const Signup = () => {
                     </div>
                 </div>
             </section>
+            */}
 
+            <MDBContainer fluid>
+                <MDBRow>
+
+                    <MDBCol sm='6'>
+
+                        <div className='d-flex flex-row ps-5 pt-5'>
+                            <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
+                            <span className="h1 fw-bold mb-0">Invois</span>
+                        </div>
+
+                        <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4' style={{ margin: 'auto' }}>
+
+                            <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+
+                            <form onSubmit={register}>
+
+                                {/*<!-- Email input -->*/}
+                                <div class="form-outline mb-4">
+                                    <input type="email" id="form3Example3c" class="form-control" onChange={e => setEmail(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
+                                    <label class="form-label" for="form3Example3c">Email</label>
+                                </div>
+
+                                {/*<!-- Password input -->*/}
+                                <div class="form-outline mb-4">
+                                    <input type="password" id="form3Example4c" class="form-control" onChange={e => setPassword(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
+                                    <label class="form-label" for="form3Example4c">Password</label>
+                                </div>
+
+                                {/*<!-- Repeat Password input -->*/}
+                                <div class="form-outline mb-4">
+                                    <input type="password" id="form3Example4cd" class="form-control" onChange={e => setRepeatPassword(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
+                                    <label class="form-label" for="form3Example4cd">Repeat your password</label>
+                                </div>
+
+                                {/*<!-- Submit button -->*/}
+                                <button type="submit" class="btn btn-primary btn-block mb-4 btn-lg" style={{ backgroundColor: '#381ce4' }} disabled={!validateForm()}>Register</button>
+
+                            </form>
+
+                        </div>
+
+                    </MDBCol>
+
+                    <MDBCol sm='6' className='d-none d-sm-block px-0'>
+                        <img src="https://images.pexels.com/photos/8777703/pexels-photo-8777703.jpeg"
+                            class="img-fluid" alt="Signup-port-cover" className="w-100" height={721} style={{ objectPosition: 'left' }} />
+
+                    </MDBCol>
+
+                </MDBRow>
+
+            </MDBContainer>
 
 
 
