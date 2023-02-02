@@ -16,6 +16,7 @@ function Approve() {
 
     const [showData, setShowData] = useState([]);
 
+    /* On Load */
     useEffect(() => {
         /* Timeout for Loadin Screen */
         setTimeout(() => setLoading(false), 4000) //4s
