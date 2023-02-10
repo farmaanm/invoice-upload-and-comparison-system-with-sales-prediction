@@ -9,6 +9,8 @@ import { auth } from '../firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
+import {userType} from './Nav'
+
 function Login() {
 
     const [userEmail, setUserEmail] = useState("");
@@ -26,12 +28,16 @@ function Login() {
         signInWithEmailAndPassword(auth, userEmail, userPassword)
             .then(() => {
                 if (userEmail.includes('@user.com')) {
+                    userType('user')
                     navigate('/upload')
                 } else if (userEmail.includes('@management.com')) {
+                    userType('management')
                     navigate('/approve')
                 } else if (userEmail.includes('@head.com')) {
+                    userType('head')
                     navigate('/sales')
                 } else if (userEmail.includes('@finance.com')) {
+                    userType('finance')
                     navigate('/payment')
                 }
 

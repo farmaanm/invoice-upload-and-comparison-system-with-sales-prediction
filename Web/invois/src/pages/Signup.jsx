@@ -35,9 +35,9 @@ const Signup = () => {
                 console.log(error)
             }
 
-        setEmail("")
-        setPassword("")
-        setRepeatPassword("")
+        setEmail(" ")
+        setPassword(" ")
+        setRepeatPassword(" ")
     }
 
 

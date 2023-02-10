@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { collection, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../firebase'
 import LoadingScreen from '../../loading/LoadingScreen';
-import { async } from '@firebase/util';
+//import { async } from '@firebase/util';
 
 
 function Approve() {
@@ -82,6 +82,7 @@ function Approve() {
             {loading === false ? (
                 <div>
                     {/* Navigation Bar */}
+                    {/*
                     <div>
                         <div style={{
                             position: 'relative',
@@ -108,7 +109,7 @@ function Approve() {
                         </div>
                         <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
                     </div>
-
+                    */}
                     {/* Approve List of Files */}
                     <div>
 

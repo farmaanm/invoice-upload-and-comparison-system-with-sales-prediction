@@ -10,35 +10,15 @@ import Sales from './pages/managementlevel1/Sales'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
 
+import Nav from './pages/Nav'
+
 function App() {
 
     return (
         <>
             <div className="App">
 
-                <BrowserRouter>
-
-                    <Routes>
-                        <Route index element={< Login />}></Route>
-                        <Route exact path='/signup' element={< Signup />}></Route>
-                        
-                        {/* User Level 1 */}
-                        <Route exact path='/upload' element={< Upload />}></Route>
-                        <Route exact path='/history' element={< History />}></Route>
-
-                        {/* Management Level 2 */}
-                        <Route exact path='/approve' element={< Approve />}></Route>
-                        <Route exact path='/contract' element={< Contract />}></Route>
-
-                        {/* Management Level 1 */}
-                        <Route exact path='/sales' element={< Sales />}></Route>
-
-                        {/* Finance */}
-                        <Route exact path='/payment' element={< Payment />}></Route>
-
-                    </Routes>
-
-                </BrowserRouter>
+                <Nav/>
 
             </div>
         </>

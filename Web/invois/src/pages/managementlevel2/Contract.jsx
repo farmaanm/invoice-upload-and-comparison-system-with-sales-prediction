@@ -133,6 +133,7 @@ function Contract() {
 
                 <div>
                     {/* Navigation Bar */}
+                    {/*
                     <div>
                         <div style={{
                             position: 'relative',
@@ -159,6 +160,7 @@ function Contract() {
                         </div>
                         <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
                     </div>
+                    */}
 
                     {/* Customer Records */}
                     <div style={{ padding: '2%' }}>

@@ -73,6 +73,7 @@ function Sales() {
             {loading === false ? (
                 <div>
                     {/* Navigation Bar */}
+                    {/*
                     <div>
                         <div style={{
                             position: 'relative',
@@ -103,7 +104,8 @@ function Sales() {
                         </div>
                         <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
                     </div>
-
+                    */}
+                    
                     {/* Sales Chart */}
                     <Chart
                         chartType="LineChart"
