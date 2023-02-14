@@ -19,8 +19,11 @@ class MyApp extends StatelessWidget {
       title: 'Invois',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        appBarTheme: const AppBarTheme(
+          color: Color(0xFF381ce4),
+        ),
       ),
-      home: const MyHomePage(title: 'Approval History'),
+      home: const MyLoginPage(title: ''),
     );
   }
 }
@@ -32,6 +35,16 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class MyLoginPage extends StatefulWidget {
+  const MyLoginPage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  //State<MyHomePage> createState() => _MyHomePageState();
+  State<MyLoginPage> createState() => _MyLoginPageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -125,6 +138,84 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(
                 txt,
                 textScaleFactor: 1,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MyLoginPageState extends State<MyLoginPage> {
+  final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('Contract').snapshots();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).size.height * 0.35,
+              horizontal: MediaQuery.of(context).size.width * 0.04),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                'assets/images/logo512.png',
+                height: 100,
+                scale: 2.5,
+                // color: Color.fromARGB(255, 15, 147, 59),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextField(
+                onChanged: (value) {},
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextField(
+                obscureText: true, // hidden password
+                onChanged: (value) {},
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  // style: ButtonStyle(elevation: MaterialStateProperty(12.0 )),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF381ce4),
+                      elevation: 10.0,
+                      textStyle: const TextStyle(color: Colors.white)),
+                  child: const Text('Login'),
+                ),
               )
             ],
           ),
