@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,12 +19,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Invois',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        appBarTheme: const AppBarTheme(
-          color: Color(0xFF381ce4),
-        ),
-      ),
-      home: const MyLoginPage(title: ''),
+          primarySwatch: Colors.blue,
+          appBarTheme: const AppBarTheme(
+            color: Color(0xFF381ce4),
+          ),
+          scaffoldBackgroundColor: const Color(0xFFf8f4f4)),
+      home: const MyHomePage(title: ''),
     );
   }
 }
@@ -55,26 +56,29 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height * 0.04,
-              horizontal: MediaQuery.of(context).size.width * 0.04),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text(
-                'Click to see more',
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              /*TextField(
+        appBar: AppBar(
+          //title: Text(widget.title),
+          title: const Text('History'),
+        ),
+        body: RefreshIndicator(
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Container(
+              margin: EdgeInsets.symmetric(
+                  vertical: MediaQuery.of(context).size.height * 0.04,
+                  horizontal: MediaQuery.of(context).size.width * 0.04),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const Text(
+                    'Click to see more',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  /*TextField(
                 onChanged: (value) {
                   //Do something with the user input.
                 },
@@ -87,63 +91,123 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),*/
-              StreamBuilder<QuerySnapshot>(
-                  stream: _usersStream,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasError) {
-                      return const Text('Something went wrong');
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    return ListView(
-                      shrinkWrap: true,
-                      children:
-                          snapshot.data!.docs.map((DocumentSnapshot document) {
-                        Map<String, dynamic> data =
-                            document.data()! as Map<String, dynamic>;
-                        return ListTile(
-                          title: Text(data['uploadedBy']),
-                          subtitle: Text(data['dateTime']),
-                          trailing: data['paymentStatus'] == 'done'
-                              ? const Icon(
-                                  Icons.done,
-                                  color: Colors.green,
-                                )
-                              : const Icon(
-                                  Icons.access_time_filled,
-                                  color: Colors.yellow,
-                                ),
-                          onTap: () {
-                            setState(() {
-                              if (txt == '') {
-                                txt = 'Pay Req: ' +
-                                    data['paymentRequisitionName'] +
-                                    '\n' +
-                                    'Vend Inv: ' +
-                                    data['vendorInvoiceName'] +
-                                    '\n' +
-                                    'Payment Done at: ' +
-                                    data['paymentDoneAt'];
-                              } else {
-                                txt = '';
-                              }
-                            });
-                          },
+                  StreamBuilder<QuerySnapshot>(
+                      stream: _usersStream,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          return const Text('Something went wrong');
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        return ListView(
+                          shrinkWrap: true,
+                          children: snapshot.data!.docs
+                              .map((DocumentSnapshot document) {
+                            Map<String, dynamic> data =
+                                document.data()! as Map<String, dynamic>;
+                            return ListTile(
+                              title: Text(data['uploadedBy']),
+                              subtitle: Text(data['dateTime']),
+                              trailing: data['paymentStatus'] == 'done'
+                                  ? const Icon(
+                                      Icons.done,
+                                      color: Colors.green,
+                                    )
+                                  : const Icon(
+                                      Icons.access_time_filled,
+                                      color: Colors.yellow,
+                                    ),
+                              onTap: () {
+                                setState(() {
+                                  if (txt == '') {
+                                    txt = 'Pay Req: ' +
+                                        data['paymentRequisitionName'] +
+                                        '\n' +
+                                        'Vend Inv: ' +
+                                        data['vendorInvoiceName'] +
+                                        '\n' +
+                                        'Payment Done at: ' +
+                                        data['paymentDoneAt'];
+                                  } else {
+                                    txt = '';
+                                  }
+                                });
+                              },
+                            );
+                          }).toList(),
                         );
-                      }).toList(),
-                    );
-                  }),
-              Text(
-                txt,
-                textScaleFactor: 1,
-              )
+                      }),
+                  Text(
+                    txt,
+                    textScaleFactor: 1,
+                  )
+                ],
+              ),
+            ),
+          ),
+          onRefresh: () {
+            return Future.delayed(const Duration(seconds: 1), () {
+              setState(() {
+                //txt = 'Page Refreshed';
+                Fluttertoast.showToast(
+                  msg: "Page Refreshed",
+                  toastLength: Toast.LENGTH_SHORT,
+                  textColor: Colors.black,
+                  fontSize: 14,
+                  backgroundColor: Colors.grey[200],
+                );
+              });
+            });
+          },
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: const BoxDecoration(
+                    color: Color(0xFFf8f4f4),
+                    image: DecorationImage(
+                      scale: 1.8,
+                      image: AssetImage("assets/images/logo.png"),
+                    )),
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  child: const Text(
+                    'User Email',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                )
+              ),
+              const SizedBox(
+                height: 3,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: Color(0xFF381ce4)),
+                ),
+              ),
+              ListTile(
+                selected: true,
+                leading: const Icon(Icons.history),
+                title: const Text(' History '),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('LogOut'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
             ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 
@@ -164,7 +228,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                'assets/images/logo512.png',
+                'assets/images/logo.png',
                 height: 100,
                 scale: 2.5,
                 // color: Color.fromARGB(255, 15, 147, 59),
