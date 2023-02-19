@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +53,14 @@ class MyLoginPage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('Contract').snapshots();
-  String txt = '';
+  String payReqName = '';
+  String payReqUrl = '';
+  String vendInvName = '';
+  String vendInvUrl = '';
+  String paymentDoneAt = '';
+
+  TextStyle defaultStyle = const TextStyle(color: Colors.grey);
+  TextStyle linkStyle = const TextStyle(color: Color(0xFF0D47A1));
 
   @override
   Widget build(BuildContext context) {
@@ -71,13 +80,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Text(
+                  /*const Text(
                     'Click to see more',
                     style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
+                  ),*/
+                  /*const SizedBox(
                     height: 10,
-                  ),
+                  ),*/
                   /*TextField(
                 onChanged: (value) {
                   //Do something with the user input.
@@ -122,17 +131,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                               onTap: () {
                                 setState(() {
-                                  if (txt == '') {
-                                    txt = 'Pay Req: ' +
-                                        data['paymentRequisitionName'] +
-                                        '\n' +
-                                        'Vend Inv: ' +
-                                        data['vendorInvoiceName'] +
-                                        '\n' +
-                                        'Payment Done at: ' +
-                                        data['paymentDoneAt'];
+                                  if (payReqName == '') {
+                                    payReqName = data['paymentRequisitionName'];
+                                    payReqUrl = data['paymentRequisitionUrl'];
+                                    vendInvName = data['vendorInvoiceName'];
+                                    vendInvUrl = data['vendorInvoiceUrl'];
+                                    paymentDoneAt = data['paymentDoneAt'];
                                   } else {
-                                    txt = '';
+                                    payReqName = '';
+                                    payReqUrl = '';
+                                    vendInvName = '';
+                                    vendInvUrl = '';
+                                    paymentDoneAt = '';
                                   }
                                 });
                               },
@@ -140,9 +150,33 @@ class _MyHomePageState extends State<MyHomePage> {
                           }).toList(),
                         );
                       }),
-                  Text(
-                    txt,
-                    textScaleFactor: 1,
+                  RichText(
+                    text: TextSpan(
+                      style: defaultStyle,
+                      children: <TextSpan>[
+                        const TextSpan(text: 'Pay Req: '),
+                        TextSpan(
+                            text: payReqName,
+                            style: linkStyle,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                //launchUrl(Uri.parse('https://www.google.com'));
+                                await launch(payReqUrl,
+                                    forceSafariVC: false, forceWebView: false);
+                              }),
+                        const TextSpan(text: '\nVend Inv: '),
+                        TextSpan(
+                            text: vendInvName,
+                            style: linkStyle,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                //launchUrl(Uri.parse(vendInvUrl));
+                                await launch(vendInvUrl,
+                                    forceSafariVC: false, forceWebView: false);
+                              }),
+                        TextSpan(text: '\nPayment Done At: $paymentDoneAt'),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -168,22 +202,21 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
-                decoration: const BoxDecoration(
-                    color: Color(0xFFf8f4f4),
-                    image: DecorationImage(
-                      scale: 1.8,
-                      image: AssetImage("assets/images/logo.png"),
-                    )),
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  child: const Text(
-                    'User Email',
-                    style: TextStyle(
-                      fontSize: 20,
+                  decoration: const BoxDecoration(
+                      color: Color(0xFFf8f4f4),
+                      image: DecorationImage(
+                        scale: 1.8,
+                        image: AssetImage("assets/images/logo.png"),
+                      )),
+                  child: Container(
+                    alignment: Alignment.bottomCenter,
+                    child: const Text(
+                      'User Email',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                )
-              ),
+                  )),
               const SizedBox(
                 height: 3,
                 child: DecoratedBox(
