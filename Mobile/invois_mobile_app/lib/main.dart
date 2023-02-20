@@ -4,6 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+FirebaseAuth auth = FirebaseAuth.instance;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +29,8 @@ class MyApp extends StatelessWidget {
             color: Color(0xFF381ce4),
           ),
           scaffoldBackgroundColor: const Color(0xFFf8f4f4)),
-      home: const MyHomePage(title: ''),
+      //home: const MyHomePage(title: ''),
+      home: const MyLoginPage(title: ''),
     );
   }
 }
@@ -120,14 +124,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             return ListTile(
                               title: Text(data['uploadedBy']),
                               subtitle: Text(data['dateTime']),
-                              trailing: data['paymentStatus'] == 'done'
+                              trailing: data['paymentStatus'] == 'Done'
                                   ? const Icon(
                                       Icons.done,
                                       color: Colors.green,
                                     )
                                   : const Icon(
                                       Icons.access_time_filled,
-                                      color: Colors.yellow,
+                                      color: Color(0xFFe09c1c),
                                     ),
                               onTap: () {
                                 setState(() {
@@ -234,8 +238,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ListTile(
                 leading: const Icon(Icons.logout),
                 title: const Text('LogOut'),
-                onTap: () {
-                  Navigator.pop(context);
+                onTap: () async {
+                  //Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MyLoginPage(
+                              title: '',
+                            )),
+                  );
+                  await FirebaseAuth.instance.signOut();
                 },
               ),
             ],
@@ -247,6 +259,12 @@ class _MyHomePageState extends State<MyHomePage> {
 class _MyLoginPageState extends State<MyLoginPage> {
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('Contract').snapshots();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  String useremailerror = '';
+  String userpassworderror = '';
 
   @override
   Widget build(BuildContext context) {
@@ -270,6 +288,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 height: 10,
               ),
               TextField(
+                controller: emailController,
                 onChanged: (value) {},
                 decoration: const InputDecoration(
                   labelText: "Email",
@@ -282,10 +301,17 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              SizedBox(
+                  height: 25,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      useremailerror,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  )),
               TextField(
+                controller: passwordController,
                 obscureText: true, // hidden password
                 onChanged: (value) {},
                 decoration: const InputDecoration(
@@ -299,13 +325,55 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              SizedBox(
+                  height: 25,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      userpassworderror,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  )),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    try {
+                      final credential = await FirebaseAuth.instance
+                          .signInWithEmailAndPassword(
+                              email: emailController.text,
+                              password: passwordController.text);
+
+                      if (!context.mounted) return;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MyHomePage(
+                                  title: '',
+                                )),
+                      );
+                    } on FirebaseAuthException catch (e) {
+                      if (e.code == 'user-not-found') {
+                        useremailerror = "No user found for that email.";
+                        Fluttertoast.showToast(
+                          msg: "No user found for that email.",
+                          toastLength: Toast.LENGTH_SHORT,
+                          textColor: Colors.black,
+                          fontSize: 14,
+                          backgroundColor: Colors.grey[200],
+                        );
+                      } else if (e.code == 'wrong-password') {
+                        userpassworderror = "Invalid password.";
+                        Fluttertoast.showToast(
+                          msg: "Wrong password provided for that user.",
+                          toastLength: Toast.LENGTH_SHORT,
+                          textColor: Colors.black,
+                          fontSize: 14,
+                          backgroundColor: Colors.grey[200],
+                        );
+                      }
+                    }
+                  },
                   // style: ButtonStyle(elevation: MaterialStateProperty(12.0 )),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF381ce4),
