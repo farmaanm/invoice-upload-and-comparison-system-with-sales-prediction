@@ -103,7 +103,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           }
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
+                            return const Center(
+                                heightFactor: 10,
+                                child: CircularProgressIndicator());
                           }
                           return ListView(
                             shrinkWrap: true,
