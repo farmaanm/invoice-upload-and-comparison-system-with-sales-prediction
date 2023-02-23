@@ -62,26 +62,29 @@ class _MyHomePageState extends State<MyHomePage> {
   String vendInvName = '';
   String vendInvUrl = '';
   String paymentDoneAt = '';
+  String userEmail = '';
 
   TextStyle defaultStyle = const TextStyle(color: Colors.grey);
   TextStyle linkStyle = const TextStyle(color: Color(0xFF0D47A1));
 
   @override
   Widget build(BuildContext context) {
-    /*FirebaseAuth.instance
+    FirebaseAuth.instance
         .authStateChanges()
         .listen((User? user) {
       if (user != null) {
-        print(user.uid);
+        for (final providerProfile in user.providerData) {
+          userEmail = providerProfile.email!;
+        }
       }
-    });*/
+    });
 
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
           appBar: AppBar(
-            //title: Text(widget.title),
-            title: const Text('History'),
+            title: Text(widget.title),
+            //title: const Text('History'),
           ),
           body: RefreshIndicator(
             child: SingleChildScrollView(
@@ -147,36 +150,42 @@ class _MyHomePageState extends State<MyHomePage> {
                             }).toList(),
                           );
                         }),
-                    RichText(
-                      text: TextSpan(
-                        style: defaultStyle,
-                        children: <TextSpan>[
-                          const TextSpan(text: 'Pay Req: '),
-                          TextSpan(
-                              text: payReqName,
-                              style: linkStyle,
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () async {
-                                  //launchUrl(Uri.parse('https://www.google.com'));
-                                  await launch(payReqUrl,
-                                      forceSafariVC: false,
-                                      forceWebView: false);
-                                }),
-                          const TextSpan(text: '\nVend Inv: '),
-                          TextSpan(
-                              text: vendInvName,
-                              style: linkStyle,
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () async {
-                                  //launchUrl(Uri.parse(vendInvUrl));
-                                  await launch(vendInvUrl,
-                                      forceSafariVC: false,
-                                      forceWebView: false);
-                                }),
-                          TextSpan(text: '\nPayment Done At: $paymentDoneAt'),
-                        ],
-                      ),
-                    )
+                    Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.height * 0.04,
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.04),
+                        child: RichText(
+                          text: TextSpan(
+                            style: defaultStyle,
+                            children: <TextSpan>[
+                              const TextSpan(text: 'Pay Req: '),
+                              TextSpan(
+                                  text: payReqName,
+                                  style: linkStyle,
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      //launchUrl(Uri.parse('https://www.google.com'));
+                                      await launch(payReqUrl,
+                                          forceSafariVC: false,
+                                          forceWebView: false);
+                                    }),
+                              const TextSpan(text: '\nVend Inv: '),
+                              TextSpan(
+                                  text: vendInvName,
+                                  style: linkStyle,
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      //launchUrl(Uri.parse(vendInvUrl));
+                                      await launch(vendInvUrl,
+                                          forceSafariVC: false,
+                                          forceWebView: false);
+                                    }),
+                              TextSpan(
+                                  text: '\nPayment Done At: $paymentDoneAt'),
+                            ],
+                          ),
+                        )),
                   ],
                 ),
               ),
@@ -204,15 +213,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     decoration: const BoxDecoration(
                         color: Color(0xFFf8f4f4),
                         image: DecorationImage(
-                          scale: 1.8,
+                          scale: 1.5,
                           image: AssetImage("assets/images/logo.png"),
                         )),
                     child: Container(
                       alignment: Alignment.bottomCenter,
-                      child: const Text(
-                        'User Email',
-                        style: TextStyle(
-                          fontSize: 20,
+                      child: Text(
+                        userEmail,
+                        style: const TextStyle(
+                          fontSize: 17,
                         ),
                       ),
                     )),
@@ -347,7 +356,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const MyHomePage(
-                                    title: '',
+                                    title: 'History',
                                   )),
                         );
                       } on FirebaseAuthException catch (e) {
