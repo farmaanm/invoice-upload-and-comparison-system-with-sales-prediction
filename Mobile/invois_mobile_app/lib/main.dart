@@ -62,6 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String vendInvName = '';
   String vendInvUrl = '';
   String paymentDoneAt = '';
+
   String userEmail = '';
 
   TextStyle defaultStyle = const TextStyle(color: Colors.grey);
@@ -73,9 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .authStateChanges()
         .listen((User? user) {
       if (user != null) {
-        for (final providerProfile in user.providerData) {
-          userEmail = providerProfile.email!;
-        }
+        userEmail = user.email!;
       }
     });
 
@@ -99,23 +98,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: <Widget>[
                     StreamBuilder<QuerySnapshot>(
                         stream: _usersStream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (snapshot.hasError) {
                             return const Text('Something went wrong');
                           }
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
                             return const Center(
                                 heightFactor: 10,
                                 child: CircularProgressIndicator());
                           }
                           return ListView(
                             shrinkWrap: true,
-                            children: snapshot.data!.docs
-                                .map((DocumentSnapshot document) {
-                              Map<String, dynamic> data =
-                                  document.data()! as Map<String, dynamic>;
+                            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                              Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
                               return ListTile(
                                 title: Text(data['uploadedBy']),
                                 subtitle: Text(data['dateTime']),
@@ -130,19 +125,33 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                 onTap: () {
                                   setState(() {
-                                    if (payReqName == '') {
-                                      payReqName =
-                                          data['paymentRequisitionName'];
-                                      payReqUrl = data['paymentRequisitionUrl'];
-                                      vendInvName = data['vendorInvoiceName'];
-                                      vendInvUrl = data['vendorInvoiceUrl'];
-                                      paymentDoneAt = data['paymentDoneAt'];
+                                    if (data['paymentStatus'] == 'Done'){
+                                      //if (payReqName == '') {
+                                        payReqName = data['paymentRequisitionName'];
+                                        payReqUrl = data['paymentRequisitionUrl'];
+                                        vendInvName = data['vendorInvoiceName'];
+                                        vendInvUrl = data['vendorInvoiceUrl'];
+                                        paymentDoneAt = data['paymentDoneAt']!;
+                                      /*} else {
+                                        payReqName = '';
+                                        payReqUrl = '';
+                                        vendInvName = '';
+                                        vendInvUrl = '';
+                                        paymentDoneAt = '';
+                                      }*/
                                     } else {
-                                      payReqName = '';
-                                      payReqUrl = '';
-                                      vendInvName = '';
-                                      vendInvUrl = '';
-                                      paymentDoneAt = '';
+                                      //if (payReqName == '') {
+                                        payReqName = data['paymentRequisitionName'];
+                                        payReqUrl = data['paymentRequisitionUrl'];
+                                        vendInvName = data['vendorInvoiceName'];
+                                        vendInvUrl = data['vendorInvoiceUrl'];
+                                        paymentDoneAt = '';
+                                      /*} else {
+                                        payReqName = '';
+                                        payReqUrl = '';
+                                        vendInvName = '';
+                                        vendInvUrl = '';
+                                      }*/
                                     }
                                   });
                                 },
@@ -234,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ListTile(
                   selected: true,
                   leading: const Icon(Icons.history),
-                  title: const Text(' History '),
+                  title: const Text(' History'),
                   onTap: () {
                     Navigator.pop(context);
                   },
@@ -262,8 +271,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class _MyLoginPageState extends State<MyLoginPage> {
-  final Stream<QuerySnapshot> _usersStream =
-      FirebaseFirestore.instance.collection('Contract').snapshots();
+  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('Contract').snapshots();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -279,7 +287,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
         body: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.height * 0.35,
+                vertical: MediaQuery.of(context).size.height * 0.25,
                 horizontal: MediaQuery.of(context).size.width * 0.04),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -287,8 +295,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
               children: <Widget>[
                 Image.asset(
                   'assets/images/logo.png',
-                  height: 100,
-                  scale: 2.5,
+                  height: 150,
+                  scale: 1,
                   // color: Color.fromARGB(255, 15, 147, 59),
                 ),
                 const SizedBox(
@@ -345,41 +353,43 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
                     onPressed: () async {
-                      try {
-                        final credential = await FirebaseAuth.instance
-                            .signInWithEmailAndPassword(
-                                email: emailController.text,
-                                password: passwordController.text);
-
-                        if (!context.mounted) return;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MyHomePage(
-                                    title: 'History',
-                                  )),
-                        );
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'user-not-found') {
-                          useremailerror = "No user found for that email.";
-                          Fluttertoast.showToast(
-                            msg: "No user found for that email.",
-                            toastLength: Toast.LENGTH_SHORT,
-                            textColor: Colors.black,
-                            fontSize: 14,
-                            backgroundColor: Colors.grey[200],
+                      //setState(() async {
+                        try {
+                          final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                              email: emailController.text,
+                              password: passwordController.text);
+                          if (!context.mounted) return;
+                          Navigator.push(context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyHomePage(
+                                  title: 'History',
+                                )),
                           );
-                        } else if (e.code == 'wrong-password') {
-                          userpassworderror = "Invalid password.";
-                          Fluttertoast.showToast(
-                            msg: "Wrong password provided for that user.",
-                            toastLength: Toast.LENGTH_SHORT,
-                            textColor: Colors.black,
-                            fontSize: 14,
-                            backgroundColor: Colors.grey[200],
-                          );
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'user-not-found') {
+                            useremailerror = "No user found for that email.";
+                            userpassworderror = '';
+                            Fluttertoast.showToast(
+                              msg: "No user found for that email.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              textColor: Colors.black,
+                              fontSize: 14,
+                              backgroundColor: Colors.grey[200],
+                            );
+                          } else if (e.code == 'wrong-password') {
+                            useremailerror = '';
+                            userpassworderror = "Invalid password.";
+                            Fluttertoast.showToast(
+                              msg: "Wrong password provided for that user.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              textColor: Colors.black,
+                              fontSize: 14,
+                              backgroundColor: Colors.grey[200],
+                            );
+                          }
                         }
-                      }
+                      //});
+
                     },
                     // style: ButtonStyle(elevation: MaterialStateProperty(12.0 )),
                     style: ElevatedButton.styleFrom(
