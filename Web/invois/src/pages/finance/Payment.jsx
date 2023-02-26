@@ -133,7 +133,7 @@ function Payment() {
             {loading === false ? (
                 <div>
                     {/* Navigation Bar */}
-                    {/*
+                    
                     <div>
                         <div style={{
                             position: 'relative',
@@ -156,7 +156,7 @@ function Payment() {
                         </div>
                         <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
                     </div>
-                    */}
+                    
                     
                     {/* List of Files */}
                     <div>

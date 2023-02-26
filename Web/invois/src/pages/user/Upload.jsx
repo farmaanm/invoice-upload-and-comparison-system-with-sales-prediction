@@ -17,6 +17,7 @@ export default function Upload() {
 
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
+    
     useEffect(() => {
         /* Timeout for Loadin Screen */
         setTimeout(() => setLoading(false), 1000) //1s
@@ -168,7 +169,7 @@ export default function Upload() {
             {loading === false ? (
                 <div>
                     {/* Navigation Bar */}
-                    {/*
+                    
                     <div>
                         <div style={{
                             position: 'relative',
@@ -195,7 +196,7 @@ export default function Upload() {
                         </div>
                         <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
                     </div>
-                    */}
+                    
                     
                     {/* File Upload */}
                     <div style={{ padding: '5%' }}>

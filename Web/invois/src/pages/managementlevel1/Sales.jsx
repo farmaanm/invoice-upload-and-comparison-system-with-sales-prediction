@@ -73,7 +73,7 @@ function Sales() {
             {loading === false ? (
                 <div>
                     {/* Navigation Bar */}
-                    {/*
+                    
                     <div>
                         <div style={{
                             position: 'relative',
@@ -87,11 +87,11 @@ function Sales() {
                             </div>
 
                             <div style={{ position: 'absolute', bottom: '10px', right: '350px' }}>
-                                <a href='/history'>History</a>
+                                <a href='/hhistory'>History</a>
                             </div>
 
                             <div style={{ position: 'absolute', bottom: '10px', right: '230px' }}>
-                                <a href="/contract">Customers</a>
+                                <a href="/hcontract">Customers</a>
                             </div>
 
                             <div style={{ position: 'absolute', bottom: '10px', right: '150px' }}>
@@ -104,7 +104,7 @@ function Sales() {
                         </div>
                         <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
                     </div>
-                    */}
+                    
                     
                     {/* Sales Chart */}
                     <Chart

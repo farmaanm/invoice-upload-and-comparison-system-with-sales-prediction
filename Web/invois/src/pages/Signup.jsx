@@ -7,6 +7,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
 
@@ -15,6 +16,7 @@ const Signup = () => {
     const [repeatPassword, setRepeatPassword] = useState("");
     const [error, setError] = useState("");
 
+    const navigate = useNavigate()
 
     const validateForm = () => {
         return email.length > 0 && password.length > 0 && password === repeatPassword;
@@ -28,6 +30,7 @@ const Signup = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((res) => {
                 console.log(res.user)
+                navigate('/')
             })
             .catch(err => setError(err.message))
 

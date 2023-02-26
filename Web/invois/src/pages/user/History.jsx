@@ -47,7 +47,7 @@ function History() {
                 <div>
 
                     {/* Navigation Bar */}
-                    {/*
+                    
                     <div>
                         <div style={{
                             position: 'relative',
@@ -74,7 +74,7 @@ function History() {
                         </div>
                         <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
                     </div>
-                    */}
+                    
 
                     {/* List of Files */}
                     <div>

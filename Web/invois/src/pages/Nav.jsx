@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import { MDBIcon } from 'mdb-react-ui-kit';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Upload from './user/Upload';
 import History from './user/History';
 import Approve from './managementlevel2/Approve'
@@ -10,23 +9,35 @@ import Signup from './Signup';
 import Payment from './finance/Payment'
 import Sales from './managementlevel1/Sales'
 
-var userTypeValue = ""
-
-function userType(userVal) {
-    console.log(userVal)
-    userTypeValue = userVal;
-}
-
 export default function UserNav() {
 
-    console.log(userTypeValue)
+    /*console.log('x = ' + x)
+    var y = x
+    console.log('y = ' + y)
 
-    const [userType, setuserType] = useState("head")
+    if (x === 'user') {
+        console.log('user')
+    } else if (x === 'management') {
+        console.log('management')
+    } else if (x === 'head') {
+        console.log('head')
+    } else if (x === 'finance') {
+        console.log('finance')
+    } else {
+        console.log('empty')
+    }*/
 
-    //setuserType('user')
+    //const [userType, setuserType] = useState(x)
+
+
+    //console.log('userType1 = ' + userType)
+    //setuserType(x)
+    //console.log('userType2 = ' + userType)
+
 
     return (
         <Router>
+            {/*
             <div>
 
                 {userType === 'user' ? (
@@ -138,12 +149,10 @@ export default function UserNav() {
                     <></>
                 )}
 
-
-
             </div>
+            */}
 
             <Routes>
-
                 <Route index element={< Login />}></Route>
                 <Route exact path='/signup' element={< Signup />}></Route>
 
@@ -157,15 +166,21 @@ export default function UserNav() {
 
                 {/* Management Level 1 */}
                 <Route exact path='/sales' element={< Sales />}></Route>
+                <Route exact path='/hhistory' element={< History />}></Route>
+                <Route exact path='/hcontract' element={< Contract />}></Route>
 
                 {/* Finance */}
                 <Route exact path='/payment' element={< Payment />}></Route>
             </Routes>
 
-
         </Router>
     );
+
 }
 
 
-export { userType }
+//export { userType }
+
+
+
+

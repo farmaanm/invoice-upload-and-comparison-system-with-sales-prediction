@@ -82,7 +82,7 @@ function Approve() {
             {loading === false ? (
                 <div>
                     {/* Navigation Bar */}
-                    {/*
+                    
                     <div>
                         <div style={{
                             position: 'relative',
@@ -109,7 +109,7 @@ function Approve() {
                         </div>
                         <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
                     </div>
-                    */}
+                    
                     {/* Approve List of Files */}
                     <div>
 
