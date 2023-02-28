@@ -8,6 +8,8 @@ import Login from './Login';
 import Signup from './Signup';
 import Payment from './finance/Payment'
 import Sales from './managementlevel1/Sales'
+import HeadHistory from './managementlevel1/HeadHistory'
+import HeadContract from './managementlevel1/HeadContract'
 
 export default function UserNav() {
 
@@ -166,8 +168,8 @@ export default function UserNav() {
 
                 {/* Management Level 1 */}
                 <Route exact path='/sales' element={< Sales />}></Route>
-                <Route exact path='/hhistory' element={< History />}></Route>
-                <Route exact path='/hcontract' element={< Contract />}></Route>
+                <Route exact path='/hhistory' element={< HeadHistory />}></Route>
+                <Route exact path='/hcontract' element={< HeadContract />}></Route>
 
                 {/* Finance */}
                 <Route exact path='/payment' element={< Payment />}></Route>

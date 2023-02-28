@@ -48,8 +48,8 @@ function Payment() {
 
     /*DB Refrence*/
     const getDataRefContract = collection(db, "Contract");
-    const qry = query(getDataRefContract, where("status", "==", "Approved"), where("paymentStatus", "==", "pending"));
-    const qryDone = query(getDataRefContract, where("status", "==", "Approved"), where("paymentStatus", "==", "done"));
+    const qry = query(getDataRefContract, where("status", "==", "Approved"), where("paymentStatus", "==", "Pending"));
+    const qryDone = query(getDataRefContract, where("status", "==", "Approved"), where("paymentStatus", "==", "Done"));
 
     const [showData, setShowData] = useState([]);
     const [showDoneData, setShowDoneData] = useState([]);
@@ -99,7 +99,7 @@ function Payment() {
         return dateTime;
     }
 
-    /* Updating Payment Status pending / done */
+    /* Updating Payment Status Pending / Done */
     const paymentUpdateStatus = () => async () => {
 
         for (var key of Object.keys(userinfo.response)) {
@@ -112,7 +112,7 @@ function Payment() {
             if (docSnap.exists()) {
                 //console.log("Document data:", docSnap.data());
                 await updateDoc(contractRef, {
-                    paymentStatus: "done",
+                    paymentStatus: "Done",
                     paymentDoneAt: getDateTime()
                 });
             } else {
@@ -122,42 +122,42 @@ function Payment() {
         }
 
         /*
-            paymentStatus: "pending",
-            paymentStatus: "done",
+            paymentStatus: "Pending",
+            paymentStatus: "Done",
         */
     }
 
 
     return (
         <>
+            {/* Navigation Bar */}
+
+            <div>
+                <div style={{
+                    position: 'relative',
+                    height: '100px',
+                    width: '100%'
+                }}>
+
+                    <div style={{ position: 'absolute', top: '20px', left: '60px' }}>
+                        <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
+                        <span className="h1 fw-bold mb-0">Invois</span>
+                    </div>
+
+                    <div style={{ position: 'absolute', bottom: '10px', right: '150px' }}>
+                        <a href='/payment' style={{ textDecoration: 'underline' }}>Payment</a>
+                    </div>
+
+                    <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>
+                        <a href="/">Log out</a>
+                    </div>
+                </div>
+                <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
+            </div>
+
             {loading === false ? (
                 <div>
-                    {/* Navigation Bar */}
-                    
-                    <div>
-                        <div style={{
-                            position: 'relative',
-                            height: '100px',
-                            width: '100%'
-                        }}>
 
-                            <div style={{ position: 'absolute', top: '20px', left: '60px' }}>
-                                <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                                <span className="h1 fw-bold mb-0">Invois</span>
-                            </div>
-
-                            <div style={{ position: 'absolute', bottom: '10px', right: '150px' }}>
-                                <a href='/payment'>Payment</a>
-                            </div>
-
-                            <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>
-                                <a href="/">Log out</a>
-                            </div>
-                        </div>
-                        <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-                    </div>
-                    
-                    
                     {/* List of Files */}
                     <div>
                         <div style={{ padding: '10px' }}>
@@ -173,7 +173,7 @@ function Payment() {
                                     </tr>
                                 </thead>
 
-                                {/* status == Approved, paymentStatus == pending */}
+                                {/* status == Approved, paymentStatus == Pending */}
                                 <tbody>
 
                                     {showData.map(({ id, post }) => {
@@ -237,7 +237,7 @@ function Payment() {
 
                                 <tbody>
 
-                                    {/* status == Approved, paymentStatus == done */}
+                                    {/* status == Approved, paymentStatus == Done */}
                                     {showDoneData.map(({ id, post }) => {
 
                                         return (

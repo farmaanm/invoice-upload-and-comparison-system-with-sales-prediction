@@ -50,7 +50,7 @@ function Approve() {
                 console.log("No such document!");
             }
         } else {
-        /* If status == Rejected */
+            /* If status == Rejected */
             if (docSnap.exists()) {
                 //console.log("Rejected", docSnap.data());
                 await updateDoc(contractRef, {
@@ -79,37 +79,39 @@ function Approve() {
 
     return (
         <>
+
+            {/* Navigation Bar */}
+
+            <div>
+                <div style={{
+                    position: 'relative',
+                    height: '100px',
+                    width: '100%'
+                }}>
+
+                    <div style={{ position: 'absolute', top: '20px', left: '60px' }}>
+                        <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
+                        <span className="h1 fw-bold mb-0">Invois</span>
+                    </div>
+
+                    <div style={{ position: 'absolute', bottom: '10px', right: '250px' }}>
+                        <a href='/approve' style={{ textDecoration: 'underline' }}>Approve</a>
+                    </div>
+
+                    <div style={{ position: 'absolute', bottom: '10px', right: '150px' }}>
+                        <a href="/contract">Contract</a>
+                    </div>
+
+                    <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>
+                        <a href="/">Log out</a>
+                    </div>
+                </div>
+                <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
+            </div>
+
             {loading === false ? (
                 <div>
-                    {/* Navigation Bar */}
-                    
-                    <div>
-                        <div style={{
-                            position: 'relative',
-                            height: '100px',
-                            width: '100%'
-                        }}>
 
-                            <div style={{ position: 'absolute', top: '20px', left: '60px' }}>
-                                <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                                <span className="h1 fw-bold mb-0">Invois</span>
-                            </div>
-
-                            <div style={{ position: 'absolute', bottom: '10px', right: '250px' }}>
-                                <a href='/approve'>Approve</a>
-                            </div>
-
-                            <div style={{ position: 'absolute', bottom: '10px', right: '150px' }}>
-                                <a href="/contract">Contract</a>
-                            </div>
-
-                            <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>
-                                <a href="/">Log out</a>
-                            </div>
-                        </div>
-                        <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-                    </div>
-                    
                     {/* Approve List of Files */}
                     <div>
 

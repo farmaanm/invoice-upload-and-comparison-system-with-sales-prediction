@@ -5,7 +5,7 @@ import { db } from '../../firebase'
 import LoadingScreen from '../../loading/LoadingScreen';
 
 
-function History() {
+function HeadHistory() {
 
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
@@ -17,7 +17,7 @@ function History() {
 
     useEffect(() => {
         /* Timeout for Loadin Screen */
-        setTimeout(() => setLoading(false), 4000) //4s
+        setTimeout(() => setLoading(false), 3000) //3s
 
         /* To retrieve data */
         const getData = async () => {
@@ -43,7 +43,6 @@ function History() {
 
     return (
         <>
-
             {/* Navigation Bar */}
 
             <div>
@@ -58,12 +57,16 @@ function History() {
                         <span className="h1 fw-bold mb-0">Invois</span>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '250px' }}>
-                        <a href='/upload'>Upload File</a>
+                    <div style={{ position: 'absolute', bottom: '10px', right: '350px' }}>
+                        <a href='/hhistory' style={{ textDecoration: 'underline' }}>History</a>
+                    </div>
+
+                    <div style={{ position: 'absolute', bottom: '10px', right: '230px' }}>
+                        <a href="/hcontract">Customers</a>
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '10px', right: '150px' }}>
-                        <a href="/history" style={{ textDecoration: 'underline' }} >History</a>
+                        <a href='/sales'>Sales</a>
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>
@@ -86,7 +89,9 @@ function History() {
                                     <tr>
                                         <th scope='col'>Vendor Invoice</th>
                                         <th scope='col'>Payment Requisition</th>
-                                        <th scope='col'>Status</th>
+                                        <th scope='col'>Approval Status</th>
+                                        <th scope='col'>Payment Status</th>
+                                        <th scope='col'>Payment Done At</th>
                                         <th scope='col'>Uploaded At</th>
                                         <th scope='col'>Uploaded By</th>
                                     </tr>
@@ -109,6 +114,20 @@ function History() {
                                                         {post.status}
                                                     </MDBBadge>
                                                 </td>
+                                                <td>{/*color={post.statusMessage}*/}
+                                                    {post.paymentStatus === 'Done' ? (
+                                                        <MDBBadge color='success' pill>
+                                                            {post.paymentStatus}
+                                                        </MDBBadge>
+                                                    ) : (<MDBBadge color='warning' pill>
+                                                        {post.paymentStatus}
+                                                    </MDBBadge>
+                                                    )}
+
+                                                </td>
+                                                <td>
+                                                    <p className='fw-normal mb-1'>{post.paymentDoneAt}</p>
+                                                </td>
                                                 <td>
                                                     <p className='fw-normal mb-1'>{post.dateTime}</p>
                                                 </td>
@@ -127,7 +146,6 @@ function History() {
                         </div>
 
                     </div>
-                    
                 </div>
             ) : (
                 <LoadingScreen />
@@ -136,4 +154,4 @@ function History() {
     );
 }
 
-export default History
+export default HeadHistory
