@@ -7,15 +7,23 @@ function Sales() {
 
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
+    let [sales, setSales] = useState([])
+
+    let getSales = async () => {
+        let response = await fetch('http://127.0.0.1:8000/salesprediction')
+        let data = await response.json()
+        setSales(data)
+    }
 
     useEffect(() => {
         /* Timeout for Loadin Screen */
         setTimeout(() => setLoading(false), 4000) //4s
+        getSales()
     });
 
     const data = [
-        ["Year", "Actual Sales", "Predicted Sales"],
-        [0, 1296, 920.273462],
+        ["Year", "Actual Sales", "Predicted Sales"]
+        /*[0, 1296, 920.273462],
         [1, 1368, 1490.778158],
         [2, 4986, 4961.348225],
         [3, 75, -1.542094],
@@ -55,16 +63,19 @@ function Sales() {
         [37, 198.00, 219.145703],
         [38, 3274.00, 3303.204720],
         [39, 316.00, 372.629593],
-        [40, 396.00, 434.767691]
-
-
-
+        [40, 396.00, 434.767691]*/
     ];
+
+    for (var i=0; i<sales.length; i++){
+        data.push(sales[i])
+    }
 
     const options = {
         title: "Company Sales",
+        hAxis: { title: "Date" },
+        vAxis: { title: "Sales ($)" },
         curveType: "function",
-        legend: { position: "bottom" },
+        legend: { position: "topright" },
     };
 
 
@@ -85,16 +96,16 @@ function Sales() {
                         <span className="h1 fw-bold mb-0">Invois</span>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '350px' }}>
+                    <div style={{ position: 'absolute', bottom: '10px', right: '320px' }}>
+                        <a href='/sales' style={{ textDecoration: 'underline' }}>Sales</a>
+                    </div>
+
+                    <div style={{ position: 'absolute', bottom: '10px', right: '240px' }}>
                         <a href='/hhistory'>History</a>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '230px' }}>
+                    <div style={{ position: 'absolute', bottom: '10px', right: '140px' }}>
                         <a href="/hcontract">Customers</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '10px', right: '150px' }}>
-                        <a href='/sales' style={{ textDecoration: 'underline' }}>Sales</a>
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>
@@ -114,6 +125,7 @@ function Sales() {
                         height="600px"
                         data={data}
                         options={options}
+                        style={{marginTop:'-15px'}}
                     />
                 </div>
             ) : (

@@ -57,16 +57,16 @@ function HeadHistory() {
                         <span className="h1 fw-bold mb-0">Invois</span>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '350px' }}>
-                        <a href='/hhistory' style={{ textDecoration: 'underline' }}>History</a>
+                    <div style={{ position: 'absolute', bottom: '10px', right: '320px' }}>
+                        <a href='/sales' style={{ textDecoration: 'underline' }}>Sales</a>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '230px' }}>
+                    <div style={{ position: 'absolute', bottom: '10px', right: '240px' }}>
+                        <a href='/hhistory'>History</a>
+                    </div>
+
+                    <div style={{ position: 'absolute', bottom: '10px', right: '140px' }}>
                         <a href="/hcontract">Customers</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '10px', right: '150px' }}>
-                        <a href='/sales'>Sales</a>
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>
