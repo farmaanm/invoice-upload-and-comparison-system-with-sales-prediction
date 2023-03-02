@@ -123,6 +123,25 @@ export default function Upload() {
         }
     }
 
+    /*****************************Setting File name********************************* */
+    const [fileCustomerInvoice, setFileCustomerInvoice] = useState()
+    const [filePaymentRequisition, setFilePaymentRequisition] = useState()
+
+    function setCustomerInvoice(event){
+        fileValidateSpot()
+        setFileCustomerInvoice(event.target.files[0])
+    }
+
+    function setPaymentRequisition(event){
+        fileValidateSpot()
+        setFilePaymentRequisition(event.target.files[0])
+    }
+
+    console.log(fileCustomerInvoice)
+    console.log(filePaymentRequisition)
+    /******************************************************************************* */
+
+
     /*Success, Unsuccess Message */
     const [centredModalSuccess, setCentredModalSuccess] = useState(false);  //Success Validation
     const [centredModalUnuccess, setCentredModalUnuccess] = useState(false);  //Unuccess Validation
@@ -147,17 +166,33 @@ export default function Upload() {
         //toggleShowUnuccess();
     }
 
+    /*********************************Extracting Payment Requisition Data******************** */
+    let [payReq, setPayReq] = useState([])
+    async function getPayReq(filePath) {
+
+        //let response = await fetch('http://127.0.0.1:8000/salesprediction')
+
+        let response = await fetch('http://127.0.0.1:8000/extractPayReq?pdfname=' + filePath)
+        let data = await response.json()
+        setPayReq(data)
+        //console.log(data)
+    }
+    console.log(payReq)
+    /***************************************************************************************** */
+
     /*Spot Validate Button Validation Success, Unsuccess Message*/
-    function validateSpot() {
+    function validateSpot(e) {
+        e.preventDefault();
+        //getPayReq(filePaymentRequisition.name)
 
         //Send to Database
 
         //if database success: 
-        toggleShowSuccess();
+        /*toggleShowSuccess();
         document.getElementById('customerInvoiceSpot').value = "";
         document.getElementById('paymentRequisitionSpot').value = "";
         setDisabledSpot(true);
-        fileValidateSpot();
+        fileValidateSpot();*/
 
         //else:
         //toggleShowUnuccess();
@@ -400,6 +435,8 @@ export default function Upload() {
 
 
                         <div className="tab-content" id="ex2-content">
+
+                            {/* Contract Invoice Upload */}
                             <div className="tab-pane fade show active"
                                 id="ex3-pills-1"
                                 role="tabpanel"
@@ -460,7 +497,7 @@ export default function Upload() {
                                 </div>
                             </div>
 
-
+                            {/* Spot Invoice Upload */}
                             <div
                                 className="tab-pane fade"
                                 id="ex3-pills-2"
@@ -489,7 +526,7 @@ export default function Upload() {
                                                         accept='application/pdf'
                                                         id="customerInvoiceSpot"
                                                         style={fileUpload}
-                                                        onChange={fileValidateSpot} />
+                                                        onChange={setCustomerInvoice} />
                                                 </td>
                                                 <td>
                                                     <input type='file'
@@ -498,7 +535,7 @@ export default function Upload() {
                                                         accept='application/pdf'
                                                         id="paymentRequisitionSpot"
                                                         style={fileUpload}
-                                                        onChange={fileValidateSpot} />
+                                                        onChange={setPaymentRequisition} />
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -507,7 +544,7 @@ export default function Upload() {
                                     <p><br /></p>
 
                                     <div>
-                                        <MDBBtn disabled={disabledSpot} type='submit' onClick={validateSpot}>VALIDATE</MDBBtn>
+                                        <MDBBtn disabled={disabledSpot} type='button' onClick={e => { validateSpot(e) }}>VALIDATE</MDBBtn>
                                     </div>
                                 </div>
                             </div>
