@@ -180,10 +180,61 @@ export default function Upload() {
     console.log(payReq)
     /***************************************************************************************** */
 
+    /*********************************Extracting Customer Invoice Data******************** */
+    const mindeeSubmit = (evt) => {
+        //evt.preventDefault()
+        //let myFileInput = document.getElementById('my-file-input');
+        //let myFile = myFileInput.files[0]
+        let myFile = fileCustomerInvoice
+        if (!myFile) { return }
+        let data = new FormData();
+        data.append("document", myFile, myFile.name);
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                //console.log(this.responseText);
+
+                const myJSON = this.responseText;
+                    const myObj = JSON.parse(myJSON);
+                    //console.log(typeof (myJSON))
+
+                    var p = myObj.document.inference.prediction.invoice_number.values[0].content;
+                    var q = myObj.document.inference.prediction.total_value.values[0].content;
+                    var r = myObj.document.inference.prediction.invoice_date.values[0].content;
+
+                    var customer = ""
+                    var vendor = ""
+
+                    for (var i = 0; i < myObj.document.inference.prediction.company_address.values.length; i++) {
+                        customer = customer + ' ' + myObj.document.inference.prediction.company_address.values[i].content
+                    }
+
+                    for (var i = 0; i < myObj.document.inference.prediction.vendor_address.values.length; i++) {
+                        vendor = vendor + ' ' + myObj.document.inference.prediction.vendor_address.values[i].content
+                    }
+
+                    console.log(p)
+                    console.log(q)
+                    console.log(r)
+                    console.log(customer)
+                    console.log(vendor)
+            }
+        });
+
+        xhr.open("POST", "https://api.mindee.net/v1/products/farmaan/multiple_invoice/v1/predict");
+        xhr.setRequestHeader("Authorization", "Token bdc0964cbb927b59c50f90614b34eced");
+        xhr.send(data);
+    }
+    /***************************************************************************************** */
+
+
     /*Spot Validate Button Validation Success, Unsuccess Message*/
     function validateSpot(e) {
         e.preventDefault();
-        //getPayReq(filePaymentRequisition.name)
+        getPayReq(filePaymentRequisition.name)
+        mindeeSubmit()
 
         //Send to Database
 
@@ -544,7 +595,8 @@ export default function Upload() {
                                     <p><br /></p>
 
                                     <div>
-                                        <MDBBtn disabled={disabledSpot} type='button' onClick={e => { validateSpot(e) }}>VALIDATE</MDBBtn>
+                                        {/*<MDBBtn disabled={disabledSpot} type='button' onClick={validateSpot}>VALIDATE</MDBBtn>*/}
+                                        <button disabled={disabledSpot} type='button' className="btn btn-primary" onClick={validateSpot}>VALIDATE</button>
                                     </div>
                                 </div>
                             </div>
