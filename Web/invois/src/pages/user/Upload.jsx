@@ -180,7 +180,9 @@ export default function Upload() {
     console.log(payReq)
     /***************************************************************************************** */
 
+
     /*********************************Extracting Customer Invoice Data******************** */
+    let [cusInv, setCusInv] = useState([])
     const mindeeSubmit = (evt) => {
         //evt.preventDefault()
         //let myFileInput = document.getElementById('my-file-input');
@@ -215,11 +217,14 @@ export default function Upload() {
                         vendor = vendor + ' ' + myObj.document.inference.prediction.vendor_address.values[i].content
                     }
 
-                    console.log(p)
-                    console.log(q)
-                    console.log(r)
-                    console.log(customer)
-                    console.log(vendor)
+                    //console.log(p)
+                    //console.log(q)
+                    //console.log(r)
+                    //console.log(customer)
+                    //console.log(vendor)
+
+                    let cusInvStr = '{"invoice_no":"' + p + '","customer_details":"' + customer + '","invoice_date":"' + r + '","document_issued_by":"' + vendor + '","total_value":"' + q + '"}'
+                    setCusInv(cusInvStr)
             }
         });
 
@@ -227,23 +232,40 @@ export default function Upload() {
         xhr.setRequestHeader("Authorization", "Token bdc0964cbb927b59c50f90614b34eced");
         xhr.send(data);
     }
+    console.log(cusInv)
     /***************************************************************************************** */
 
 
+    /*********************************Validating Invoice Data******************** */
+    let [validationStatus, setValidationStatus] = useState([])
+    async function validateData() {
+
+        let response = await fetch('http://127.0.0.1:8000/validateData?pdfname=')
+        let data = await response.json()
+        setValidationStatus(data)
+        console.log(data)
+    }
+    console.log(validationStatus)
+    /***************************************************************************************** */
+
+    
     /*Spot Validate Button Validation Success, Unsuccess Message*/
     function validateSpot(e) {
         e.preventDefault();
+
         getPayReq(filePaymentRequisition.name)
         mindeeSubmit()
+
+        //validateData()
 
         //Send to Database
 
         //if database success: 
-        /*toggleShowSuccess();
+        toggleShowSuccess();
         document.getElementById('customerInvoiceSpot').value = "";
         document.getElementById('paymentRequisitionSpot').value = "";
         setDisabledSpot(true);
-        fileValidateSpot();*/
+        fileValidateSpot();
 
         //else:
         //toggleShowUnuccess();
@@ -420,7 +442,8 @@ export default function Upload() {
                                 <MDBModalContent>
                                     <MDBModalHeader style={{ backgroundColor: '#dff0d5' }}>
                                         <MDBModalTitle>Confirmation</MDBModalTitle>
-                                        <MDBBtn className='btn-close' color='none' onClick={toggleShowSuccess}></MDBBtn>
+                                        {/*<MDBBtn className='btn-close' color='none' onClick={toggleShowSuccess}></MDBBtn>*/}
+                                        <button className='btn-close' color='none' onClick={toggleShowSuccess}></button>
                                     </MDBModalHeader>
 
                                     <MDBModalBody style={{ backgroundColor: '#dff0d5' }}>

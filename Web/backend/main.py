@@ -208,6 +208,49 @@ def paymentRequisition(pdfname=None):
 
     return str
 
+@app.get("/validateData")
+def dataComparison():
+
+    a_invoice_number = 'LK0072723'
+    a_invoice_date = '19-Sep-22'
+    a_customer_address = 'OCEAN NETWORK EXPRESS LANKA (PVT) LTD 349 8/1, GALLE ROAD, COLOMBO 03'
+    a_shipper_address = 'YUSEN LOGISTICS & KUSUHARA LANKA (PVT) LTD. WEST WING, GROUND FLOOR, 400 DEANS ROAD, COLOMBO 10, SRI LANKA COLOMBO 01000'
+    a_total_value = '732.00'
+
+    b_invoice_number = 'LK0072723'
+    b_invoice_date = '2022-09-19'
+    b_customer_address = 'OCEAN NETWORK EXPRESS LANKA (PVT) LTD NO.349, 8/1, GALLE ROAD, COLOMBO 03, SRI LANKA Tel:'
+    b_shipper_address = "YUSEN LOGISTICS & KUSUHARA LANKA (PVT) LTD Dean's Rd"
+    b_total_value = '732.00'
+
+    # Date
+    from dateutil import parser
+
+    a_invoice_date = parser.parse(a_invoice_date)
+    b_invoice_date = parser.parse(b_invoice_date)
+
+    #print('Date -> ', a_invoice_date == b_invoice_date)
+
+    # invoice number, Total value
+    #print('Invoice No. -> ', a_invoice_number == b_invoice_number)
+    #print('Bill Value -> ', a_total_value == b_total_value)
+
+    # Customer Address
+    a_customer_address = set(a_customer_address.split())
+    b_customer_address = set(b_customer_address.split())
+    customer_address = a_customer_address & b_customer_address
+
+    # print(customer_address)
+
+    # Shipper Address
+    a_shipper_address = set(a_shipper_address.split())
+    b_shipper_address = set(b_shipper_address.split())
+    shipper_address = a_shipper_address & b_shipper_address
+
+    # print(shipper_address)
+
+    return a_invoice_date
+
 
 if __name__ == '__main__':
     app.run()
