@@ -11,6 +11,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/salesprediction")
 def multiple_regression():
     from sklearn.metrics import r2_score
@@ -26,12 +27,14 @@ def multiple_regression():
 
     dates = dataset["date"].values[591:843]
 
-    dataset = dataset.drop(['date', 'Invoice No.', 'vendor', 'destination', 'LKR per USD', 'Total Value LKR'], axis=1)
+    dataset = dataset.drop(['date', 'Invoice No.', 'vendor',
+                           'destination', 'LKR per USD', 'Total Value LKR'], axis=1)
 
     X = dataset.iloc[:, :-1].values
     y = dataset.iloc[:, -1].values
-    
-    ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [3])], remainder='passthrough')
+
+    ct = ColumnTransformer(
+        transformers=[('encoder', OneHotEncoder(), [3])], remainder='passthrough')
     X = np.array(ct.fit_transform(X))
 
     X_train = X[:590, :]
@@ -43,12 +46,13 @@ def multiple_regression():
     regressor.fit(X_train, y_train)
 
     y_pred = regressor.predict(X_test)
-    df = pd.DataFrame({'Real Values': y_test, 'Predicted Values': y_pred, 'Difference': (y_pred/y_test)*100})
+    df = pd.DataFrame(
+        {'Real Values': y_test, 'Predicted Values': y_pred, 'Difference': (y_pred/y_test)*100})
     print(df)
 
     # Counting number of predicted results >80 and <120
     out = np.array([(np.divide(y_pred, y_test))*100])
-    result = np.where(np.logical_and(out>= 80, out<= 120))
+    result = np.where(np.logical_and(out >= 80, out <= 120))
     print("Values 80 <= result <= 120: ", len(result[1]))
 
     from sklearn.metrics import mean_absolute_error, mean_squared_error
@@ -81,14 +85,15 @@ def multiple_regression():
         temp_values.append(dates[i])
         temp_values.append(y_test[i])
         temp_values.append(y_pred[i])
-        
+
         result_values.append(temp_values)
 
     return result_values
 
+
 @app.get("/extractPayReq")
 def paymentRequisition(pdfname=None):
-    
+
     print(pdfname)
     print(type(pdfname))
 
@@ -208,57 +213,88 @@ def paymentRequisition(pdfname=None):
 
     return str
 
+
 @app.get("/validateData")
-def dataComparison():
+def dataComparison(cusInvStr=None, payReqStr=None):
 
-    a_invoice_number = 'LK0072723'
-    a_invoice_date = '19-Sep-22'
-    a_customer_address = 'OCEAN NETWORK EXPRESS LANKA (PVT) LTD 349 8/1, GALLE ROAD, COLOMBO 03'
-    a_shipper_address = 'YUSEN LOGISTICS & KUSUHARA LANKA (PVT) LTD. WEST WING, GROUND FLOOR, 400 DEANS ROAD, COLOMBO 10, SRI LANKA COLOMBO 01000'
-    a_total_value = '732.00'
+    print(cusInvStr)
+    print(payReqStr)
 
-    b_invoice_number = 'LK0072723'
-    b_invoice_date = '2022-09-19'
-    b_customer_address = 'OCEAN NETWORK EXPRESS LANKA (PVT) LTD NO.349, 8/1, GALLE ROAD, COLOMBO 03, SRI LANKA Tel:'
-    b_shipper_address = "YUSEN LOGISTICS & KUSUHARA LANKA (PVT) LTD Dean's Rd"
-    b_total_value = '732.00'
+    text = "Hello"
+    
+    if cusInvStr is None and payReqStr is None:
+        text = "Empty"
+    else:
+        text = "Done"
 
-    # Date
-    from dateutil import parser
+        import json
 
-    a_invoice_date = parser.parse(a_invoice_date)
-    b_invoice_date = parser.parse(b_invoice_date)
+        for key, value in cusInvStr.items():
+            print(key, value)
+        
+        #cusInvJson = json.dumps(cusInvStr)
+        #payReqJson = json.dumps(payReqStr)
 
-    #print('Date -> ', a_invoice_date == b_invoice_date)
+        #print(cusInvJson)
+        #print(type(cusInvJson))
 
-    # invoice number, Total value
-    #print('Invoice No. -> ', a_invoice_number == b_invoice_number)
-    #print('Bill Value -> ', a_total_value == b_total_value)
+        #print(payReqJson["invoice_no"])
+        '''
+        cusInv_invoice_number = cusInvJson["invoice_no"]
+        cusInv_invoice_date = cusInvJson["invoice_date"]
+        cusInv_customer_address = cusInvJson["document_issued_by"]
+        cusInv_shipper_address = cusInvJson["customer_details"]
+        cusInv_total_value = cusInvJson["total_value"]
 
-    # Customer Address
-    a_customer_address = set(a_customer_address.split())
-    b_customer_address = set(b_customer_address.split())
-    customer_address = a_customer_address & b_customer_address
+        payReq_invoice_number = payReqJson["invoice_no"]
+        payReq_invoice_date = payReqJson["invoice_date"]
+        payReq_customer_address = payReqJson["customer_details"]
+        payReq_shipper_address = payReqJson["document_issued_by"]
+        payReq_total_value = payReqJson["total_value"]
 
-    # print(customer_address)
+        payReq_total_value = payReq_total_value.replace(",", "")
 
-    # Shipper Address
-    a_shipper_address = set(a_shipper_address.split())
-    b_shipper_address = set(b_shipper_address.split())
-    shipper_address = a_shipper_address & b_shipper_address
+        #print(type(cusInv_total_value))
+        #print(type(payReq_total_value))
 
-    # print(shipper_address)
+        # Date
+        from dateutil import parser
 
-    return a_invoice_date
+        cusInv_invoice_date = parser.parse(cusInv_invoice_date)
+        payReq_invoice_date = parser.parse(payReq_invoice_date)
+
+        print('Date -> ', cusInv_invoice_date == payReq_invoice_date)
+
+        # invoice number
+        print('Invoice No. -> ', cusInv_invoice_number == payReq_invoice_number)
+
+        # Total value
+        print('Bill Value -> ', cusInv_total_value == payReq_total_value)
+
+        # Customer Address
+        cusInv_customer_address = set(cusInv_customer_address.split())
+        payReq_customer_address = set(payReq_customer_address.split())
+        customer_address = cusInv_customer_address & payReq_customer_address
+
+        print(customer_address)
+
+        # Shipper Address
+        cusInv_shipper_address = set(cusInv_shipper_address.split())
+        payReq_shipper_address = set(payReq_shipper_address.split())
+        shipper_address = cusInv_shipper_address & payReq_shipper_address
+
+        print(shipper_address)
+        '''
+
+    return text
+    
+    
 
 
 if __name__ == '__main__':
     app.run()
 
-#http://127.0.0.1:8000/my-first-api
-#http://127.0.0.1:8000/my-second-api?name=Farmaan
-#uvicorn main:app --reload
-
-
-
-
+# http://127.0.0.1:8000/my-first-api
+# http://127.0.0.1:8000/my-second-api?name=Farmaan
+# http://127.0.0.1:8000/my-second-api?name=Farmaan&name2=A
+# uvicorn main:app --reload

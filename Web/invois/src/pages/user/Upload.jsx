@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-    MDBBtn,
     MDBIcon,
     MDBModal,
     MDBModalDialog,
@@ -19,7 +18,7 @@ export default function Upload() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        /* Timeout for Loadin Screen */
+        /* Timeout for Loading Screen */
         setTimeout(() => setLoading(false), 1000) //1s
     });
 
@@ -183,7 +182,7 @@ export default function Upload() {
 
     /*********************************Extracting Customer Invoice Data******************** */
     let [cusInv, setCusInv] = useState([])
-    const mindeeSubmit = (evt) => {
+    const mindeeSubmit = async (evt) => {
         //evt.preventDefault()
         //let myFileInput = document.getElementById('my-file-input');
         //let myFile = myFileInput.files[0]
@@ -238,25 +237,69 @@ export default function Upload() {
 
     /*********************************Validating Invoice Data******************** */
     let [validationStatus, setValidationStatus] = useState([])
+
+    let [cusInv_invoice_number, setcusInv_invoice_number] = useState("")
+    let [cusInv_invoice_date, setcusInv_invoice_date] = useState("")
+    let [cusInv_customer_address, setcusInv_customer_address] = useState("")
+    let [cusInv_shipper_address, setcusInv_shipper_address] = useState("")
+    let [cusInv_total_value, setcusInv_total_value] = useState("")
+
+    let [payReq_invoice_number, setpayReq_invoice_number] = useState("")
+    let [payReq_invoice_date, setpayReq_invoice_date] = useState("")
+    let [payReq_customer_address, setpayReq_customer_address] = useState("")
+    let [payReq_shipper_address, setpayReq_shipper_address] = useState("")
+    let [payReq_total_value, setpayReq_total_value] = useState("")
+
     async function validateData() {
 
-        let response = await fetch('http://127.0.0.1:8000/validateData?pdfname=')
+        /*let response = await fetch('http://127.0.0.1:8000/validateData?cusInvStr=' + cusInv + '&payReqStr=' + payReq)
         let data = await response.json()
         setValidationStatus(data)
-        console.log(data)
+        console.log(data)*/
+
+        //const cusInvJson = JSON.parse(cusInv)
+        //const payReqJson = JSON.parse(payReq)
+        const myObj = JSON.parse(cusInv);
+
+        let var_cusInv_invoice_number = await myObj.invoice_no
+        
+        setcusInv_invoice_number(var_cusInv_invoice_number)
+        setcusInv_invoice_date(myObj.invoice_date)
+        setcusInv_customer_address(myObj.document_issued_by)
+        setcusInv_shipper_address(myObj.customer_details)
+        setcusInv_total_value(myObj.total_value)
+
+        const myObj2 = JSON.parse(payReq);
+        
+        setpayReq_invoice_number(myObj2.invoice_no)
+        setpayReq_invoice_date(myObj2.invoice_date)
+        setpayReq_customer_address(myObj2.customer_details)
+        setpayReq_shipper_address(myObj2.document_issued_by)
+        setpayReq_total_value(myObj2.total_value)
+        
     }
-    console.log(validationStatus)
+    console.log(cusInv_invoice_number)
+    console.log(cusInv_invoice_date)
+    console.log(cusInv_customer_address)
+    console.log(cusInv_shipper_address)
+    console.log(cusInv_total_value)
+
+    console.log(payReq_invoice_number)
+    console.log(payReq_invoice_date)
+    console.log(payReq_customer_address)
+    console.log(payReq_shipper_address)
+    console.log(payReq_total_value)
     /***************************************************************************************** */
 
     
     /*Spot Validate Button Validation Success, Unsuccess Message*/
-    function validateSpot(e) {
+    async function validateSpot(e) {
         e.preventDefault();
 
-        getPayReq(filePaymentRequisition.name)
-        mindeeSubmit()
+        await getPayReq(filePaymentRequisition.name)
+        await mindeeSubmit()
 
-        //validateData()
+        await validateData()
 
         //Send to Database
 
@@ -271,7 +314,7 @@ export default function Upload() {
         //toggleShowUnuccess();
     }
 
-
+    
     return (
         <>
 
@@ -465,7 +508,8 @@ export default function Upload() {
                                 <MDBModalContent >
                                     <MDBModalHeader style={{ backgroundColor: '#f2dede' }}>
                                         <MDBModalTitle>Confirmation</MDBModalTitle>
-                                        <MDBBtn className='btn-close' color='none' onClick={toggleShowUnuccess}></MDBBtn>
+                                        {/*<MDBBtn className='btn-close' color='none' onClick={toggleShowUnuccess}></MDBBtn>*/}
+                                        <button className='btn-close' color='none' onClick={toggleShowUnuccess}></button>
                                     </MDBModalHeader>
 
                                     <MDBModalBody style={{ backgroundColor: '#f2dede' }}>
@@ -566,7 +610,7 @@ export default function Upload() {
                                     <p><br /></p>
 
                                     <div>
-                                        <button class="btn btn-primary" disabled={disabledContract} onClick={validateContract}>VALIDATE</button>
+                                        <button className="btn btn-primary" disabled={disabledContract} onClick={validateContract}>VALIDATE</button>
                                     </div>
                                 </div>
                             </div>
