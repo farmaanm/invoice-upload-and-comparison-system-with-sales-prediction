@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <title>Mindee API FINAL</title>
+</head>
+
+<body>
+
+    <h1>New code</h1>
+    <h1>Mindee API</h1>
+    <h1>For Customer Invoices</h1>
+    <h1>With data seperation</h1>
+
+    <form onsubmit="mindeeSubmit(event)">
+        <input type="file" id="my-file-input" name="file" />
+        <input type="submit" />
+    </form>
+
+    <p id="demo"></p>
+    <p id="p"></p>
+    <p id="q"></p>
+    <p id="r"></p>
+    <p id="s"></p>
+    <p id="t"></p>
+
+    <script type="text/javascript">
+        const mindeeSubmit = (evt) => {
+            evt.preventDefault()
+            let myFileInput = document.getElementById('my-file-input');
+            let myFile = myFileInput.files[0]
+            if (!myFile) { return }
+            let data = new FormData();
+            data.append("document", myFile, myFile.name);
+
+            let xhr = new XMLHttpRequest();
+
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+                    console.log(this.responseText);
+
+                    const myJSON = this.responseText;
+                    const myObj = JSON.parse(myJSON);
+                    //console.log(typeof (myJSON))
+
+                    var p = myObj.document.inference.prediction.invoice_number.values[0].content;
+                    var q = myObj.document.inference.prediction.total_value.values[0].content;
+                    var r = myObj.document.inference.prediction.invoice_date.values[0].content;
+
+                    var customer = ""
+                    var vendor = ""
+
+                    for (var i = 0; i < myObj.document.inference.prediction.company_address.values.length; i++) {
+                        customer = customer + ' ' + myObj.document.inference.prediction.company_address.values[i].content
+                    }
+
+                    for (var i = 0; i < myObj.document.inference.prediction.vendor_address.values.length; i++) {
+                        vendor = vendor + ' ' + myObj.document.inference.prediction.vendor_address.values[i].content
+                    }
+
+                    document.getElementById("p").innerHTML = p
+                    document.getElementById("q").innerHTML = q
+                    document.getElementById("r").innerHTML = r
+                    document.getElementById("s").innerHTML = customer
+                    document.getElementById("t").innerHTML = vendor
+
+                }
+            });
+
+            xhr.open("POST", "https://api.mindee.net/v1/products/farmaan/multiple_invoice/v1/predict");
+            xhr.setRequestHeader("Authorization", "Token bdc0964cbb927b59c50f90614b34eced");
+            xhr.send(data);
+
+            //document.getElementById("demo").innerHTML = data.responseText
+
+        }
+    </script>
+</body>
+
+</html>
+
+
+
