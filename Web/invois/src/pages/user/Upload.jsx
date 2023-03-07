@@ -175,6 +175,8 @@ export default function Upload() {
         let data = await response.json()
         setPayReq(data)
         //console.log(data)
+
+        
     }
     console.log(payReq)
     /***************************************************************************************** */
@@ -238,57 +240,21 @@ export default function Upload() {
     /*********************************Validating Invoice Data******************** */
     let [validationStatus, setValidationStatus] = useState([])
 
-    let [cusInv_invoice_number, setcusInv_invoice_number] = useState("")
-    let [cusInv_invoice_date, setcusInv_invoice_date] = useState("")
-    let [cusInv_customer_address, setcusInv_customer_address] = useState("")
-    let [cusInv_shipper_address, setcusInv_shipper_address] = useState("")
-    let [cusInv_total_value, setcusInv_total_value] = useState("")
-
-    let [payReq_invoice_number, setpayReq_invoice_number] = useState("")
-    let [payReq_invoice_date, setpayReq_invoice_date] = useState("")
-    let [payReq_customer_address, setpayReq_customer_address] = useState("")
-    let [payReq_shipper_address, setpayReq_shipper_address] = useState("")
-    let [payReq_total_value, setpayReq_total_value] = useState("")
-
     async function validateData() {
+        
+        cusInv = String(cusInv)
+        payReq = String(payReq)
 
-        /*let response = await fetch('http://127.0.0.1:8000/validateData?cusInvStr=' + cusInv + '&payReqStr=' + payReq)
+        cusInv = cusInv.replace("&", "%26");
+        payReq = payReq.replace("&", "%26");
+
+        let response = await fetch('http://127.0.0.1:8000/validateData?cusInvStr=' + cusInv + '&payReqStr=' + payReq)
         let data = await response.json()
         setValidationStatus(data)
-        console.log(data)*/
+        console.log(data)
 
-        //const cusInvJson = JSON.parse(cusInv)
-        //const payReqJson = JSON.parse(payReq)
-        const myObj = JSON.parse(cusInv);
-
-        let var_cusInv_invoice_number = await myObj.invoice_no
-        
-        setcusInv_invoice_number(var_cusInv_invoice_number)
-        setcusInv_invoice_date(myObj.invoice_date)
-        setcusInv_customer_address(myObj.document_issued_by)
-        setcusInv_shipper_address(myObj.customer_details)
-        setcusInv_total_value(myObj.total_value)
-
-        const myObj2 = JSON.parse(payReq);
-        
-        setpayReq_invoice_number(myObj2.invoice_no)
-        setpayReq_invoice_date(myObj2.invoice_date)
-        setpayReq_customer_address(myObj2.customer_details)
-        setpayReq_shipper_address(myObj2.document_issued_by)
-        setpayReq_total_value(myObj2.total_value)
-        
     }
-    console.log(cusInv_invoice_number)
-    console.log(cusInv_invoice_date)
-    console.log(cusInv_customer_address)
-    console.log(cusInv_shipper_address)
-    console.log(cusInv_total_value)
-
-    console.log(payReq_invoice_number)
-    console.log(payReq_invoice_date)
-    console.log(payReq_customer_address)
-    console.log(payReq_shipper_address)
-    console.log(payReq_total_value)
+    console.log(validationStatus)
     /***************************************************************************************** */
 
     
@@ -296,22 +262,22 @@ export default function Upload() {
     async function validateSpot(e) {
         e.preventDefault();
 
-        await getPayReq(filePaymentRequisition.name)
         await mindeeSubmit()
+        await getPayReq(filePaymentRequisition.name)
+        
+        if(await validateData()){
+            //Send to Database
 
-        await validateData()
-
-        //Send to Database
-
-        //if database success: 
-        toggleShowSuccess();
-        document.getElementById('customerInvoiceSpot').value = "";
-        document.getElementById('paymentRequisitionSpot').value = "";
-        setDisabledSpot(true);
-        fileValidateSpot();
-
-        //else:
-        //toggleShowUnuccess();
+            //if database success: 
+            toggleShowSuccess();
+            document.getElementById('customerInvoiceSpot').value = "";
+            document.getElementById('paymentRequisitionSpot').value = "";
+            setDisabledSpot(true);
+            fileValidateSpot();
+        }
+        else{
+            toggleShowUnuccess();
+        }
     }
 
     
