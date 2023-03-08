@@ -20,6 +20,10 @@ export default function Upload() {
     useEffect(() => {
         /* Timeout for Loading Screen */
         setTimeout(() => setLoading(false), 1000) //1s
+
+        if(payReq !== "" && cusInv !== ""){
+            validateData()
+        }
     });
 
     /*On Load Function*/
@@ -214,8 +218,8 @@ export default function Upload() {
                         customer = customer + ' ' + myObj.document.inference.prediction.company_address.values[i].content
                     }
 
-                    for (var i = 0; i < myObj.document.inference.prediction.vendor_address.values.length; i++) {
-                        vendor = vendor + ' ' + myObj.document.inference.prediction.vendor_address.values[i].content
+                    for (var j = 0; j < myObj.document.inference.prediction.vendor_address.values.length; j++) {
+                        vendor = vendor + ' ' + myObj.document.inference.prediction.vendor_address.values[j].content
                     }
 
                     //console.log(p)
@@ -265,7 +269,8 @@ export default function Upload() {
         await mindeeSubmit()
         await getPayReq(filePaymentRequisition.name)
         
-        if(await validateData()){
+        /* Below code not working properly */
+        if(validationStatus === "True"){
             //Send to Database
 
             //if database success: 

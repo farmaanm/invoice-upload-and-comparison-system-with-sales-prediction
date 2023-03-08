@@ -213,33 +213,31 @@ def paymentRequisition(pdfname=None):
 
     return str
 
-
+    
 @app.get("/validateData")
 def dataComparison(cusInvStr=None, payReqStr=None):
 
     print(cusInvStr)
     print(payReqStr)
 
-    text = "Hello"
     
     if cusInvStr is None and payReqStr is None:
-        text = "Empty"
+        result = "Empty"
     else:
-        text = "Done"
 
         import json
 
-        for key, value in cusInvStr.items():
-            print(key, value)
+        #for key, value in cusInvStr.items():
+        #    print(key, value)
         
-        #cusInvJson = json.dumps(cusInvStr)
-        #payReqJson = json.dumps(payReqStr)
+        cusInvJson = json.loads(cusInvStr)
+        payReqJson = json.loads(payReqStr)
 
-        #print(cusInvJson)
-        #print(type(cusInvJson))
+        print(cusInvJson)
+        print(type(cusInvJson))
 
-        #print(payReqJson["invoice_no"])
-        '''
+        print(payReqJson["invoice_no"])
+        
         cusInv_invoice_number = cusInvJson["invoice_no"]
         cusInv_invoice_date = cusInvJson["invoice_date"]
         cusInv_customer_address = cusInvJson["document_issued_by"]
@@ -251,20 +249,20 @@ def dataComparison(cusInvStr=None, payReqStr=None):
         payReq_customer_address = payReqJson["customer_details"]
         payReq_shipper_address = payReqJson["document_issued_by"]
         payReq_total_value = payReqJson["total_value"]
-
+        
         payReq_total_value = payReq_total_value.replace(",", "")
 
-        #print(type(cusInv_total_value))
-        #print(type(payReq_total_value))
-
+        print(type(cusInv_total_value))
+        print(type(payReq_total_value))
+        
         # Date
         from dateutil import parser
 
         cusInv_invoice_date = parser.parse(cusInv_invoice_date)
         payReq_invoice_date = parser.parse(payReq_invoice_date)
-
+        
         print('Date -> ', cusInv_invoice_date == payReq_invoice_date)
-
+        
         # invoice number
         print('Invoice No. -> ', cusInv_invoice_number == payReq_invoice_number)
 
@@ -275,7 +273,7 @@ def dataComparison(cusInvStr=None, payReqStr=None):
         cusInv_customer_address = set(cusInv_customer_address.split())
         payReq_customer_address = set(payReq_customer_address.split())
         customer_address = cusInv_customer_address & payReq_customer_address
-
+        
         print(customer_address)
 
         # Shipper Address
@@ -284,11 +282,14 @@ def dataComparison(cusInvStr=None, payReqStr=None):
         shipper_address = cusInv_shipper_address & payReq_shipper_address
 
         print(shipper_address)
-        '''
+    
+        if((cusInv_invoice_date == payReq_invoice_date) and (cusInv_invoice_number == payReq_invoice_number) and (cusInv_total_value == payReq_total_value)):
+            result = "True"
+        else:
+            result = "False"
 
-    return text
-    
-    
+        return result
+   
 
 
 if __name__ == '__main__':
