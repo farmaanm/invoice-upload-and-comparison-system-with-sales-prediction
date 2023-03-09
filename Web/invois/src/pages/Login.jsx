@@ -93,46 +93,48 @@ function Login() {
 
                         <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4' style={{ margin: 'auto' }}>
 
-                            <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
+                            <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
 
                             <form onSubmit={login}>
 
                                 {/*<!-- Email input -->*/}
-                                <div class="form-outline mb-4">
+                                <div className="form-outline mb-4">
                                     <input
                                         type="email"
                                         id="userEmail"
-                                        class="form-control form-control-lg"
+                                        className="form-control form-control-lg"
                                         name='userEmail'
                                         required
                                         value={userEmail}
                                         onChange={e => setUserEmail(e.target.value)}
                                         style={{ border: '1px solid #c4c4c4' }} />
-                                    <label class="form-label" for="userEmail">Email</label>
+                                    <label className="form-label" htmlFor="userEmail">Email</label>
                                     <p style={emailerror} id="email-error">{emailErrorMsg}</p>
                                 </div>
 
 
                                 {/*<!-- Password input -->*/}
-                                <div class="form-outline mb-4">
+                                <div className="form-outline mb-4">
                                     <input
                                         type="password"
                                         id="userPassword"
-                                        class="form-control form-control-lg"
+                                        className="form-control form-control-lg"
                                         name='userPassword'
                                         required
                                         value={userPassword}
                                         onChange={e => setUserPassword(e.target.value)}
                                         style={{ border: '1px solid #c4c4c4' }} />
-                                    <label class="form-label" for="userPassword" >Password</label>
+                                    <label className="form-label" htmlFor="userPassword" >Password</label>
                                     <p style={passworderror} id="password-error">{passwordErrorMsg}</p>
                                 </div>
 
 
                                 {/*<!-- Submit button -->*/}
-                                <button type="submit" class="btn btn-primary btn-block mb-4 btn-lg" style={{ backgroundColor: '#381ce4' }} disabled={!validateForm()}>Login</button>
+                                <button type="submit" className="btn btn-primary btn-block mb-4 btn-lg" style={{ backgroundColor: '#381ce4' }} disabled={!validateForm()}>Login</button>
 
                             </form>
+
+                            Don't have an account? <a href='/signup' style={{ textDecoration: 'underline' }}>Sign Up</a>
 
                         </div>
 

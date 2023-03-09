@@ -120,32 +120,34 @@ const Signup = () => {
 
                         <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4' style={{ margin: 'auto' }}>
 
-                            <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+                            <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
                             <form onSubmit={register}>
 
                                 {/*<!-- Email input -->*/}
-                                <div class="form-outline mb-4">
-                                    <input type="email" id="form3Example3c" class="form-control" onChange={e => setEmail(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
-                                    <label class="form-label" for="form3Example3c">Email</label>
+                                <div className="form-outline mb-4">
+                                    <input type="email" id="form3Example3c" className="form-control" onChange={e => setEmail(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
+                                    <label className="form-label" htmlFor="form3Example3c">Email</label>
                                 </div>
 
                                 {/*<!-- Password input -->*/}
-                                <div class="form-outline mb-4">
-                                    <input type="password" id="form3Example4c" class="form-control" onChange={e => setPassword(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
-                                    <label class="form-label" for="form3Example4c">Password</label>
+                                <div className="form-outline mb-4">
+                                    <input type="password" id="form3Example4c" className="form-control" onChange={e => setPassword(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
+                                    <label className="form-label" htmlFor="form3Example4c">Password</label>
                                 </div>
 
                                 {/*<!-- Repeat Password input -->*/}
-                                <div class="form-outline mb-4">
-                                    <input type="password" id="form3Example4cd" class="form-control" onChange={e => setRepeatPassword(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
-                                    <label class="form-label" for="form3Example4cd">Repeat your password</label>
+                                <div className="form-outline mb-4">
+                                    <input type="password" id="form3Example4cd" className="form-control" onChange={e => setRepeatPassword(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
+                                    <label className="form-label" htmlFor="form3Example4cd">Repeat your password</label>
                                 </div>
 
                                 {/*<!-- Submit button -->*/}
-                                <button type="submit" class="btn btn-primary btn-block mb-4 btn-lg" style={{ backgroundColor: '#381ce4' }} disabled={!validateForm()}>Register</button>
+                                <button type="submit" className="btn btn-primary btn-block mb-4 btn-lg" style={{ backgroundColor: '#381ce4' }} disabled={!validateForm()}>Register</button>
 
                             </form>
+
+                            Already have an account? <a href='/' style={{ textDecoration: 'underline' }}>Sign In</a>
 
                         </div>
 

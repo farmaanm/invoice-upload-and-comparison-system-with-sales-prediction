@@ -21,7 +21,7 @@ export default function Upload() {
         /* Timeout for Loading Screen */
         setTimeout(() => setLoading(false), 1000) //1s
 
-        if(payReq !== "" && cusInv !== ""){
+        if (payReq !== "" && cusInv !== "") {
             validateData()
         }
     });
@@ -99,6 +99,7 @@ export default function Upload() {
     const fileUpload = {
         border: '1px solid #381ce4',
         color: '#4f4f4f',
+        backgroundColor: '#F5F5F5',
         padding: '20px',
         borderStyle: 'dashed',
         borderRadius: '5px',
@@ -126,16 +127,16 @@ export default function Upload() {
         }
     }
 
-    /*****************************Setting File name********************************* */
+    /*****************************Setting File name On Change********************************* */
     const [fileCustomerInvoice, setFileCustomerInvoice] = useState()
     const [filePaymentRequisition, setFilePaymentRequisition] = useState()
 
-    function setCustomerInvoice(event){
+    function setCustomerInvoice(event) {
         fileValidateSpot()
         setFileCustomerInvoice(event.target.files[0])
     }
 
-    function setPaymentRequisition(event){
+    function setPaymentRequisition(event) {
         fileValidateSpot()
         setFilePaymentRequisition(event.target.files[0])
     }
@@ -180,7 +181,6 @@ export default function Upload() {
         setPayReq(data)
         //console.log(data)
 
-        
     }
     console.log(payReq)
     /***************************************************************************************** */
@@ -204,32 +204,32 @@ export default function Upload() {
                 //console.log(this.responseText);
 
                 const myJSON = this.responseText;
-                    const myObj = JSON.parse(myJSON);
-                    //console.log(typeof (myJSON))
+                const myObj = JSON.parse(myJSON);
+                //console.log(typeof (myJSON))
 
-                    var p = myObj.document.inference.prediction.invoice_number.values[0].content;
-                    var q = myObj.document.inference.prediction.total_value.values[0].content;
-                    var r = myObj.document.inference.prediction.invoice_date.values[0].content;
+                var p = myObj.document.inference.prediction.invoice_number.values[0].content;
+                var q = myObj.document.inference.prediction.total_value.values[0].content;
+                var r = myObj.document.inference.prediction.invoice_date.values[0].content;
 
-                    var customer = ""
-                    var vendor = ""
+                var customer = ""
+                var vendor = ""
 
-                    for (var i = 0; i < myObj.document.inference.prediction.company_address.values.length; i++) {
-                        customer = customer + ' ' + myObj.document.inference.prediction.company_address.values[i].content
-                    }
+                for (var i = 0; i < myObj.document.inference.prediction.company_address.values.length; i++) {
+                    customer = customer + ' ' + myObj.document.inference.prediction.company_address.values[i].content
+                }
 
-                    for (var j = 0; j < myObj.document.inference.prediction.vendor_address.values.length; j++) {
-                        vendor = vendor + ' ' + myObj.document.inference.prediction.vendor_address.values[j].content
-                    }
+                for (var j = 0; j < myObj.document.inference.prediction.vendor_address.values.length; j++) {
+                    vendor = vendor + ' ' + myObj.document.inference.prediction.vendor_address.values[j].content
+                }
 
-                    //console.log(p)
-                    //console.log(q)
-                    //console.log(r)
-                    //console.log(customer)
-                    //console.log(vendor)
+                //console.log(p)
+                //console.log(q)
+                //console.log(r)
+                //console.log(customer)
+                //console.log(vendor)
 
-                    let cusInvStr = '{"invoice_no":"' + p + '","customer_details":"' + customer + '","invoice_date":"' + r + '","document_issued_by":"' + vendor + '","total_value":"' + q + '"}'
-                    setCusInv(cusInvStr)
+                let cusInvStr = '{"invoice_no":"' + p + '","customer_details":"' + customer + '","invoice_date":"' + r + '","document_issued_by":"' + vendor + '","total_value":"' + q + '"}'
+                setCusInv(cusInvStr)
             }
         });
 
@@ -241,11 +241,10 @@ export default function Upload() {
     /***************************************************************************************** */
 
 
-    /*********************************Validating Invoice Data******************** */
+    /*********************************Validating Invoice Data******************************** */
     let [validationStatus, setValidationStatus] = useState([])
-
     async function validateData() {
-        
+
         cusInv = String(cusInv)
         payReq = String(payReq)
 
@@ -256,21 +255,21 @@ export default function Upload() {
         let data = await response.json()
         setValidationStatus(data)
         console.log(data)
-
     }
     console.log(validationStatus)
     /***************************************************************************************** */
 
-    
+
     /*Spot Validate Button Validation Success, Unsuccess Message*/
     async function validateSpot(e) {
         e.preventDefault();
 
         await mindeeSubmit()
         await getPayReq(filePaymentRequisition.name)
-        
+
+
         /* Below code not working properly */
-        if(validationStatus === "True"){
+        if (validationStatus === "True") {
             //Send to Database
 
             //if database success: 
@@ -280,12 +279,12 @@ export default function Upload() {
             setDisabledSpot(true);
             fileValidateSpot();
         }
-        else{
+        else if (validationStatus === "False") {
             toggleShowUnuccess();
         }
     }
 
-    
+
     return (
         <>
 
@@ -325,132 +324,135 @@ export default function Upload() {
                     {/* File Upload */}
                     <div style={{ padding: '5%' }}>
                         { /*
-            <div style={{ padding: '10px' }}>
+                        <>
+                        <div style={{ padding: '10px' }}>
 
-                <table width={'70%'} align='center'>
-                    <tbody>
-                        <tr style={{ height: '50px' }}>
-                            <td colSpan={2} align='left' style={{ paddingLeft: '100px' }}>Select Contract Type:</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <button
-                                    onClick={contractData}
-                                    style={contract}
-                                    id='contractBtn'>
-                                    Contract</button>
-                            </td>
-                            <td>
-                                <button
-                                    onClick={spotData}
-                                    style={spot}
-                                    id='spotBtn'>
-                                    Spot</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            <table width={'70%'} align='center'>
+                                <tbody>
+                                    <tr style={{ height: '50px' }}>
+                                        <td colSpan={2} align='left' style={{ paddingLeft: '100px' }}>Select Contract Type:</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <button
+                                                onClick={contractData}
+                                                style={contract}
+                                                id='contractBtn'>
+                                                Contract</button>
+                                        </td>
+                                        <td>
+                                            <button
+                                                onClick={spotData}
+                                                style={spot}
+                                                id='spotBtn'>
+                                                Spot</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-            </div> 
+                        </div> 
 
-            <p><br /></p>
+                        <p><br /></p>
 
-            <div style={{ padding: '10px' }} id="contractDataDisplay">
-                <table width={'100%'}>
-                    <tbody>
-                        <tr style={{ height: '50px' }}>
-                            <td width={'33%'} >
-                                <label htmlFor='customerInvoiceContract'>Upload Customer Invoice:</label>
-                            </td>
-                            <td width={'33%'}>
-                                <label htmlFor='paymentRequisitionContract'>Upload Payment Requisition:</label>
-                            </td>
-                            <td width={'33%'}>
-                                Select Rate:
-                            </td>
-                        </tr>
-                        <tr><td></td><td></td></tr>
-                        <tr>
-                            <td>
-                                <input type='file'
-                                    name='customerInvoiceContract'
-                                    width='50px'
-                                    accept='application/pdf'
-                                    style={fileUpload}
-                                    id='customerInvoiceContract'
-                                    onChange={fileValidateContract} />
-                            </td>
-                            <td>
-                                <input type='file'
-                                    name='paymentRequisitionContract'
-                                    width='50px'
-                                    accept='application/pdf'
-                                    style={fileUpload}
-                                    id='paymentRequisitionContract'
-                                    onChange={fileValidateContract} />
-                            </td>
-                            <td>
-                                <select style={fileUpload} id='rateContract' onChange={fileValidateContract} >
-                                    <option value={0}>Rate</option>
-                                    <option value={1}>Rate 1</option>
-                                    <option value={2}>Rate 2</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <div style={{ padding: '10px' }} id="contractDataDisplay">
+                            <table width={'100%'}>
+                                <tbody>
+                                    <tr style={{ height: '50px' }}>
+                                        <td width={'33%'} >
+                                            <label htmlFor='customerInvoiceContract'>Upload Customer Invoice:</label>
+                                        </td>
+                                        <td width={'33%'}>
+                                            <label htmlFor='paymentRequisitionContract'>Upload Payment Requisition:</label>
+                                        </td>
+                                        <td width={'33%'}>
+                                            Select Rate:
+                                        </td>
+                                    </tr>
+                                    <tr><td></td><td></td></tr>
+                                    <tr>
+                                        <td>
+                                            <input type='file'
+                                                name='customerInvoiceContract'
+                                                width='50px'
+                                                accept='application/pdf'
+                                                style={fileUpload}
+                                                id='customerInvoiceContract'
+                                                onChange={fileValidateContract} />
+                                        </td>
+                                        <td>
+                                            <input type='file'
+                                                name='paymentRequisitionContract'
+                                                width='50px'
+                                                accept='application/pdf'
+                                                style={fileUpload}
+                                                id='paymentRequisitionContract'
+                                                onChange={fileValidateContract} />
+                                        </td>
+                                        <td>
+                                            <select style={fileUpload} id='rateContract' onChange={fileValidateContract} >
+                                                <option value={0}>Rate</option>
+                                                <option value={1}>Rate 1</option>
+                                                <option value={2}>Rate 2</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-                <p><br /></p>
+                            <p><br /></p>
 
-                <div>
-                    <MDBBtn disabled={disabledContract} onClick={validateContract}>VALIDATE</MDBBtn>
-                </div>
-            </div>
+                            <div>
+                                <MDBBtn disabled={disabledContract} onClick={validateContract}>VALIDATE</MDBBtn>
+                            </div>
+                        </div>
 
 
-            <div style={{ padding: '10px' }} id="spotDataDisplay">
-                <table width={'100%'}>
-                    <tbody>
-                        <tr>
-                            <td width={'33%'} >
-                                <label htmlFor='customerInvoiceSpot'>Upload Customer Invoice:</label>
-                            </td>
-                            <td width={'33%'}>
-                                <label htmlFor='paymentRequisitionSpot'>Upload Payment Requisition:</label>
-                            </td>
-                        </tr>
-                        <tr><td></td><td></td></tr>
-                        <tr>
-                            <td>
-                                <input type='file'
-                                    name='customerInvoiceSpot'
-                                    width='50px'
-                                    accept='application/pdf'
-                                    id="customerInvoiceSpot"
-                                    style={fileUpload}
-                                    onChange={fileValidateSpot} />
-                            </td>
-                            <td>
-                                <input type='file'
-                                    name='paymentRequisitionSpot'
-                                    width='50px'
-                                    accept='application/pdf'
-                                    id="paymentRequisitionSpot"
-                                    style={fileUpload}
-                                    onChange={fileValidateSpot} />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <div style={{ padding: '10px' }} id="spotDataDisplay">
+                            <table width={'100%'}>
+                                <tbody>
+                                    <tr>
+                                        <td width={'33%'} >
+                                            <label htmlFor='customerInvoiceSpot'>Upload Customer Invoice:</label>
+                                        </td>
+                                        <td width={'33%'}>
+                                            <label htmlFor='paymentRequisitionSpot'>Upload Payment Requisition:</label>
+                                        </td>
+                                    </tr>
+                                    <tr><td></td><td></td></tr>
+                                    <tr>
+                                        <td>
+                                            <input type='file'
+                                                name='customerInvoiceSpot'
+                                                width='50px'
+                                                accept='application/pdf'
+                                                id="customerInvoiceSpot"
+                                                style={fileUpload}
+                                                onChange={fileValidateSpot} />
+                                        </td>
+                                        <td>
+                                            <input type='file'
+                                                name='paymentRequisitionSpot'
+                                                width='50px'
+                                                accept='application/pdf'
+                                                id="paymentRequisitionSpot"
+                                                style={fileUpload}
+                                                onChange={fileValidateSpot} />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-                <p><br /></p>
+                            <p><br /></p>
 
-                <div>
-                    <MDBBtn disabled={disabledSpot} type='submit' onClick={validateSpot}>VALIDATE</MDBBtn>
-                </div>
-            </div>
-*/ }
+                            <div>
+                                <MDBBtn disabled={disabledSpot} type='submit' onClick={validateSpot}>VALIDATE</MDBBtn>
+                            </div>
+                        </div>
+                        </>
+                        */ }
 
+                        
                         <MDBModal tabIndex='-1' show={centredModalSuccess} setShow={setCentredModalSuccess}>
                             <MDBModalDialog centered>
                                 <MDBModalContent>
