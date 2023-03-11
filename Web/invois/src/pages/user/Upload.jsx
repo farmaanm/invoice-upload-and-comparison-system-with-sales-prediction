@@ -17,16 +17,21 @@ export default function Upload() {
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
 
+    let [payReq, setPayReq] = useState([])
+    let [cusInv, setCusInv] = useState([])
+    let [validationStatus, setValidationStatus] = useState([])
+
     useEffect(() => {
         /* Timeout for Loading Screen */
         setTimeout(() => setLoading(false), 1000) //1s
 
         if (payReq !== "" && cusInv !== "") {
             validateData()
+            
             displayMessage(validationStatus)
         }
-    });
-    
+    }, [validationStatus, cusInv, payReq]);
+
 
     /*On Load Function*/
     /*useEffect(() => {
@@ -151,9 +156,11 @@ export default function Upload() {
     /*Success, Unsuccess Message */
     const [centredModalSuccess, setCentredModalSuccess] = useState(false);  //Success Validation
     const [centredModalUnuccess, setCentredModalUnuccess] = useState(false);  //Unuccess Validation
+    const [centredModalProccessing, setCentredModalProccessing] = useState(false);  //Proccessing Validation
 
     const toggleShowSuccess = () => setCentredModalSuccess(!centredModalSuccess);
     const toggleShowUnuccess = () => setCentredModalUnuccess(!centredModalUnuccess);
+    const toggleShowProccessing = () => setCentredModalProccessing(!centredModalProccessing);
 
     /*Contract Validate Button Validation Success, Unsuccess Message*/
     function validateContract() {
@@ -173,7 +180,7 @@ export default function Upload() {
     }
 
     /*********************************Extracting Payment Requisition Data******************** */
-    let [payReq, setPayReq] = useState([])
+    //let [payReq, setPayReq] = useState([])
     async function getPayReq(filePath) {
 
         //let response = await fetch('http://127.0.0.1:8000/salesprediction')
@@ -189,7 +196,7 @@ export default function Upload() {
 
 
     /*********************************Extracting Customer Invoice Data******************** */
-    let [cusInv, setCusInv] = useState([])
+    //let [cusInv, setCusInv] = useState([])
     const mindeeSubmit = async (evt) => {
         //evt.preventDefault()
         //let myFileInput = document.getElementById('my-file-input');
@@ -244,7 +251,7 @@ export default function Upload() {
 
 
     /*********************************Validating Invoice Data******************************** */
-    let [validationStatus, setValidationStatus] = useState([])
+    //let [validationStatus, setValidationStatus] = useState([])
     async function validateData() {
 
         cusInv = String(cusInv)
@@ -261,11 +268,16 @@ export default function Upload() {
     console.log(validationStatus)
     /***************************************************************************************** */
 
-    async function displayMessage(validation){
+    function refreshPage() {
+        window.location.reload(false);
+    }
+
+    async function displayMessage(validation) {
         if (validation === "True") {
             //Send to Database
 
             //if database success: 
+            toggleShowProccessing();
             toggleShowSuccess();
             document.getElementById('customerInvoiceSpot').value = "";
             document.getElementById('paymentRequisitionSpot').value = "";
@@ -273,7 +285,12 @@ export default function Upload() {
             fileValidateSpot();
         }
         else if (validation === "False") {
+            toggleShowProccessing();
             toggleShowUnuccess();
+            document.getElementById('customerInvoiceSpot').value = "";
+            document.getElementById('paymentRequisitionSpot').value = "";
+            setDisabledSpot(true);
+            fileValidateSpot();
         }
     }
 
@@ -281,16 +298,14 @@ export default function Upload() {
     async function validateSpot(e) {
         e.preventDefault();
 
+        toggleShowProccessing();
         await mindeeSubmit()
         await getPayReq(filePaymentRequisition.name)
-
-
-        
         
     }
 
 
-    
+
 
 
     return (
@@ -460,7 +475,7 @@ export default function Upload() {
                         </>
                         */ }
 
-                        
+
                         <MDBModal tabIndex='-1' show={centredModalSuccess} setShow={setCentredModalSuccess}>
                             <MDBModalDialog centered>
                                 <MDBModalContent>
@@ -502,6 +517,29 @@ export default function Upload() {
                                     </MDBModalBody>
 
                                     <MDBModalFooter style={{ backgroundColor: '#f2dede' }} />
+
+                                </MDBModalContent>
+                            </MDBModalDialog>
+                        </MDBModal>
+
+                        <MDBModal tabIndex='-1' show={centredModalProccessing} setShow={setCentredModalProccessing}>
+                            <MDBModalDialog centered >
+                                <MDBModalContent >
+                                    <MDBModalHeader style={{ backgroundColor: '#fbf0da' }}>
+                                        <MDBModalTitle>Proccessing...</MDBModalTitle>
+                                        {/*<MDBBtn className='btn-close' color='none' onClick={toggleShowUnuccess}></MDBBtn>*/}
+                                        <button className='btn-close' color='none' onClick={toggleShowProccessing}></button>
+                                    </MDBModalHeader>
+
+                                    <MDBModalBody style={{ backgroundColor: '#fbf0da' }}>
+                                        <MDBIcon fas icon="clock" style={{ color: '#8f681d', fontSize: '50px' }} />
+                                        <p style={{ color: '#8f681d', fontFamily: "Tahoma", fontSize: '20px' }}>
+                                            <br />
+                                            Data is being Extracted...
+                                        </p>
+                                    </MDBModalBody>
+
+                                    <MDBModalFooter style={{ backgroundColor: '#fbf0da' }} />
 
                                 </MDBModalContent>
                             </MDBModalDialog>
