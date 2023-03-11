@@ -22,7 +22,8 @@ function Sales() {
     });
 
     const data = [
-        ["Year", "Actual Sales", "Predicted Sales"]
+        //["Year", "Actual Sales", "Predicted Sales"]
+        ["Month", "Predicted Sales"]
         /*[0, 1296, 920.273462],
         [1, 1368, 1490.778158],
         [2, 4986, 4961.348225],
@@ -66,13 +67,26 @@ function Sales() {
         [40, 396.00, 434.767691]*/
     ];
 
-    for (var i=0; i<sales.length; i++){
+    function getMonthName(monthNumber) {
+        const date = new Date();
+        date.setMonth(monthNumber - 1);
+
+        return date.toLocaleString('en-US', { month: 'long' });
+    }
+
+    for (var i = 0; i < sales.length; i++) {
+        //console.log(typeof (sales[i][0]))
+
+        if (typeof (sales[i][0]) == 'number') {
+            sales[i][0] = getMonthName(sales[i][0])
+        }
+
         data.push(sales[i])
     }
 
     const options = {
         title: "Company Sales",
-        hAxis: { title: "Date" },
+        hAxis: { title: "Month" },
         vAxis: { title: "Sales ($)" },
         curveType: "function",
         legend: { position: "topright" },
@@ -114,7 +128,7 @@ function Sales() {
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
             </div>
-            
+
             {loading === false ? (
                 <div>
 
@@ -125,7 +139,7 @@ function Sales() {
                         height="600px"
                         data={data}
                         options={options}
-                        style={{marginTop:'-15px'}}
+                        style={{ marginTop: '-15px' }}
                     />
                 </div>
             ) : (

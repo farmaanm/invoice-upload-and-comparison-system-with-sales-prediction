@@ -50,7 +50,7 @@ function HeadContract() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '10px', right: '320px' }}>
-                        <a href='/sales' style={{ textDecoration: 'underline' }}>Sales</a>
+                        <a href='/sales' >Sales</a>
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '10px', right: '240px' }}>
@@ -58,7 +58,7 @@ function HeadContract() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '10px', right: '140px' }}>
-                        <a href="/hcontract">Customers</a>
+                        <a href="/hcontract" style={{ textDecoration: 'underline' }}>Customers</a>
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>

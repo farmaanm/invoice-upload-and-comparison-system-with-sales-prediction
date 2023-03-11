@@ -23,8 +23,10 @@ export default function Upload() {
 
         if (payReq !== "" && cusInv !== "") {
             validateData()
+            displayMessage(validationStatus)
         }
     });
+    
 
     /*On Load Function*/
     /*useEffect(() => {
@@ -259,17 +261,8 @@ export default function Upload() {
     console.log(validationStatus)
     /***************************************************************************************** */
 
-
-    /*Spot Validate Button Validation Success, Unsuccess Message*/
-    async function validateSpot(e) {
-        e.preventDefault();
-
-        await mindeeSubmit()
-        await getPayReq(filePaymentRequisition.name)
-
-
-        /* Below code not working properly */
-        if (validationStatus === "True") {
+    async function displayMessage(validation){
+        if (validation === "True") {
             //Send to Database
 
             //if database success: 
@@ -279,10 +272,25 @@ export default function Upload() {
             setDisabledSpot(true);
             fileValidateSpot();
         }
-        else if (validationStatus === "False") {
+        else if (validation === "False") {
             toggleShowUnuccess();
         }
     }
+
+    /*Spot Validate Button Validation Success, Unsuccess Message*/
+    async function validateSpot(e) {
+        e.preventDefault();
+
+        await mindeeSubmit()
+        await getPayReq(filePaymentRequisition.name)
+
+
+        
+        
+    }
+
+
+    
 
 
     return (
