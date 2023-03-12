@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String userEmail = '';
 
-  TextStyle defaultStyle = const TextStyle(color: Colors.grey);
+  TextStyle defaultStyle = const TextStyle(fontSize: 16.0, color: Colors.grey);
   TextStyle linkStyle = const TextStyle(color: Color(0xFF0D47A1));
 
   @override
@@ -78,6 +78,18 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
 
+    BoxDecoration myBoxDecoration() {
+      return BoxDecoration(
+        border: Border.all(
+          color: Colors.black12,
+          width: 1,
+        ),
+        borderRadius: const BorderRadius.all(
+            Radius.circular(5.0)
+        ),
+      );
+    }
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -89,8 +101,9 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Container(
+                //height: 1500,
                 margin: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.height * 0.04,
+                    vertical: MediaQuery.of(context).size.height * 0.04,  //0.04
                     horizontal: MediaQuery.of(context).size.width * 0.04),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -107,7 +120,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                 heightFactor: 10,
                                 child: CircularProgressIndicator());
                           }
-                          return ListView(
+                          return Container(
+                              height: 480,
+                              decoration: myBoxDecoration(),
+                              child: ListView(
                             shrinkWrap: true,
                             children: snapshot.data!.docs.map((DocumentSnapshot document) {
                               Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
@@ -157,13 +173,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                 },
                               );
                             }).toList(),
+                          )
                           );
                         }),
                     Container(
                         margin: EdgeInsets.symmetric(
-                            vertical: MediaQuery.of(context).size.height * 0.04,
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.04),
+                            vertical: MediaQuery.of(context).size.height * 0.03,  //0.04
+                            horizontal: MediaQuery.of(context).size.width * 0.04),
                         child: RichText(
                           text: TextSpan(
                             style: defaultStyle,
