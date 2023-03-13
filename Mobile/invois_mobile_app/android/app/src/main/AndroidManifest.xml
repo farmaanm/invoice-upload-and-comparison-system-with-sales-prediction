@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.invois_mobile_app">
    <application
-        android:label="invois_mobile_app"
+        android:label="Invois"
         android:name="${applicationName}"
+        android:roundIcon="@mipmap/ic_launcher"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
