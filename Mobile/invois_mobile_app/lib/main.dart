@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,9 +30,49 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(
             color: Color(0xFF381ce4),
           ),
-          scaffoldBackgroundColor: const Color(0xFFf8f4f4)),
+          scaffoldBackgroundColor: const Color(0xFFf5f5f5)), //381ce4
       //home: const MyHomePage(title: ''),
-      home: const MyLoginPage(title: ''),
+      home: SplashScreen(),
+    );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreen();
+}
+
+class _SplashScreen extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(
+        const Duration(seconds: 3),
+        () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const MyLoginPage(title: ''))));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      //child: FlutterLogo(size: MediaQuery.of(context).size.height)
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Image.asset(
+            'assets/images/logo.png',
+            height: 200,
+            scale: 1,
+            // color: Color.fromARGB(255, 15, 147, 59),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -70,9 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth.instance
-        .authStateChanges()
-        .listen((User? user) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
         userEmail = user.email!;
       }
@@ -84,9 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
           color: Colors.black12,
           width: 1,
         ),
-        borderRadius: const BorderRadius.all(
-            Radius.circular(5.0)
-        ),
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
       );
     }
 
@@ -103,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Container(
                 //height: 1500,
                 margin: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.height * 0.04,  //0.04
+                    vertical: MediaQuery.of(context).size.height * 0.04, //0.04
                     horizontal: MediaQuery.of(context).size.width * 0.04),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -111,11 +149,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: <Widget>[
                     StreamBuilder<QuerySnapshot>(
                         stream: _usersStream,
-                        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (snapshot.hasError) {
                             return const Text('Something went wrong');
                           }
-                          if (snapshot.connectionState == ConnectionState.waiting) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
                             return const Center(
                                 heightFactor: 10,
                                 child: CircularProgressIndicator());
@@ -124,62 +164,72 @@ class _MyHomePageState extends State<MyHomePage> {
                               height: 480,
                               decoration: myBoxDecoration(),
                               child: ListView(
-                            shrinkWrap: true,
-                            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                              Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-                              return ListTile(
-                                title: Text(data['uploadedBy']),
-                                subtitle: Text(data['dateTime']),
-                                trailing: data['paymentStatus'] == 'Done'
-                                    ? const Icon(
-                                        Icons.done,
-                                        color: Colors.green,
-                                      )
-                                    : const Icon(
-                                        Icons.access_time_filled,
-                                        color: Color(0xFFe09c1c),
-                                      ),
-                                onTap: () {
-                                  setState(() {
-                                    if (data['paymentStatus'] == 'Done'){
-                                      //if (payReqName == '') {
-                                        payReqName = data['paymentRequisitionName'];
-                                        payReqUrl = data['paymentRequisitionUrl'];
-                                        vendInvName = data['vendorInvoiceName'];
-                                        vendInvUrl = data['vendorInvoiceUrl'];
-                                        paymentDoneAt = data['paymentDoneAt']!;
-                                      /*} else {
+                                shrinkWrap: true,
+                                children: snapshot.data!.docs
+                                    .map((DocumentSnapshot document) {
+                                  Map<String, dynamic> data =
+                                      document.data()! as Map<String, dynamic>;
+                                  return ListTile(
+                                    title: Text(data['uploadedBy']),
+                                    subtitle: Text(data['dateTime']),
+                                    trailing: data['paymentStatus'] == 'Done'
+                                        ? const Icon(
+                                            Icons.done,
+                                            color: Colors.green,
+                                          )
+                                        : const Icon(
+                                            Icons.access_time_filled,
+                                            color: Color(0xFFe09c1c),
+                                          ),
+                                    onTap: () {
+                                      setState(() {
+                                        if (data['paymentStatus'] == 'Done') {
+                                          //if (payReqName == '') {
+                                          payReqName =
+                                              data['paymentRequisitionName'];
+                                          payReqUrl =
+                                              data['paymentRequisitionUrl'];
+                                          vendInvName =
+                                              data['vendorInvoiceName'];
+                                          vendInvUrl = data['vendorInvoiceUrl'];
+                                          paymentDoneAt =
+                                              data['paymentDoneAt']!;
+                                          /*} else {
                                         payReqName = '';
                                         payReqUrl = '';
                                         vendInvName = '';
                                         vendInvUrl = '';
                                         paymentDoneAt = '';
                                       }*/
-                                    } else {
-                                      //if (payReqName == '') {
-                                        payReqName = data['paymentRequisitionName'];
-                                        payReqUrl = data['paymentRequisitionUrl'];
-                                        vendInvName = data['vendorInvoiceName'];
-                                        vendInvUrl = data['vendorInvoiceUrl'];
-                                        paymentDoneAt = '';
-                                      /*} else {
+                                        } else {
+                                          //if (payReqName == '') {
+                                          payReqName =
+                                              data['paymentRequisitionName'];
+                                          payReqUrl =
+                                              data['paymentRequisitionUrl'];
+                                          vendInvName =
+                                              data['vendorInvoiceName'];
+                                          vendInvUrl = data['vendorInvoiceUrl'];
+                                          paymentDoneAt = '';
+                                          /*} else {
                                         payReqName = '';
                                         payReqUrl = '';
                                         vendInvName = '';
                                         vendInvUrl = '';
                                       }*/
-                                    }
-                                  });
-                                },
-                              );
-                            }).toList(),
-                          )
-                          );
+                                        }
+                                      });
+                                    },
+                                  );
+                                }).toList(),
+                              ));
                         }),
                     Container(
                         margin: EdgeInsets.symmetric(
-                            vertical: MediaQuery.of(context).size.height * 0.03,  //0.04
-                            horizontal: MediaQuery.of(context).size.width * 0.04),
+                            vertical: MediaQuery.of(context).size.height *
+                                0.03, //0.04
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.04),
                         child: RichText(
                           text: TextSpan(
                             style: defaultStyle,
@@ -287,7 +337,8 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class _MyLoginPageState extends State<MyLoginPage> {
-  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('Contract').snapshots();
+  final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('Contract').snapshots();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -301,20 +352,159 @@ class _MyLoginPageState extends State<MyLoginPage> {
       onWillPop: () async => false,
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.height * 0.25,
+          child: Column(children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 350,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage("assets/images/login_background.jpg"),
+                ),
+              ),
+            ),
+            Container(
+                transform: Matrix4.translationValues(0.0, -50.0, 0.0),
+                margin: const EdgeInsets.symmetric(
+                    vertical: 0.01, horizontal: 0.01),
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(40.0),
+                      topLeft: Radius.circular(40.0)),
+                ),
+                child: Container(
+                  margin: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.height * 0.05,
+                      horizontal: MediaQuery.of(context).size.width * 0.04),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      const Text('Login to your account'),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextField(
+                        controller: emailController,
+                        onChanged: (value) {},
+                        decoration: const InputDecoration(
+                          labelText: "Email",
+                          fillColor: Colors.white,
+                          filled: true,
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(6.0)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                          height: 25,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              useremailerror,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          )),
+                      TextField(
+                        controller: passwordController,
+                        obscureText: true, // hidden password
+                        onChanged: (value) {},
+                        decoration: const InputDecoration(
+                          labelText: "Password",
+                          fillColor: Colors.white,
+                          filled: true,
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(6.0)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                          height: 25,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              userpassworderror,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          )),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            //setState(() async {
+                            try {
+                              final credential = await FirebaseAuth.instance
+                                  .signInWithEmailAndPassword(
+                                      email: emailController.text,
+                                      password: passwordController.text);
+                              if (!context.mounted) return;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const MyHomePage(
+                                          title: 'History',
+                                        )),
+                              );
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'user-not-found') {
+                                useremailerror =
+                                    "No user found for that email.";
+                                userpassworderror = '';
+                                Fluttertoast.showToast(
+                                  msg: "No user found for that email.",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  textColor: Colors.black,
+                                  fontSize: 14,
+                                  backgroundColor: Colors.grey[200],
+                                );
+                              } else if (e.code == 'wrong-password') {
+                                useremailerror = '';
+                                userpassworderror = "Invalid password.";
+                                Fluttertoast.showToast(
+                                  msg: "Wrong password provided for that user.",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  textColor: Colors.black,
+                                  fontSize: 14,
+                                  backgroundColor: Colors.grey[200],
+                                );
+                              }
+                            }
+                            //});
+                          },
+                          // style: ButtonStyle(elevation: MaterialStateProperty(12.0 )),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF381ce4),
+                              elevation: 10.0,
+                              textStyle: const TextStyle(color: Colors.white)),
+                          child: const Text('Login'),
+                        ),
+                      )
+                    ],
+                  ),
+                ))
+          ]
+              /*margin: EdgeInsets.symmetric(
+                //vertical: MediaQuery.of(context).size.height * 0.25,
                 horizontal: MediaQuery.of(context).size.width * 0.04),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Image.asset(
-                  'assets/images/logo.png',
-                  height: 150,
+                  'assets/images/login_background.jpg',
+                  height: 200,
                   scale: 1,
                   // color: Color.fromARGB(255, 15, 147, 59),
                 ),
+
                 const SizedBox(
                   height: 10,
                 ),
@@ -370,42 +560,43 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   child: ElevatedButton(
                     onPressed: () async {
                       //setState(() async {
-                        try {
-                          final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                              email: emailController.text,
-                              password: passwordController.text);
-                          if (!context.mounted) return;
-                          Navigator.push(context,
-                            MaterialPageRoute(
-                                builder: (context) => const MyHomePage(
-                                  title: 'History',
-                                )),
+                      try {
+                        final credential = await FirebaseAuth.instance
+                            .signInWithEmailAndPassword(
+                                email: emailController.text,
+                                password: passwordController.text);
+                        if (!context.mounted) return;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MyHomePage(
+                                    title: 'History',
+                                  )),
+                        );
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'user-not-found') {
+                          useremailerror = "No user found for that email.";
+                          userpassworderror = '';
+                          Fluttertoast.showToast(
+                            msg: "No user found for that email.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            textColor: Colors.black,
+                            fontSize: 14,
+                            backgroundColor: Colors.grey[200],
                           );
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == 'user-not-found') {
-                            useremailerror = "No user found for that email.";
-                            userpassworderror = '';
-                            Fluttertoast.showToast(
-                              msg: "No user found for that email.",
-                              toastLength: Toast.LENGTH_SHORT,
-                              textColor: Colors.black,
-                              fontSize: 14,
-                              backgroundColor: Colors.grey[200],
-                            );
-                          } else if (e.code == 'wrong-password') {
-                            useremailerror = '';
-                            userpassworderror = "Invalid password.";
-                            Fluttertoast.showToast(
-                              msg: "Wrong password provided for that user.",
-                              toastLength: Toast.LENGTH_SHORT,
-                              textColor: Colors.black,
-                              fontSize: 14,
-                              backgroundColor: Colors.grey[200],
-                            );
-                          }
+                        } else if (e.code == 'wrong-password') {
+                          useremailerror = '';
+                          userpassworderror = "Invalid password.";
+                          Fluttertoast.showToast(
+                            msg: "Wrong password provided for that user.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            textColor: Colors.black,
+                            fontSize: 14,
+                            backgroundColor: Colors.grey[200],
+                          );
                         }
+                      }
                       //});
-
                     },
                     // style: ButtonStyle(elevation: MaterialStateProperty(12.0 )),
                     style: ElevatedButton.styleFrom(
@@ -416,8 +607,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   ),
                 )
               ],
-            ),
-          ),
+            ),*/
+              ),
         ),
       ),
     );
