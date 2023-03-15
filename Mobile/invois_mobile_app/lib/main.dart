@@ -59,7 +59,7 @@ class _SplashScreen extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: const Color(0xFFF5F5F5), //Colors.white,
       //child: FlutterLogo(size: MediaQuery.of(context).size.height)
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -227,14 +227,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     Container(
                         margin: EdgeInsets.symmetric(
                             vertical: MediaQuery.of(context).size.height *
-                                0.03, //0.04
+                                0.02, //0.04
                             horizontal:
                                 MediaQuery.of(context).size.width * 0.04),
                         child: RichText(
                           text: TextSpan(
                             style: defaultStyle,
                             children: <TextSpan>[
-                              const TextSpan(text: 'Pay Req: '),
+                              const TextSpan(
+                                text: 'Pay Req: ',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF4f4f4f),
+                                    height: 3),
+                              ),
                               TextSpan(
                                   text: payReqName,
                                   style: linkStyle,
@@ -245,7 +251,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                           forceSafariVC: false,
                                           forceWebView: false);
                                     }),
-                              const TextSpan(text: '\nVend Inv: '),
+                              const TextSpan(
+                                text: '\nVend Inv: ',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF4f4f4f),
+                                    height: 2),
+                              ),
                               TextSpan(
                                   text: vendInvName,
                                   style: linkStyle,
@@ -256,8 +268,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                           forceSafariVC: false,
                                           forceWebView: false);
                                     }),
+                              const TextSpan(
+                                text: '\nPayment Done At: ',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF4f4f4f),
+                                    height: 2),
+                              ),
                               TextSpan(
-                                  text: '\nPayment Done At: $paymentDoneAt'),
+                                text: paymentDoneAt,
+                                style: const TextStyle(
+                                  color: Color(0xFF4f4f4f),
+                                ),
+                              ),
                             ],
                           ),
                         )),
@@ -309,14 +332,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 ListTile(
                   selected: true,
                   leading: const Icon(Icons.history),
-                  title: const Text(' History'),
+                  title: const Text(
+                    ' History',
+                    style: TextStyle(fontSize: 16),
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title: const Text('LogOut'),
+                  title: const Text(
+                    ' LogOut',
+                    style: TextStyle(fontSize: 16),
+                  ),
                   onTap: () async {
                     //Navigator.pop(context);
                     Navigator.push(
@@ -364,11 +393,11 @@ class _MyLoginPageState extends State<MyLoginPage> {
               ),
             ),
             Container(
-                transform: Matrix4.translationValues(0.0, -50.0, 0.0),
+                transform: Matrix4.translationValues(0.0, -60.0, 0.0),
                 margin: const EdgeInsets.symmetric(
                     vertical: 0.01, horizontal: 0.01),
                 decoration: const BoxDecoration(
-                  color: Colors.red,
+                  color: Color(0xFFf5f5f5), //Colors.red,
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(40.0),
                       topLeft: Radius.circular(40.0)),
@@ -376,24 +405,38 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 child: Container(
                   margin: EdgeInsets.symmetric(
                       vertical: MediaQuery.of(context).size.height * 0.05,
-                      horizontal: MediaQuery.of(context).size.width * 0.04),
+                      horizontal: MediaQuery.of(context).size.width * 0.10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      const Text('Login to your account'),
+                      const Text(
+                        'Login to your account',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Color(0xFF4f4f4f),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(
-                        height: 10,
+                        height: 60,
                       ),
                       TextField(
                         controller: emailController,
                         onChanged: (value) {},
+                        style: const TextStyle(color: Color(0xFF4f4f4f)),
                         decoration: const InputDecoration(
                           labelText: "Email",
-                          fillColor: Colors.white,
+                          fillColor: Color(0xFFf5f5f5),
+                          //Colors.white,
                           filled: true,
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 20.0),
+                          enabledBorder: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 0.0),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(6.0)),
@@ -415,10 +458,16 @@ class _MyLoginPageState extends State<MyLoginPage> {
                         onChanged: (value) {},
                         decoration: const InputDecoration(
                           labelText: "Password",
-                          fillColor: Colors.white,
+                          fillColor: Color(0xFFf5f5f5),
+                          //Colors.white,
                           filled: true,
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 20.0),
+                          enabledBorder: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 0.0),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(6.0)),
@@ -436,7 +485,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                           )),
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        height: 40,
+                        height: 50,
                         child: ElevatedButton(
                           onPressed: () async {
                             //setState(() async {
@@ -481,10 +530,22 @@ class _MyLoginPageState extends State<MyLoginPage> {
                           },
                           // style: ButtonStyle(elevation: MaterialStateProperty(12.0 )),
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF381ce4),
-                              elevation: 10.0,
-                              textStyle: const TextStyle(color: Colors.white)),
-                          child: const Text('Login'),
+                            backgroundColor: const Color(0xFF381ce4),
+                            elevation: 10.0,
+                            textStyle: const TextStyle(color: Colors.white),
+                            shape: const StadiumBorder(),
+                            /*RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                                      ),*/
+                            //padding: const EdgeInsets.fromLTRB(20, 10, 20, 10)
+                          ),
+                          child: const Text(
+                            'LOGIN',
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2),
+                          ),
                         ),
                       )
                     ],
