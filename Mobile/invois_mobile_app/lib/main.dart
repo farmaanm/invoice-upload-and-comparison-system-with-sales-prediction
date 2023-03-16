@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -49,7 +50,7 @@ class _SplashScreen extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-        const Duration(seconds: 3),
+        const Duration(seconds: 3), //3
         () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -66,7 +67,7 @@ class _SplashScreen extends State<SplashScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Image.asset(
-            'assets/images/logo.png',
+            'assets/images/splash_logo.png',
             height: 200,
             scale: 1,
             // color: Color.fromARGB(255, 15, 147, 59),
