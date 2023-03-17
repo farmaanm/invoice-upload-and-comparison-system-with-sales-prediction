@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:invois_mobile_app/palette.dart';
 
 FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -27,13 +28,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Invois',
       theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Palette.kToDark, //Colors.blue,
           appBarTheme: const AppBarTheme(
             color: Color(0xFF381ce4),
           ),
           scaffoldBackgroundColor: const Color(0xFFf5f5f5)), //381ce4
       //home: const MyHomePage(title: ''),
-      home: SplashScreen(),
+      home: const SplashScreen(),
     );
   }
 }
@@ -43,6 +44,25 @@ class SplashScreen extends StatefulWidget {
 
   @override
   State<SplashScreen> createState() => _SplashScreen();
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class MyLoginPage extends StatefulWidget {
+  const MyLoginPage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  //State<MyHomePage> createState() => _MyHomePageState();
+  State<MyLoginPage> createState() => _MyLoginPageState();
 }
 
 class _SplashScreen extends State<SplashScreen> {
@@ -76,25 +96,6 @@ class _SplashScreen extends State<SplashScreen> {
       ),
     );
   }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class MyLoginPage extends StatefulWidget {
-  const MyLoginPage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  //State<MyHomePage> createState() => _MyHomePageState();
-  State<MyLoginPage> createState() => _MyLoginPageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -228,7 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Container(
                         margin: EdgeInsets.symmetric(
                             vertical: MediaQuery.of(context).size.height *
-                                0.02, //0.04
+                                0.002, //0.04
                             horizontal:
                                 MediaQuery.of(context).size.width * 0.04),
                         child: RichText(
@@ -240,7 +241,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF4f4f4f),
-                                    height: 3),
+                                    height: 2),
                               ),
                               TextSpan(
                                   text: payReqName,
@@ -305,6 +306,8 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           drawer: Drawer(
+              child: Container(
+            color: const Color(0xFFF5F5F5),
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
@@ -312,16 +315,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     decoration: const BoxDecoration(
                         color: Color(0xFFf8f4f4),
                         image: DecorationImage(
-                          scale: 1.5,
-                          image: AssetImage("assets/images/logo.png"),
+                          fit: BoxFit.scaleDown,
+                          scale: 0.5,
+                          image: AssetImage("assets/images/splash_logo.png"),
                         )),
                     child: Container(
                       alignment: Alignment.bottomCenter,
                       child: Text(
-                        userEmail,
+                        'Welcome\n$userEmail',
                         style: const TextStyle(
                           fontSize: 17,
+                          letterSpacing: 3,
+                          color: Color(0xFF4f4f4f),
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     )),
                 const SizedBox(
@@ -361,7 +368,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
-          )),
+          ))),
     );
   }
 }

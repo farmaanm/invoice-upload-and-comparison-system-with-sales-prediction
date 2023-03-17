@@ -45,6 +45,8 @@ dependencies:
   url_launcher: ^6.1.7
   firebase_auth: ^4.2.5
 
+  shimmer: ^2.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
