@@ -10,7 +10,7 @@ import {
     MDBModalFooter,
 } from 'mdb-react-ui-kit';
 import LoadingScreen from '../../loading/LoadingScreen';
-
+import processingGif from '../../images/processingGif.gif'
 
 export default function Upload() {
 
@@ -27,7 +27,7 @@ export default function Upload() {
 
         if (payReq !== "" && cusInv !== "") {
             validateData()
-            
+
             displayMessage(validationStatus)
         }
     }, [validationStatus, cusInv, payReq]);
@@ -269,7 +269,13 @@ export default function Upload() {
     /***************************************************************************************** */
 
     function refreshPage() {
-        window.location.reload(false);
+        var delayInMilliseconds = 1000; //1 second
+
+        setTimeout(function () {
+            //your code to be executed after 1 second
+            window.location.reload(false);
+        }, delayInMilliseconds);
+
     }
 
     async function displayMessage(validation) {
@@ -301,7 +307,7 @@ export default function Upload() {
         toggleShowProccessing();
         await mindeeSubmit()
         await getPayReq(filePaymentRequisition.name)
-        
+
     }
 
 
@@ -339,7 +345,6 @@ export default function Upload() {
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
             </div>
-
 
             {loading === false ? (
                 <div>
@@ -475,14 +480,14 @@ export default function Upload() {
                         </>
                         */ }
 
-
+                        {/* Success Modal */}
                         <MDBModal tabIndex='-1' show={centredModalSuccess} setShow={setCentredModalSuccess}>
                             <MDBModalDialog centered>
                                 <MDBModalContent>
                                     <MDBModalHeader style={{ backgroundColor: '#dff0d5' }}>
                                         <MDBModalTitle>Confirmation</MDBModalTitle>
                                         {/*<MDBBtn className='btn-close' color='none' onClick={toggleShowSuccess}></MDBBtn>*/}
-                                        <button className='btn-close' color='none' onClick={toggleShowSuccess}></button>
+                                        <button className='btn-close' color='none' onClick={() => { toggleShowSuccess(); refreshPage(); }}></button>
                                     </MDBModalHeader>
 
                                     <MDBModalBody style={{ backgroundColor: '#dff0d5' }}>
@@ -499,20 +504,21 @@ export default function Upload() {
                             </MDBModalDialog>
                         </MDBModal>
 
+                        {/* Unsuccess Modal */}
                         <MDBModal tabIndex='-1' show={centredModalUnuccess} setShow={setCentredModalUnuccess}>
                             <MDBModalDialog centered >
                                 <MDBModalContent >
                                     <MDBModalHeader style={{ backgroundColor: '#f2dede' }}>
                                         <MDBModalTitle>Confirmation</MDBModalTitle>
                                         {/*<MDBBtn className='btn-close' color='none' onClick={toggleShowUnuccess}></MDBBtn>*/}
-                                        <button className='btn-close' color='none' onClick={toggleShowUnuccess}></button>
+                                        <button className='btn-close' color='none' onClick={() => { toggleShowUnuccess(); refreshPage(); }}></button>
                                     </MDBModalHeader>
 
                                     <MDBModalBody style={{ backgroundColor: '#f2dede' }}>
                                         <MDBIcon fas icon="clipboard" style={{ color: '#ab5473', fontSize: '50px' }} />
                                         <p style={{ color: '#ab5473', fontFamily: "Tahoma", fontSize: '20px' }}>
                                             <br />
-                                            Oops! Try Again
+                                            Data mismatched. Please retry again!
                                         </p>
                                     </MDBModalBody>
 
@@ -522,17 +528,19 @@ export default function Upload() {
                             </MDBModalDialog>
                         </MDBModal>
 
+                        {/* Proccessing Modal */}
                         <MDBModal tabIndex='-1' show={centredModalProccessing} setShow={setCentredModalProccessing}>
                             <MDBModalDialog centered >
                                 <MDBModalContent >
                                     <MDBModalHeader style={{ backgroundColor: '#fbf0da' }}>
-                                        <MDBModalTitle>Proccessing...</MDBModalTitle>
+                                        <MDBModalTitle>Processing...</MDBModalTitle>
                                         {/*<MDBBtn className='btn-close' color='none' onClick={toggleShowUnuccess}></MDBBtn>*/}
-                                        <button className='btn-close' color='none' onClick={toggleShowProccessing}></button>
+                                        {/*<button className='btn-close' color='none' onClick={toggleShowProccessing}></button>*/}
                                     </MDBModalHeader>
 
                                     <MDBModalBody style={{ backgroundColor: '#fbf0da' }}>
-                                        <MDBIcon fas icon="clock" style={{ color: '#8f681d', fontSize: '50px' }} />
+                                        {/*<MDBIcon fas icon="clock" style={{ color: '#8f681d', fontSize: '50px' }} />*/}
+                                        <img src={processingGif} alt="processing gif" style={{height:'70px'}}/>
                                         <p style={{ color: '#8f681d', fontFamily: "Tahoma", fontSize: '20px' }}>
                                             <br />
                                             Data is being Extracted...
@@ -569,7 +577,8 @@ export default function Upload() {
                             </li>
                         </ul>
 
-
+                        
+                        <br/>
 
                         <div className="tab-content" id="ex2-content">
 
@@ -644,7 +653,7 @@ export default function Upload() {
                                 <div style={{ padding: '10px' }} id="spotDataDisplay">
                                     <table width={'100%'}>
                                         <tbody>
-                                            <tr>
+                                            <tr style={{ height: '50px' }}>
                                                 <td width={'33%'} >
                                                     <label htmlFor='customerInvoiceSpot'>Upload Customer Invoice:</label>
                                                 </td>
@@ -656,6 +665,7 @@ export default function Upload() {
                                             <tr></tr>
 
                                             <tr>
+                                                {/* Payment Requisition Upload */}
                                                 <td>
                                                     <input type='file'
                                                         name='customerInvoiceSpot'
@@ -665,6 +675,8 @@ export default function Upload() {
                                                         style={fileUpload}
                                                         onChange={setCustomerInvoice} />
                                                 </td>
+
+                                                {/* Customer Invoice Upload */}
                                                 <td>
                                                     <input type='file'
                                                         name='paymentRequisitionSpot'
@@ -681,6 +693,7 @@ export default function Upload() {
                                     <p><br /></p>
 
                                     <div>
+                                        {/* Submit Button */}
                                         {/*<MDBBtn disabled={disabledSpot} type='button' onClick={validateSpot}>VALIDATE</MDBBtn>*/}
                                         <button disabled={disabledSpot} type='button' className="btn btn-primary" onClick={validateSpot}>VALIDATE</button>
                                     </div>
