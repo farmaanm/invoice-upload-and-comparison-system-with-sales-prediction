@@ -10,7 +10,10 @@ import {
     MDBModalFooter,
 } from 'mdb-react-ui-kit';
 import LoadingScreen from '../../loading/LoadingScreen';
-import processingGif from '../../images/processingGif.gif'
+import successGif from '../../images/successGif.gif';
+import unsuccessGif from '../../images/unsuccessGif.gif';
+import processingGif from '../../images/processingGif.gif';
+
 
 export default function Upload() {
 
@@ -491,7 +494,8 @@ export default function Upload() {
                                     </MDBModalHeader>
 
                                     <MDBModalBody style={{ backgroundColor: '#dff0d5' }}>
-                                        <MDBIcon fas icon="clipboard-check" style={{ color: '#55804c', fontSize: '50px' }} />
+                                        {/*<MDBIcon fas icon="clipboard-check" style={{ color: '#55804c', fontSize: '50px' }} />*/}
+                                        <img src={successGif} alt="processing gif" style={{height:'70px'}}/>
                                         <p style={{ color: '#55804c', fontFamily: "Tahoma", fontSize: '20px' }}>
                                             <br />
                                             Validation Successful!
@@ -509,16 +513,17 @@ export default function Upload() {
                             <MDBModalDialog centered >
                                 <MDBModalContent >
                                     <MDBModalHeader style={{ backgroundColor: '#f2dede' }}>
-                                        <MDBModalTitle>Confirmation</MDBModalTitle>
+                                        <MDBModalTitle>Error</MDBModalTitle>
                                         {/*<MDBBtn className='btn-close' color='none' onClick={toggleShowUnuccess}></MDBBtn>*/}
                                         <button className='btn-close' color='none' onClick={() => { toggleShowUnuccess(); refreshPage(); }}></button>
                                     </MDBModalHeader>
 
                                     <MDBModalBody style={{ backgroundColor: '#f2dede' }}>
-                                        <MDBIcon fas icon="clipboard" style={{ color: '#ab5473', fontSize: '50px' }} />
+                                        {/*<MDBIcon fas icon="clipboard" style={{ color: '#ab5473', fontSize: '50px' }} />*/}
+                                        <img src={unsuccessGif} alt="processing gif" style={{height:'70px'}}/>
                                         <p style={{ color: '#ab5473', fontFamily: "Tahoma", fontSize: '20px' }}>
                                             <br />
-                                            Data mismatched. Please retry again!
+                                            Data mismatched. Please try again!
                                         </p>
                                     </MDBModalBody>
 
