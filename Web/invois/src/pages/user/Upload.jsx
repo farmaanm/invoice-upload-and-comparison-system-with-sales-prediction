@@ -13,7 +13,8 @@ import LoadingScreen from '../../loading/LoadingScreen';
 import successGif from '../../images/successGif.gif';
 import unsuccessGif from '../../images/unsuccessGif.gif';
 import processingGif from '../../images/processingGif.gif';
-
+import { db } from '../../firebase'
+import { collection, doc, getDocs, addDoc, updateDoc, query, orderBy, where } from 'firebase/firestore'
 
 export default function Upload() {
 
@@ -30,7 +31,6 @@ export default function Upload() {
 
         if (payReq !== "" && cusInv !== "") {
             validateData()
-
             displayMessage(validationStatus)
         }
     }, [validationStatus, cusInv, payReq]);
@@ -145,6 +145,7 @@ export default function Upload() {
         fileValidateSpot()
         setFileCustomerInvoice(event.target.files[0])
     }
+    
 
     function setPaymentRequisition(event) {
         fileValidateSpot()
@@ -281,9 +282,58 @@ export default function Upload() {
 
     }
 
+    function getDateTime() {
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = now.getMonth() + 1;
+        var day = now.getDate();
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        var second = now.getSeconds();
+
+        if (month.toString().length === 1) {
+            month = '0' + month;
+        }
+        if (day.toString().length === 1) {
+            day = '0' + day;
+        }
+        if (hour.toString().length === 1) {
+            hour = '0' + hour;
+        }
+        if (minute.toString().length === 1) {
+            minute = '0' + minute;
+        }
+        if (second.toString().length === 1) {
+            second = '0' + second;
+        }
+
+        var dateTime = day + '/' + month + '/' + year + ' ' + hour + ':' + minute + ':' + second;
+
+        return dateTime;
+    }
+
+    const getDataRefContract = collection(db, "Contract");
+
     async function displayMessage(validation) {
         if (validation === "True") {
             //Send to Database
+            try {
+                const docRef = await addDoc(getDataRefContract, {
+                    dateTime: getDateTime(),
+                    paymentDoneAt: '',
+                    paymentRequisitionName: filePaymentRequisition.name,
+                    paymentRequisitionUrl: 'paymentRequisitionUrl',
+                    paymentStatus: 'Pending',
+                    status: 'Pending',
+                    statusMessage: 'warning',
+                    uploadedBy: 'uploadedBy',
+                    vendorInvoiceName: fileCustomerInvoice.name,
+                    vendorInvoiceUrl: 'vendorInvoiceUrl'
+                });
+                console.log("Document written with ID: ", docRef.id);
+            } catch (e) {
+                console.error("Error adding document: ", e);
+            }
 
             //if database success: 
             toggleShowProccessing();
@@ -302,6 +352,8 @@ export default function Upload() {
             fileValidateSpot();
         }
     }
+
+    
 
     /*Spot Validate Button Validation Success, Unsuccess Message*/
     async function validateSpot(e) {
@@ -495,7 +547,7 @@ export default function Upload() {
 
                                     <MDBModalBody style={{ backgroundColor: '#dff0d5' }}>
                                         {/*<MDBIcon fas icon="clipboard-check" style={{ color: '#55804c', fontSize: '50px' }} />*/}
-                                        <img src={successGif} alt="processing gif" style={{height:'70px'}}/>
+                                        <img src={successGif} alt="processing gif" style={{ height: '70px' }} />
                                         <p style={{ color: '#55804c', fontFamily: "Tahoma", fontSize: '20px' }}>
                                             <br />
                                             Validation Successful!
@@ -520,7 +572,7 @@ export default function Upload() {
 
                                     <MDBModalBody style={{ backgroundColor: '#f2dede' }}>
                                         {/*<MDBIcon fas icon="clipboard" style={{ color: '#ab5473', fontSize: '50px' }} />*/}
-                                        <img src={unsuccessGif} alt="processing gif" style={{height:'70px'}}/>
+                                        <img src={unsuccessGif} alt="processing gif" style={{ height: '70px' }} />
                                         <p style={{ color: '#ab5473', fontFamily: "Tahoma", fontSize: '20px' }}>
                                             <br />
                                             Data mismatched. Please try again!
@@ -545,7 +597,7 @@ export default function Upload() {
 
                                     <MDBModalBody style={{ backgroundColor: '#fbf0da' }}>
                                         {/*<MDBIcon fas icon="clock" style={{ color: '#8f681d', fontSize: '50px' }} />*/}
-                                        <img src={processingGif} alt="processing gif" style={{height:'70px'}}/>
+                                        <img src={processingGif} alt="processing gif" style={{ height: '70px' }} />
                                         <p style={{ color: '#8f681d', fontFamily: "Tahoma", fontSize: '20px' }}>
                                             <br />
                                             Data is being Extracted...
@@ -582,8 +634,8 @@ export default function Upload() {
                             </li>
                         </ul>
 
-                        
-                        <br/>
+
+                        <br />
 
                         <div className="tab-content" id="ex2-content">
 
