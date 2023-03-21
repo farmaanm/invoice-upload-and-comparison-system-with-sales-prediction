@@ -10,11 +10,15 @@ import {
     MDBModalFooter,
 } from 'mdb-react-ui-kit';
 import LoadingScreen from '../../loading/LoadingScreen';
+
 import successGif from '../../images/successGif.gif';
 import unsuccessGif from '../../images/unsuccessGif.gif';
 import processingGif from '../../images/processingGif.gif';
-import { db } from '../../firebase'
-import { collection, doc, getDocs, addDoc, updateDoc, query, orderBy, where } from 'firebase/firestore'
+
+import { db, storage } from '../../firebase'
+import { collection, addDoc } from 'firebase/firestore'
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 
 export default function Upload() {
 
@@ -34,76 +38,6 @@ export default function Upload() {
             displayMessage(validationStatus)
         }
     }, [validationStatus, cusInv, payReq]);
-
-
-    /*On Load Function*/
-    /*useEffect(() => {
-        contractData();
-    }, [])*/
-
-    /*Contract Button Select*/
-    //const [isContract, setIsContract] = useState(false);
-
-    /*Display Contract Form*/
-    /*function contractData() {
-
-        var x = document.getElementById('contractDataDisplay');
-        var y = document.getElementById('spotDataDisplay');
-
-        if (x.style.display === "none") {
-            x.style.display = "block";
-            y.style.display = "none";
-            setIsContract(true);
-            setIsSpot(false);
-        } else {
-            x.style.display = "none";
-            setIsContract(false);
-        }
-    }*/
-
-    /*Contract Button Style*/
-    /*const contract = {
-        width: '280px',
-        borderRadius: '5px',
-        padding: '20px',
-        fontSize: '30px',
-        fontFamily: 'Roboto',
-        color: isContract ? 'white' : '#4F4F4F',
-        backgroundColor: isContract ? '#381ce4' : 'white',   //after, before
-        border: isContract ? '1px solid white' : '1px solid #4F4F4F'
-    };*/
-
-    /*Spot Button Select*/
-    //const [isSpot, setIsSpot] = useState(false);
-
-    /*Display Spot Form*/
-    /*function spotData() {
-
-        var x = document.getElementById('contractDataDisplay');
-        var y = document.getElementById('spotDataDisplay');
-
-        if (y.style.display === "none") {
-            x.style.display = "none";
-            y.style.display = "block";
-            setIsSpot(true);
-            setIsContract(false);
-        } else {
-            y.style.display = "none";
-            setIsSpot(false);
-        }
-    }*/
-
-    /*Spot Button Style*/
-    /*const spot = {
-        width: '280px',
-        borderRadius: '5px',
-        padding: '20px',
-        fontSize: '30px',
-        fontFamily: 'Roboto',
-        color: isSpot ? 'white' : '#4F4F4F',
-        backgroundColor: isSpot ? '#381ce4' : 'white',   //after, before
-        border: isSpot ? '1px solid white' : '1px solid #4F4F4F'
-    };*/
 
     /*File Upload Style*/
     const fileUpload = {
@@ -137,7 +71,7 @@ export default function Upload() {
         }
     }
 
-    /*****************************Setting File name On Change********************************* */
+    /* Setting File name On Change */
     const [fileCustomerInvoice, setFileCustomerInvoice] = useState()
     const [filePaymentRequisition, setFilePaymentRequisition] = useState()
 
@@ -145,7 +79,6 @@ export default function Upload() {
         fileValidateSpot()
         setFileCustomerInvoice(event.target.files[0])
     }
-    
 
     function setPaymentRequisition(event) {
         fileValidateSpot()
@@ -154,8 +87,7 @@ export default function Upload() {
 
     console.log(fileCustomerInvoice)
     console.log(filePaymentRequisition)
-    /******************************************************************************* */
-
+    
 
     /*Success, Unsuccess Message */
     const [centredModalSuccess, setCentredModalSuccess] = useState(false);  //Success Validation
@@ -183,8 +115,7 @@ export default function Upload() {
         //toggleShowUnuccess();
     }
 
-    /*********************************Extracting Payment Requisition Data******************** */
-    //let [payReq, setPayReq] = useState([])
+    /* Extracting Payment Requisition Data */
     async function getPayReq(filePath) {
 
         //let response = await fetch('http://127.0.0.1:8000/salesprediction')
@@ -196,11 +127,8 @@ export default function Upload() {
 
     }
     console.log(payReq)
-    /***************************************************************************************** */
-
-
-    /*********************************Extracting Customer Invoice Data******************** */
-    //let [cusInv, setCusInv] = useState([])
+    
+    /* Extracting Customer Invoice Data */
     const mindeeSubmit = async (evt) => {
         //evt.preventDefault()
         //let myFileInput = document.getElementById('my-file-input');
@@ -251,11 +179,8 @@ export default function Upload() {
         xhr.send(data);
     }
     console.log(cusInv)
-    /***************************************************************************************** */
-
-
-    /*********************************Validating Invoice Data******************************** */
-    //let [validationStatus, setValidationStatus] = useState([])
+    
+    /* Comparing and Validating Invoice Data */
     async function validateData() {
 
         cusInv = String(cusInv)
@@ -270,18 +195,17 @@ export default function Upload() {
         console.log(data)
     }
     console.log(validationStatus)
-    /***************************************************************************************** */
 
+    /* Page Refreshing */
     function refreshPage() {
         var delayInMilliseconds = 1000; //1 second
 
         setTimeout(function () {
-            //your code to be executed after 1 second
             window.location.reload(false);
         }, delayInMilliseconds);
-
     }
 
+    /* Get Current Date and Time */
     function getDateTime() {
         var now = new Date();
         var year = now.getFullYear();
@@ -314,22 +238,67 @@ export default function Upload() {
 
     const getDataRefContract = collection(db, "Contract");
 
+    /* Displaying Validtion Message */
     async function displayMessage(validation) {
+
+        /* If Validation == True */
         if (validation === "True") {
             //Send to Database
             try {
+                const storageRefPayReq = ref(storage, `/Payment Requisitions/${filePaymentRequisition.name}`)
+                const uploadTaskPayReq = uploadBytesResumable(storageRefPayReq, filePaymentRequisition);
+
+                const storageRefCusInv = ref(storage, `/Vendor Invoice/${fileCustomerInvoice.name}`)
+                const uploadTaskCusInv = uploadBytesResumable(storageRefCusInv, fileCustomerInvoice);
+
+                /* Payment Requisition File Upload */
+                uploadTaskPayReq.on(
+                    "state_changed",
+                    (snapshot) => {
+                        const percent = Math.round(
+                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        );
+                    },
+                    (err) => console.log(err),
+                    () => {
+                        // download url
+                        getDownloadURL(uploadTaskPayReq.snapshot.ref).then((url) => {
+                            console.log(url);
+                        });
+                    }
+                );
+
+                /* Customer Invoice File Upload */
+                uploadTaskCusInv.on(
+                    "state_changed",
+                    (snapshot) => {
+                        const percent = Math.round(
+                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        );
+                    },
+                    (err) => console.log(err),
+                    () => {
+                        // download url
+                        getDownloadURL(uploadTaskCusInv.snapshot.ref).then((url) => {
+                            console.log(url);
+                        });
+                    }
+                );
+
+                /* Send all data to DB */
                 const docRef = await addDoc(getDataRefContract, {
                     dateTime: getDateTime(),
                     paymentDoneAt: '',
                     paymentRequisitionName: filePaymentRequisition.name,
-                    paymentRequisitionUrl: 'paymentRequisitionUrl',
+                    paymentRequisitionUrl: 'payReqUrl',
                     paymentStatus: 'Pending',
                     status: 'Pending',
                     statusMessage: 'warning',
                     uploadedBy: 'uploadedBy',
                     vendorInvoiceName: fileCustomerInvoice.name,
-                    vendorInvoiceUrl: 'vendorInvoiceUrl'
+                    vendorInvoiceUrl: 'cusInvUrl'
                 });
+
                 console.log("Document written with ID: ", docRef.id);
             } catch (e) {
                 console.error("Error adding document: ", e);
@@ -343,6 +312,7 @@ export default function Upload() {
             setDisabledSpot(true);
             fileValidateSpot();
         }
+        /* If Validation == False */
         else if (validation === "False") {
             toggleShowProccessing();
             toggleShowUnuccess();
@@ -353,9 +323,7 @@ export default function Upload() {
         }
     }
 
-    
-
-    /*Spot Validate Button Validation Success, Unsuccess Message*/
+    /* Extracting Spot Invoice Data Function Call */
     async function validateSpot(e) {
         e.preventDefault();
 
@@ -364,10 +332,6 @@ export default function Upload() {
         await getPayReq(filePaymentRequisition.name)
 
     }
-
-
-
-
 
     return (
         <>
