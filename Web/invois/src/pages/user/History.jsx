@@ -1,6 +1,6 @@
 import { MDBBadge, MDBIcon } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs, query, orderBy } from 'firebase/firestore'
 import { db } from '../../firebase'
 import LoadingScreen from '../../loading/LoadingScreen';
 
@@ -20,8 +20,10 @@ function History() {
         setTimeout(() => setLoading(false), 4000) //4s
 
         /* To retrieve data */
+        const q = query(getDataRefContract, orderBy('dateTime', 'asc'));
+
         const getData = async () => {
-            const data = await getDocs(getDataRefContract);
+            const data = await getDocs(q);
             setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
         };
 

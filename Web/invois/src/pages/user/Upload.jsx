@@ -15,8 +15,9 @@ import successGif from '../../images/successGif.gif';
 import unsuccessGif from '../../images/unsuccessGif.gif';
 import processingGif from '../../images/processingGif.gif';
 
-import { db, storage } from '../../firebase'
-import { collection, addDoc } from 'firebase/firestore'
+import 'firebase/auth';
+import { db, storage, auth } from '../../firebase'
+import { collection, addDoc, doc, getDoc, updateDoc } from 'firebase/firestore'
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
@@ -38,6 +39,15 @@ export default function Upload() {
             displayMessage(validationStatus)
         }
     }, [validationStatus, cusInv, payReq]);
+
+    /* Get Current User */
+    let username = '';
+    let user = auth.currentUser
+    if (user) {
+        let useremail = user.email
+        console.log(useremail)
+        username = useremail.split('@')[0]
+    }
 
     /*File Upload Style*/
     const fileUpload = {
@@ -87,7 +97,7 @@ export default function Upload() {
 
     console.log(fileCustomerInvoice)
     console.log(filePaymentRequisition)
-    
+
 
     /*Success, Unsuccess Message */
     const [centredModalSuccess, setCentredModalSuccess] = useState(false);  //Success Validation
@@ -127,7 +137,7 @@ export default function Upload() {
 
     }
     console.log(payReq)
-    
+
     /* Extracting Customer Invoice Data */
     const mindeeSubmit = async (evt) => {
         //evt.preventDefault()
@@ -179,7 +189,7 @@ export default function Upload() {
         xhr.send(data);
     }
     console.log(cusInv)
-    
+
     /* Comparing and Validating Invoice Data */
     async function validateData() {
 
@@ -238,7 +248,10 @@ export default function Upload() {
 
     const getDataRefContract = collection(db, "Contract");
 
-    /* Displaying Validtion Message */
+    let payReqUrl = ""
+    let cusInvUrl = ""
+
+    /* Displaying Validtion Message and Send to DB */
     async function displayMessage(validation) {
 
         /* If Validation == True */
@@ -263,6 +276,7 @@ export default function Upload() {
                     () => {
                         // download url
                         getDownloadURL(uploadTaskPayReq.snapshot.ref).then((url) => {
+                            payReqUrl = url;
                             console.log(url);
                         });
                     }
@@ -280,6 +294,7 @@ export default function Upload() {
                     () => {
                         // download url
                         getDownloadURL(uploadTaskCusInv.snapshot.ref).then((url) => {
+                            cusInvUrl = url;
                             console.log(url);
                         });
                     }
@@ -294,12 +309,31 @@ export default function Upload() {
                     paymentStatus: 'Pending',
                     status: 'Pending',
                     statusMessage: 'warning',
-                    uploadedBy: 'uploadedBy',
+                    uploadedBy: username,
                     vendorInvoiceName: fileCustomerInvoice.name,
                     vendorInvoiceUrl: 'cusInvUrl'
                 });
 
+                console.log("Pay Req = " + payReqUrl)
+                console.log("Cus Inv = " + cusInvUrl)
+
                 console.log("Document written with ID: ", docRef.id);
+
+                /* Update URL */
+                const contractRef = doc(db, "Contract", docRef.id);
+                const docSnap = await getDoc(contractRef);
+
+                if (docSnap.exists()) {
+                    //console.log("Document data:", docSnap.data());
+                    await updateDoc(contractRef, {
+                        paymentRequisitionUrl: payReqUrl,
+                        vendorInvoiceUrl: cusInvUrl
+                    });
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+
             } catch (e) {
                 console.error("Error adding document: ", e);
             }
