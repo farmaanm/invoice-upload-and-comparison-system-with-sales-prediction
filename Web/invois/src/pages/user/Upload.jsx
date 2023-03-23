@@ -681,9 +681,9 @@ export default function Upload() {
                                                 </td>
                                                 <td>
                                                     <select style={fileUpload} id='rateContract' onChange={fileValidateContract} >
-                                                        <option value={0}>Rate</option>
-                                                        <option value={1}>Rate 1</option>
-                                                        <option value={2}>Rate 2</option>
+                                                        <option value={0}>Rate 000</option>
+                                                        <option value={1}>Rate 010</option>
+                                                        <option value={2}>Rate 020</option>
                                                     </select>
                                                 </td>
                                             </tr>

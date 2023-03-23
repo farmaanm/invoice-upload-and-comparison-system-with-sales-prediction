@@ -25,7 +25,7 @@ def multiple_regression():
 
     dataset = pd.read_csv('Sales Data.csv')
 
-    dates = dataset["date"].values[591:843]
+    dates = dataset["month"].values[591:843]
 
     dataset = dataset.drop(['date', 'Invoice No.', 'vendor',
                            'destination', 'LKR per USD', 'Total Value LKR'], axis=1)
@@ -83,12 +83,27 @@ def multiple_regression():
     for i in range(0, len(y_test)):
         temp_values = []
         temp_values.append(dates[i])
-        temp_values.append(y_test[i])
+        #temp_values.append(y_test[i])
         temp_values.append(y_pred[i])
 
         result_values.append(temp_values)
 
-    return result_values
+    from itertools import groupby
+    groups = groupby(result_values, key=lambda v:v[0])
+    result = [[i, sum(v[1] for v in g)] for i, g in groups]
+    #print(result)
+
+    '''
+    import calendar
+    for x in range(0,len(result)):
+        #print(result[x][0])
+    
+        #print(calendar.month_name[result[x][0]])
+    
+        result[x][0] = calendar.month_name[result[x][0]]
+    '''
+    
+    return result
 
 
 @app.get("/extractPayReq")
@@ -198,6 +213,10 @@ def paymentRequisition(pdfname=None):
 
     assert d is not None
 
+    total_value = p1.get_text_for_page(0)
+    if (('\n' in total_value) == True):
+        total_value = total_value.split('\n', 1)[0]
+
     customer = m1.get_text_for_page(0)
     customer = customer.replace('\n', ' ')
 
@@ -207,7 +226,7 @@ def paymentRequisition(pdfname=None):
     # b'{"Machine Name":"'+hostname+'"}', None, True)
 
     str = '{"invoice_no":"' + l1.get_text_for_page(0) + '","customer_details":"' + customer + '","invoice_date":"' + n1.get_text_for_page(
-        0) + '","document_issued_by":"' + doc_issued_by + '","total_value":"' + p1.get_text_for_page(0) + '","uploaded_by":"' + q1.get_text_for_page(0) + '"}'
+        0) + '","document_issued_by":"' + doc_issued_by + '","total_value":"' + total_value + '","uploaded_by":"' + q1.get_text_for_page(0) + '"}'
 
     #json_str = json.loads(str)
 
