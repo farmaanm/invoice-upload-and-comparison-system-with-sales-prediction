@@ -37,9 +37,9 @@ def multiple_regression():
         transformers=[('encoder', OneHotEncoder(), [3])], remainder='passthrough')
     X = np.array(ct.fit_transform(X))
 
-    X_train = X[:590, :]
+    X_train = X[:, :]    #[:590, :] [rows, cols]
     X_test = X[591:843, :]
-    y_train = y[0:590]
+    y_train = y[:]  #[0:590]
     y_test = y[591:843]
 
     regressor = LinearRegression()
@@ -76,7 +76,36 @@ def multiple_regression():
     plt.show()
     '''
 
-    result_values = [dates.tolist(), y_test.tolist(), y_pred.tolist()]
+    #################################################################
+
+    from datetime import datetime, timedelta
+
+    dt = datetime.now()
+
+    future_data = X_test
+
+    for i in range(0, len(future_data)):
+
+        td = timedelta(days=i+1)
+        my_date = dt + td
+
+        my_date = datetime.strptime(str(my_date)[:10], '%Y-%m-%d')
+        
+        year = int(str(my_date)[:4])
+        month = int(str(my_date)[5:7])
+        day = int(str(my_date)[8:10])
+
+        future_data[i][2] = day
+        future_data[i][3] = month
+        future_data[i][4] = year
+
+    y_pred2 = regressor.predict(future_data)
+
+    #print(future_data)
+
+    #################################################################
+
+    result_values = [dates.tolist(), y_test.tolist(), y_pred2.tolist()]
 
     result_values = []
 
@@ -84,7 +113,7 @@ def multiple_regression():
         temp_values = []
         temp_values.append(dates[i])
         #temp_values.append(y_test[i])
-        temp_values.append(y_pred[i])
+        temp_values.append(y_pred2[i])
 
         result_values.append(temp_values)
 
