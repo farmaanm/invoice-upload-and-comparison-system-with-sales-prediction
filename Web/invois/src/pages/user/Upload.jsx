@@ -17,7 +17,7 @@ import processingGif from '../../images/processingGif.gif';
 
 import 'firebase/auth';
 import { db, storage, auth } from '../../firebase'
-import { collection, addDoc, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { collection, addDoc, doc, getDoc, getDocs, updateDoc, query, orderBy } from 'firebase/firestore'
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
@@ -30,15 +30,29 @@ export default function Upload() {
     let [cusInv, setCusInv] = useState([])
     let [validationStatus, setValidationStatus] = useState([])
 
+    const getDataRefCustomer = collection(db, "Customer");
+    const [showData, setShowData] = useState([]);
+
     useEffect(() => {
         /* Timeout for Loading Screen */
         setTimeout(() => setLoading(false), 1000) //1s
+
+        const q = query(getDataRefCustomer, orderBy("customerName"));
+
+        const getData = async () => {
+            const data = await getDocs(q);
+            setShowData(data.docs.map((docFiles) => ({ id: docFiles.id, post: docFiles.data() })));
+        };
+
+        getData();
 
         if (payReq !== "" && cusInv !== "") {
             validateData()
             displayMessage(validationStatus)
         }
     }, [validationStatus, cusInv, payReq]);
+
+    //console.log(showData)
 
     /* Get Current User */
     let username = '';
@@ -84,19 +98,28 @@ export default function Upload() {
     /* Setting File name On Change */
     const [fileCustomerInvoice, setFileCustomerInvoice] = useState()
     const [filePaymentRequisition, setFilePaymentRequisition] = useState()
+    const [rateValue, setRateValue] = useState(0)
 
     function setCustomerInvoice(event) {
         fileValidateSpot()
+        fileValidateContract()
         setFileCustomerInvoice(event.target.files[0])
     }
 
     function setPaymentRequisition(event) {
         fileValidateSpot()
+        fileValidateContract()
         setFilePaymentRequisition(event.target.files[0])
+    }
+
+    function setRate(event) {
+        fileValidateContract()
+        setRateValue(event.target.value)
     }
 
     console.log(fileCustomerInvoice)
     console.log(filePaymentRequisition)
+    console.log(rateValue)
 
 
     /*Success, Unsuccess Message */
@@ -108,22 +131,7 @@ export default function Upload() {
     const toggleShowUnuccess = () => setCentredModalUnuccess(!centredModalUnuccess);
     const toggleShowProccessing = () => setCentredModalProccessing(!centredModalProccessing);
 
-    /*Contract Validate Button Validation Success, Unsuccess Message*/
-    function validateContract() {
 
-        //Send to Database
-
-        //if database success: 
-        toggleShowSuccess();
-        document.getElementById('customerInvoiceContract').value = "";
-        document.getElementById('paymentRequisitionContract').value = "";
-        document.getElementById('rateContract').value = 0;
-        setDisabledContract(true);
-        fileValidateContract();
-
-        //else:
-        //toggleShowUnuccess();
-    }
 
     /* Extracting Payment Requisition Data */
     async function getPayReq(filePath) {
@@ -201,6 +209,17 @@ export default function Upload() {
 
         let response = await fetch('http://127.0.0.1:8000/validateData?cusInvStr=' + cusInv + '&payReqStr=' + payReq)
         let data = await response.json()
+
+        if (rateValue !== 0) {
+            const obj = JSON.parse(cusInv);
+
+            if (parseFloat(obj.total_value) === parseFloat(rateValue)) {
+                data = "True"
+            } else {
+                data = "False"
+            }
+        }
+
         setValidationStatus(data)
         console.log(data)
     }
@@ -343,8 +362,16 @@ export default function Upload() {
             toggleShowSuccess();
             document.getElementById('customerInvoiceSpot').value = "";
             document.getElementById('paymentRequisitionSpot').value = "";
+
+            document.getElementById('customerInvoiceContract').value = "";
+            document.getElementById('paymentRequisitionContract').value = "";
+            document.getElementById('rateContract').value = 0;
+
             setDisabledSpot(true);
             fileValidateSpot();
+
+            setDisabledContract(true);
+            fileValidateContract();
         }
         /* If Validation == False */
         else if (validation === "False") {
@@ -352,8 +379,12 @@ export default function Upload() {
             toggleShowUnuccess();
             document.getElementById('customerInvoiceSpot').value = "";
             document.getElementById('paymentRequisitionSpot').value = "";
+
             setDisabledSpot(true);
             fileValidateSpot();
+
+            setDisabledContract(true);
+            fileValidateContract();
         }
     }
 
@@ -366,6 +397,8 @@ export default function Upload() {
         await getPayReq(filePaymentRequisition.name)
 
     }
+
+
 
     return (
         <>
@@ -661,6 +694,7 @@ export default function Upload() {
                                             <tr></tr>
 
                                             <tr>
+                                                {/* Customer Ivoice */}
                                                 <td>
                                                     <input type='file'
                                                         name='customerInvoiceContract'
@@ -668,8 +702,10 @@ export default function Upload() {
                                                         accept='application/pdf'
                                                         style={fileUpload}
                                                         id='customerInvoiceContract'
-                                                        onChange={fileValidateContract} />
+                                                        onChange={setCustomerInvoice} />
                                                 </td>
+
+                                                {/* Payment Requisition */}
                                                 <td>
                                                     <input type='file'
                                                         name='paymentRequisitionContract'
@@ -677,13 +713,36 @@ export default function Upload() {
                                                         accept='application/pdf'
                                                         style={fileUpload}
                                                         id='paymentRequisitionContract'
-                                                        onChange={fileValidateContract} />
+                                                        onChange={setPaymentRequisition} />
                                                 </td>
+
+                                                {/* Rate */}
                                                 <td>
-                                                    <select style={fileUpload} id='rateContract' onChange={fileValidateContract} >
-                                                        <option value={0}>Rate 000</option>
-                                                        <option value={1}>Rate 010</option>
-                                                        <option value={2}>Rate 020</option>
+                                                    <select style={fileUpload} id='rateContract' onChange={setRate} >
+                                                        {
+                                                            showData.map(({ id, post }) => {
+                                                                const destination = [];
+                                                                const rate = [];
+
+                                                                for (var i = 0; i < post.records.length; i++) {
+                                                                    destination.push(post.records[i].destination)
+                                                                    rate.push(post.records[i].rate)
+                                                                }
+
+                                                                return (
+                                                                    <>
+                                                                        {
+                                                                            Object.values(post.records).map((rows, index) => {
+                                                                                return (
+
+                                                                                    <option value={rows.rate} key={index}>{post.customerName} | {rows.destination} | {rows.rate}</option>
+                                                                                )
+                                                                            })
+                                                                        }
+                                                                    </>
+                                                                )
+                                                            })
+                                                        }
                                                     </select>
                                                 </td>
                                             </tr>
@@ -693,7 +752,7 @@ export default function Upload() {
                                     <p><br /></p>
 
                                     <div>
-                                        <button className="btn btn-primary" disabled={disabledContract} onClick={validateContract}>VALIDATE</button>
+                                        <button className="btn btn-primary" disabled={disabledContract} onClick={validateSpot}>VALIDATE</button>
                                     </div>
                                 </div>
                             </div>
