@@ -1,4 +1,4 @@
-import { MDBIcon } from 'mdb-react-ui-kit';
+import { MDBBadge, MDBIcon } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react'
 import { collection, getDocs, doc, getDoc, updateDoc, query, orderBy } from 'firebase/firestore'
 import { db } from '../../firebase'
@@ -84,27 +84,27 @@ function Approve() {
 
             {/* Navigation Bar */}
 
-            <div>
+            <div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4'}}>
                 <div style={{
-                    position: 'relative',
+                    //position: 'relative',
                     height: '100px',
                     width: '100%'
                 }}>
 
-                    <div style={{ position: 'absolute', top: '20px', left: '60px' }}>
+                    <div style={{ position: 'absolute', top: '30px', left: '60px' }}>
                         <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
                         <span className="h1 fw-bold mb-0">Invois</span>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '250px' }}>
+                    <div style={{ position: 'absolute', bottom: '45px', right: '250px' }}>
                         <a href='/approve' style={{ textDecoration: 'underline' }}>Approve</a>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '150px' }}>
+                    <div style={{ position: 'absolute', bottom: '45px', right: '150px' }}>
                         <a href="/contract">Contract</a>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>
+                    <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
                         <a href="/">Log out</a>
                     </div>
                 </div>
@@ -112,7 +112,7 @@ function Approve() {
             </div>
 
             {loading === false ? (
-                <div>
+                <div style={{marginTop:'130px'}}>
 
                     {/* Approve List of Files */}
                     <div>
@@ -172,7 +172,10 @@ function Approve() {
                                                         <a href={post.paymentRequisitionUrl}><p className='fw-normal mb-1'>{post.paymentRequisitionName}</p></a>
                                                     </td>
                                                     <td>
-                                                        <span className={"badge rounded-pill badge-" + post.statusMessage}>{post.status}</span>
+                                                        {/*<span className={"badge rounded-pill badge-" + post.statusMessage}>{post.status}</span>*/}
+                                                        <MDBBadge color={post.statusMessage} pill>
+                                                            {post.status}
+                                                        </MDBBadge>
                                                     </td>
                                                     <td>
                                                         <p className='fw-normal mb-1'>{post.dateTime}</p>

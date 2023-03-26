@@ -35,7 +35,7 @@ export default function Upload() {
 
     useEffect(() => {
         /* Timeout for Loading Screen */
-        setTimeout(() => setLoading(false), 1000) //1s
+        setTimeout(() => setLoading(false), 4000) //4s
 
         const q = query(getDataRefCustomer, orderBy("customerName"));
 
@@ -69,6 +69,17 @@ export default function Upload() {
         color: '#4f4f4f',
         backgroundColor: '#F5F5F5',
         padding: '20px',
+        borderStyle: 'dashed',
+        borderRadius: '5px',
+        fontFamily: 'Roboto'
+    }
+
+    /*Rate Style*/
+    const rateStyle = {
+        border: '1px solid #381ce4',
+        color: '#4f4f4f',
+        backgroundColor: '#F5F5F5',
+        padding: '25px',
         borderStyle: 'dashed',
         borderRadius: '5px',
         fontFamily: 'Roboto'
@@ -405,27 +416,27 @@ export default function Upload() {
 
             {/* Navigation Bar */}
 
-            <div>
+            <div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4'}}>
                 <div style={{
-                    position: 'relative',
+                    //position: 'relative',
                     height: '100px',
                     width: '100%'
                 }}>
 
-                    <div style={{ position: 'absolute', top: '20px', left: '60px' }}>
+                    <div style={{ position: 'absolute', top: '30px', left: '60px' }}>
                         <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
                         <span className="h1 fw-bold mb-0">Invois</span>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '250px' }}>
+                    <div style={{ position: 'absolute', bottom: '45px', right: '240px' }}>
                         <a href='/upload' style={{ textDecoration: 'underline' }}>Upload File</a>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '150px' }}>
+                    <div style={{ position: 'absolute', bottom: '45px', right: '150px' }}>
                         <a href="/history">History</a>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>
+                    <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
                         <a href="/">Log out</a>
                     </div>
                 </div>
@@ -433,7 +444,7 @@ export default function Upload() {
             </div>
 
             {loading === false ? (
-                <div>
+                <div style={{marginTop:'130px'}}>
 
                     {/* File Upload */}
                     <div style={{ padding: '5%' }}>
@@ -718,7 +729,7 @@ export default function Upload() {
 
                                                 {/* Rate */}
                                                 <td>
-                                                    <select style={fileUpload} id='rateContract' onChange={setRate} >
+                                                    <select style={rateStyle} id='rateContract' onChange={setRate} >
                                                         {
                                                             showData.map(({ id, post }) => {
                                                                 const destination = [];

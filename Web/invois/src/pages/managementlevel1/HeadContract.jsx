@@ -37,31 +37,31 @@ function HeadContract() {
 
             {/* Navigation Bar */}
 
-            <div>
+            <div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4'}}>
                 <div style={{
-                    position: 'relative',
+                    //position: 'relative',
                     height: '100px',
                     width: '100%'
                 }}>
 
-                    <div style={{ position: 'absolute', top: '20px', left: '60px' }}>
+                    <div style={{ position: 'absolute', top: '30px', left: '60px' }}>
                         <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
                         <span className="h1 fw-bold mb-0">Invois</span>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '320px' }}>
+                    <div style={{ position: 'absolute', bottom: '45px', right: '320px' }}>
                         <a href='/sales' >Sales</a>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '240px' }}>
+                    <div style={{ position: 'absolute', bottom: '45px', right: '240px' }}>
                         <a href='/hhistory'>History</a>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '140px' }}>
+                    <div style={{ position: 'absolute', bottom: '45px', right: '140px' }}>
                         <a href="/hcontract" style={{ textDecoration: 'underline' }}>Customers</a>
                     </div>
 
-                    <div style={{ position: 'absolute', bottom: '10px', right: '60px' }}>
+                    <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
                         <a href="/">Log out</a>
                     </div>
                 </div>
@@ -70,7 +70,7 @@ function HeadContract() {
 
             {loading === false ? (
 
-                <div>
+                <div style={{marginTop:'130px'}}>
 
                     {/* Customer Records */}
                     <div style={{ padding: '2%' }}>
