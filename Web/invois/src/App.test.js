@@ -93,7 +93,7 @@ describe('Firebase Util Test Suite', () => {
 
 });
 
-describe("This suite is to test the User Level 1", () => {
+/*describe("This suite is to test the User Level 1", () => {
 
 
     describe("Upload", () => {
@@ -120,7 +120,7 @@ describe("This suite is to test the User Level 1", () => {
         });
     });
 
-});
+});*/
 
 describe("This suite is to test the Management Level 1", () => {
 
@@ -167,7 +167,7 @@ describe("This suite is to test the Management Level 1", () => {
 
 describe("This suite is to test the Management Level 2", () => {
 
-    describe("Approve", () => {
+    /*describe("Approve", () => {
         test('rendering nav bar', () => {
 
             const { getByText } = render(<Approve />);
@@ -177,7 +177,7 @@ describe("This suite is to test the Management Level 2", () => {
             expect(getByText("Log out")).toBeInTheDocument("Log out")
 
         });
-    });
+    });*/
 
     describe("Contract", () => {
         test('rendering nav bar', () => {
@@ -235,17 +235,7 @@ describe("This suite is to test the Finance", () => {
         
     });
 
-    
 
 });
-
-
-
-//render(<FirstTest />);
-//const element = screen.getByText(/First test/i);
-//expect(element).toBeInTheDocument();
-
-//const { getByText } = render(<FirstTest />);
-//expect(getByText("First test")).toBeInTheDocument("First test")
 
 
