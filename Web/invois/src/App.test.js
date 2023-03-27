@@ -101,7 +101,7 @@ describe("This suite is to test the User Level 1", () => {
         test('rendering nav bar', () => {
 
             const { getByText } = render(<Upload />);
-
+            await setTimeout(5000);
             expect(getByText("Upload File")).toBeInTheDocument("Upload File")
             expect(getByText("History")).toBeInTheDocument("History")
             expect(getByText("Log out")).toBeInTheDocument("Log out")
