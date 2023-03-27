@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event';
 
@@ -21,16 +21,14 @@ import Payment from '../src/pages/finance/Payment';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, deleteUser, getAuth } from 'firebase/auth';
 import { async } from '@firebase/util';
 
+afterAll(() => setTimeout(() => process.exit(1), 1000))
+
 describe('Firebase Util Test Suite', () => {
     beforeAll(async () => {
         jest.setTimeout(10000);
     });
 
     const auth = getAuth()
-
-    /*beforeEach(async () => {
-        await signOutFirebase();
-    });*/
 
     test('createUserWithEmailAndPassword should create an account', async () => {
 
@@ -72,7 +70,7 @@ describe('Firebase Util Test Suite', () => {
 
     test('signOutFirebase should log out the user', async () => {
         await signInWithEmailAndPassword(auth, 'test@user.com', 'test123');
-        
+
         signOut(auth).then(() => {
             // Sign-out successful.
         }).catch((error) => {
@@ -82,7 +80,7 @@ describe('Firebase Util Test Suite', () => {
 
     test('deleteUser should delete user', async () => {
         await signInWithEmailAndPassword(auth, 'test@user.com', 'test123');
-        
+
         const user = auth.currentUser;
 
         deleteUser(user).then(() => {
@@ -97,11 +95,12 @@ describe('Firebase Util Test Suite', () => {
 
 describe("This suite is to test the User Level 1", () => {
 
+
     describe("Upload", () => {
         test('rendering nav bar', () => {
 
             const { getByText } = render(<Upload />);
-            await setTimeout(5000);
+            setTimeout(10000);
             expect(getByText("Upload File")).toBeInTheDocument("Upload File")
             expect(getByText("History")).toBeInTheDocument("History")
             expect(getByText("Log out")).toBeInTheDocument("Log out")
@@ -190,6 +189,32 @@ describe("This suite is to test the Management Level 2", () => {
             expect(getByText("Log out")).toBeInTheDocument("Log out")
 
         });
+
+        test('add customer record', async () => {
+
+            render(<Contract />);
+            //const { container } = render(<Contract />);
+
+            //await new Promise((r) => setTimeout(r, 5000));
+
+            //fireEvent.click(screen.getByText(/ADD CUSTOMER/i))
+
+            let cusNameTextBox = screen.findByRole('textbox', { name: /customer name/i,});
+            let validityTextBox = screen.findByRole('textbox', { name: /validity/i,});
+            let freightRateTextBox = screen.findByRole('textbox', { name: /freight rate/i,});
+            let effRateTextBox = screen.findByRole('textbox', { name: /eff rate/i,});
+            let otherRateTextBox = screen.findByRole('textbox', { name: /other rate/i,});
+
+            userEvent.type(cusNameTextBox, "Customer #9");
+            userEvent.type(validityTextBox, "05/24/2023");
+            userEvent.type(freightRateTextBox, "500");
+            userEvent.type(effRateTextBox, "50");
+            userEvent.type(otherRateTextBox, "10");
+
+            //fireEvent.click(container.querySelector('.btn btn-primary'));
+            //fireEvent.click(await screen.findByRole('button', { name: /add customer/i,}))
+            //expect(mockedOnChange).toHaveBeenCalledWith("Customer #9");
+        });
     });
 
 });
@@ -197,6 +222,7 @@ describe("This suite is to test the Management Level 2", () => {
 describe("This suite is to test the Finance", () => {
 
     describe("Payment", () => {
+
         test('rendering nav bar', () => {
 
             const { getByText } = render(<Payment />);
@@ -205,7 +231,11 @@ describe("This suite is to test the Finance", () => {
             expect(getByText("Log out")).toBeInTheDocument("Log out")
 
         });
+
+        
     });
+
+    
 
 });
 
