@@ -23,7 +23,6 @@ import { async } from '@firebase/util';
 import { collection, getDocs, query, where, doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from './firebase'
 
-import Trial from '../src/pages/trial';
 
 
 /**
