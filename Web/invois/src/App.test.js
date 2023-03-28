@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitForElementToBeRemoved, waitFor, queryByText } from '@testing-library/react';
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event';
 
@@ -20,8 +20,18 @@ import Payment from '../src/pages/finance/Payment';
 
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, deleteUser, getAuth } from 'firebase/auth';
 import { async } from '@firebase/util';
+import { collection, getDocs, query, where, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { db } from './firebase'
 
-afterAll(() => setTimeout(() => process.exit(1), 1000))
+import Trial from '../src/pages/trial';
+
+
+/**
+ * @jest-environment node
+ */
+
+
+//afterAll(() => setTimeout(() => process.exit(1), 1000))
 
 describe('Firebase Util Test Suite', () => {
     beforeAll(async () => {
@@ -93,34 +103,41 @@ describe('Firebase Util Test Suite', () => {
 
 });
 
-/*describe("This suite is to test the User Level 1", () => {
+describe("This suite is to test the User Level 1", () => {
 
+    describe("Login", () => {
+        /*test('Login Text boxes', () => {
+
+            const { getByText } = render(<Login />);
+
+            userEvent.tab();
+            expect(getByText("")).toBeInTheDocument("")
+            
+        });*/
+    });
 
     describe("Upload", () => {
-        test('rendering nav bar', () => {
+        test('rendering loading screen', () => {
 
             const { getByText } = render(<Upload />);
-            setTimeout(10000);
-            expect(getByText("Upload File")).toBeInTheDocument("Upload File")
-            expect(getByText("History")).toBeInTheDocument("History")
-            expect(getByText("Log out")).toBeInTheDocument("Log out")
+
+            expect(getByText("Loading...")).toBeInTheDocument("Loading...")
 
         });
     });
 
     describe("History", () => {
-        test('rendering nav bar', () => {
+        
+        test('rendering loading screen', () => {
 
             const { getByText } = render(<History />);
 
-            expect(getByText("Upload File")).toBeInTheDocument("Upload File")
-            expect(getByText("History")).toBeInTheDocument("History")
-            expect(getByText("Log out")).toBeInTheDocument("Log out")
+            expect(getByText("Loading...")).toBeInTheDocument("Loading...")
 
         });
     });
 
-});*/
+});
 
 describe("This suite is to test the Management Level 1", () => {
 
@@ -133,6 +150,14 @@ describe("This suite is to test the Management Level 1", () => {
             expect(getByText("History")).toBeInTheDocument("History")
             expect(getByText("Customers")).toBeInTheDocument("Customers")
             expect(getByText("Log out")).toBeInTheDocument("Log out")
+
+        });
+
+        test('rendering loading screen', () => {
+
+            const { getByText } = render(<Sales />);
+
+            expect(getByText("Loading...")).toBeInTheDocument("Loading...")
 
         });
     });
@@ -148,9 +173,18 @@ describe("This suite is to test the Management Level 1", () => {
             expect(getByText("Log out")).toBeInTheDocument("Log out")
 
         });
+
+        test('rendering loading screen', () => {
+
+            const { getByText } = render(<HeadHistory />);
+
+            expect(getByText("Loading...")).toBeInTheDocument("Loading...")
+
+        });
     });
 
     describe("Customers", () => {
+
         test('rendering nav bar', () => {
 
             const { getByText } = render(<HeadContract />);
@@ -161,23 +195,32 @@ describe("This suite is to test the Management Level 1", () => {
             expect(getByText("Log out")).toBeInTheDocument("Log out")
 
         });
+
+        test('rendering loading screen', () => {
+
+            const { getByText } = render(<HeadContract />);
+
+            expect(getByText("Loading...")).toBeInTheDocument("Loading...")
+
+        });
+
     });
 
 });
 
 describe("This suite is to test the Management Level 2", () => {
 
-    /*describe("Approve", () => {
-        test('rendering nav bar', () => {
+    describe("Approve", () => {
+        
+
+        test('rendering loading screen', () => {
 
             const { getByText } = render(<Approve />);
 
-            expect(getByText("Approve")).toBeInTheDocument("Approve")
-            expect(getByText("Contract")).toBeInTheDocument("Contract")
-            expect(getByText("Log out")).toBeInTheDocument("Log out")
+            expect(getByText("Loading...")).toBeInTheDocument("Loading...")
 
         });
-    });*/
+    });
 
     describe("Contract", () => {
         test('rendering nav bar', () => {
@@ -190,31 +233,14 @@ describe("This suite is to test the Management Level 2", () => {
 
         });
 
-        test('add customer record', async () => {
+        test('rendering loading screen', () => {
 
-            render(<Contract />);
-            //const { container } = render(<Contract />);
+            const { getByText } = render(<Contract />);
 
-            //await new Promise((r) => setTimeout(r, 5000));
+            expect(getByText("Loading...")).toBeInTheDocument("Loading...")
 
-            //fireEvent.click(screen.getByText(/ADD CUSTOMER/i))
-
-            let cusNameTextBox = screen.findByRole('textbox', { name: /customer name/i,});
-            let validityTextBox = screen.findByRole('textbox', { name: /validity/i,});
-            let freightRateTextBox = screen.findByRole('textbox', { name: /freight rate/i,});
-            let effRateTextBox = screen.findByRole('textbox', { name: /eff rate/i,});
-            let otherRateTextBox = screen.findByRole('textbox', { name: /other rate/i,});
-
-            userEvent.type(cusNameTextBox, "Customer #9");
-            userEvent.type(validityTextBox, "05/24/2023");
-            userEvent.type(freightRateTextBox, "500");
-            userEvent.type(effRateTextBox, "50");
-            userEvent.type(otherRateTextBox, "10");
-
-            //fireEvent.click(container.querySelector('.btn btn-primary'));
-            //fireEvent.click(await screen.findByRole('button', { name: /add customer/i,}))
-            //expect(mockedOnChange).toHaveBeenCalledWith("Customer #9");
         });
+
     });
 
 });
@@ -232,9 +258,15 @@ describe("This suite is to test the Finance", () => {
 
         });
 
-        
-    });
+        test('rendering loading screen', () => {
 
+            const { getByText } = render(<Payment />);
+
+            expect(getByText("Loading...")).toBeInTheDocument("Loading...")
+
+        });
+
+    });
 
 });
 
