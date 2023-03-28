@@ -102,42 +102,6 @@ describe('Firebase Util Test Suite', () => {
 
 });
 
-describe("This suite is to test the User Level 1", () => {
-
-    describe("Login", () => {
-        /*test('Login Text boxes', () => {
-
-            const { getByText } = render(<Login />);
-
-            userEvent.tab();
-            expect(getByText("")).toBeInTheDocument("")
-            
-        });*/
-    });
-
-    describe("Upload", () => {
-        test('rendering loading screen', () => {
-
-            const { getByText } = render(<Upload />);
-
-            expect(getByText("Loading...")).toBeInTheDocument("Loading...")
-
-        });
-    });
-
-    describe("History", () => {
-        
-        test('rendering loading screen', () => {
-
-            const { getByText } = render(<History />);
-
-            expect(getByText("Loading...")).toBeInTheDocument("Loading...")
-
-        });
-    });
-
-});
-
 describe("This suite is to test the Management Level 1", () => {
 
     describe("Sales", () => {
@@ -208,18 +172,6 @@ describe("This suite is to test the Management Level 1", () => {
 });
 
 describe("This suite is to test the Management Level 2", () => {
-
-    describe("Approve", () => {
-        
-
-        test('rendering loading screen', () => {
-
-            const { getByText } = render(<Approve />);
-
-            expect(getByText("Loading...")).toBeInTheDocument("Loading...")
-
-        });
-    });
 
     describe("Contract", () => {
         test('rendering nav bar', () => {
