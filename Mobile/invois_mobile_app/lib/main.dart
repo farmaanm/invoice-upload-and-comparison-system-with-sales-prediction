@@ -12,9 +12,15 @@ import 'package:invois_mobile_app/palette.dart';
 
 FirebaseAuth auth = FirebaseAuth.instance;
 
-Future<void> main() async {
+/*Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp();
+  runApp(const MyApp());
+}*/
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
@@ -43,7 +49,7 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreen();
+  State<SplashScreen> createState() => SplashScreenState();
 }
 
 class MyHomePage extends StatefulWidget {
@@ -62,10 +68,16 @@ class MyLoginPage extends StatefulWidget {
 
   @override
   //State<MyHomePage> createState() => _MyHomePageState();
-  State<MyLoginPage> createState() => _MyLoginPageState();
+  State<MyLoginPage> createState() => MyLoginPageState();
 }
 
-class _SplashScreen extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen> {
+
+  int methodToBeTested() {
+    // dummy implementation that uses widget.XXX
+    return 0;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -114,6 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
         userEmail = user.email!;
@@ -124,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return BoxDecoration(
         border: Border.all(
           color: Colors.black12,
-          width: 1,
+          width: 0.2,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
       );
@@ -299,7 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     toastLength: Toast.LENGTH_SHORT,
                     textColor: Colors.black,
                     fontSize: 14,
-                    backgroundColor: Colors.grey[200],
+                    backgroundColor: Colors.grey[300],
                   );
                 });
               });
@@ -312,13 +325,17 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.zero,
               children: [
                 DrawerHeader(
+                    //padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 30.0),
                     decoration: const BoxDecoration(
-                        color: Color(0xFFf8f4f4),
-                        image: DecorationImage(
-                          fit: BoxFit.scaleDown,
-                          scale: 0.5,
-                          image: AssetImage("assets/images/splash_logo.png"),
-                        )),
+                      color: Color(0xFFf8f4f4),
+                      image: DecorationImage(
+                        fit: BoxFit.scaleDown,
+                        scale: 5,
+                        image: AssetImage(
+                          "assets/images/splash_logo.png",
+                        ),
+                      ),
+                    ),
                     child: Container(
                       alignment: Alignment.bottomCenter,
                       child: Text(
@@ -373,15 +390,42 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class _MyLoginPageState extends State<MyLoginPage> {
-  final Stream<QuerySnapshot> _usersStream =
-      FirebaseFirestore.instance.collection('Contract').snapshots();
+@visibleForTesting
+class MyLoginPageState extends State<MyLoginPage> {
+  /*final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('Contract').snapshots();*/
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   String useremailerror = '';
   String userpassworderror = '';
+
+  updateLoginError(err) {
+    setState(() {
+      if (err == 'user-not-found') {
+        useremailerror += "No user found for that email.";
+        userpassworderror = '';
+        Fluttertoast.showToast(
+          msg: "No user found for that email.",
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.black,
+          fontSize: 14,
+          backgroundColor: Colors.grey[200],
+        );
+      } else if (err == 'wrong-password') {
+        useremailerror = '';
+        userpassworderror = "Invalid password.";
+        Fluttertoast.showToast(
+          msg: "Wrong password provided for that user.",
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.black,
+          fontSize: 14,
+          backgroundColor: Colors.grey[200],
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -420,6 +464,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     children: <Widget>[
                       const Text(
                         'Login to your account',
+                        key: Key('loginLabel'),
                         style: TextStyle(
                           fontSize: 25,
                           color: Color(0xFF4f4f4f),
@@ -452,10 +497,11 @@ class _MyLoginPageState extends State<MyLoginPage> {
                         ),
                       ),
                       SizedBox(
-                          height: 25,
+                          height: 35,
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
+                              key: const Key('userEmailError'),
                               useremailerror,
                               style: const TextStyle(color: Colors.red),
                             ),
@@ -483,10 +529,11 @@ class _MyLoginPageState extends State<MyLoginPage> {
                         ),
                       ),
                       SizedBox(
-                          height: 25,
+                          height: 35,
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
+                              key: const Key('userPasswordError'),
                               userpassworderror,
                               style: const TextStyle(color: Colors.red),
                             ),
@@ -495,6 +542,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                         width: MediaQuery.of(context).size.width,
                         height: 50,
                         child: ElevatedButton(
+                          key: const Key('loginButton'),
                           onPressed: () async {
                             //setState(() async {
                             try {
@@ -511,8 +559,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
                                         )),
                               );
                             } on FirebaseAuthException catch (e) {
-                              if (e.code == 'user-not-found') {
-                                useremailerror =
+                              /*if (e.code == 'user-not-found') {
+                                useremailerror +=
                                     "No user found for that email.";
                                 userpassworderror = '';
                                 Fluttertoast.showToast(
@@ -532,7 +580,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
                                   fontSize: 14,
                                   backgroundColor: Colors.grey[200],
                                 );
-                              }
+                              }*/
+                              updateLoginError(e.code);
                             }
                             //});
                           },
