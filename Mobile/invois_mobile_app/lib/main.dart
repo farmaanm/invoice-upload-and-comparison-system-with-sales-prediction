@@ -58,7 +58,7 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => MyHomePageState();
 }
 
 class MyLoginPage extends StatefulWidget {
@@ -72,11 +72,6 @@ class MyLoginPage extends StatefulWidget {
 }
 
 class SplashScreenState extends State<SplashScreen> {
-
-  int methodToBeTested() {
-    // dummy implementation that uses widget.XXX
-    return 0;
-  }
 
   @override
   void initState() {
@@ -95,6 +90,7 @@ class SplashScreenState extends State<SplashScreen> {
       color: const Color(0xFFF5F5F5), //Colors.white,
       //child: FlutterLogo(size: MediaQuery.of(context).size.height)
       child: Column(
+        key: const Key('splashScreenImage'),
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -110,7 +106,7 @@ class SplashScreenState extends State<SplashScreen> {
   }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('Contract').snapshots();
   String payReqName = '';
@@ -475,6 +471,7 @@ class MyLoginPageState extends State<MyLoginPage> {
                         height: 60,
                       ),
                       TextField(
+                        key: const Key('userEmailInput'),
                         controller: emailController,
                         onChanged: (value) {},
                         style: const TextStyle(color: Color(0xFF4f4f4f)),
@@ -507,6 +504,7 @@ class MyLoginPageState extends State<MyLoginPage> {
                             ),
                           )),
                       TextField(
+                        key: const Key('userPasswordInput'),
                         controller: passwordController,
                         obscureText: true, // hidden password
                         onChanged: (value) {},
