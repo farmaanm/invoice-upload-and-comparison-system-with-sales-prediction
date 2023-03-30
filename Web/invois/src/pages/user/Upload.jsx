@@ -330,6 +330,8 @@ export default function Upload() {
                     }
                 );
 
+                setTimeout(async () => {
+
                 /* Send all data to DB */
                 const docRef = await addDoc(getDataRefContract, {
                     dateTime: getDateTime(),
@@ -363,6 +365,7 @@ export default function Upload() {
                     // doc.data() will be undefined in this case
                     console.log("No such document!");
                 }
+            },6000)
 
             } catch (e) {
                 console.error("Error adding document: ", e);
