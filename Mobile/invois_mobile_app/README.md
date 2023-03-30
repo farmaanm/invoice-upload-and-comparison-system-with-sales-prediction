@@ -1,16 +1,39 @@
 # invois_mobile_app
 
-PUSL3119 Invois Mobile App
+### About the application
 
-## Getting Started
+The `Invois` Mobile Application is an Android based reference application. The end goal of this application is to serve remote workers who does not have access to a dektop or PC.
 
-This project is a starting point for a Flutter application.
+#### User Level 1, Management Level 1 & 2, Finance
 
-A few resources to get you started if this is your first Flutter project:
+- View history of approved invoices along with their payment status.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Dependencies
+
+- Flutter
+
+- Firestore
+
+- URL Launcher
+
+- Flutter Toast
+
+---
+
+#### To run test script
+```
+flutter test
+```
+
+---
+
+### How it works
+
+#### Basics
+
+The application is developed using Flutter in Android Studio, establishing the connection to the Firestore Realtime database.
+
+Following a splash screen of 3 seconds, users can login to the application providing the email and password. On success users will be navigated to the home screen to perform the required tasks.
+
