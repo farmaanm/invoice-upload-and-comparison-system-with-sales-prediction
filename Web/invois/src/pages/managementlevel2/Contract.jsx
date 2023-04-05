@@ -44,6 +44,10 @@ function Contract() {
     const [containerSize, setContainerSize] = useState("");
     const [shippingLine, setShippingLine] = useState("");
 
+    function validateForm() {
+        return customerName.length > 0 && validity.length > 0 && destination.length > 0 && containerSize.length > 0 && shippingLine.length > 0;
+    }
+
 
     async function addcustomer() {
 
@@ -132,7 +136,7 @@ function Contract() {
 
             {/* Navigation Bar */}
 
-            <div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4'}}>
+            <div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4', zIndex:'1'}}>
                 <div style={{
                     //position: 'relative',
                     height: '100px',
@@ -317,7 +321,7 @@ function Contract() {
 
                                 {/* Add Button */}
                                 <div align="right" width="100%">
-                                    <button className="btn btn-primary" type="button" onClick={addcustomer}>ADD RECORD</button>
+                                    <button className="btn btn-primary" type="button" onClick={addcustomer} disabled={!validateForm()}>ADD RECORD</button>
                                 </div>
 
                             </div>
@@ -327,7 +331,7 @@ function Contract() {
                         <br />
 
                         {/* Customer Records */}
-                        <div className="accordion" id="accordionExample">
+                        <div className="accordion" id="accordionExample" style={{zIndex:'0'}}>
 
                             {showData.map(({ id, post }) => {
                                 const destination = [];

@@ -23,38 +23,43 @@ def multiple_regression():
     import matplotlib.pyplot as plt
     import pandas as pd
 
+    # read csv file
     dataset = pd.read_csv('Sales Data.csv')
 
     dates = dataset["month"].values[591:843]
+    #print(dates)
 
-    dataset = dataset.drop(['date', 'Invoice No.', 'vendor',
-                           'destination', 'LKR per USD', 'Total Value LKR'], axis=1)
+    # dropping unwanted columns
+    dataset = dataset.drop(['date', 'Invoice No.', 'vendor', 'destination', 'LKR per USD', 'Total Value LKR'], axis=1)
 
     X = dataset.iloc[:, :-1].values
     y = dataset.iloc[:, -1].values
 
-    ct = ColumnTransformer(
-        transformers=[('encoder', OneHotEncoder(), [3])], remainder='passthrough')
+    ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [3])], remainder='passthrough')
     X = np.array(ct.fit_transform(X))
 
+    # using all records to train model
     X_train = X[:, :]    #[:590, :] [rows, cols]
-    X_test = X[591:843, :]
     y_train = y[:]  #[0:590]
+
+    # using 252 records to actually predict
+    X_test = X[591:843, :]
     y_test = y[591:843]
 
     regressor = LinearRegression()
     regressor.fit(X_train, y_train)
 
+    # predicting sales
     y_pred = regressor.predict(X_test)
-    df = pd.DataFrame(
-        {'Real Values': y_test, 'Predicted Values': y_pred, 'Difference': (y_pred/y_test)*100})
-    print(df)
+    df = pd.DataFrame({'Real Values': y_test, 'Predicted Values': y_pred, 'Difference': (y_pred/y_test)*100})
+    #print(df)
 
-    # Counting number of predicted results >80 and <120
+    # Counting number of predicted results where % difference >80 and <120
     out = np.array([(np.divide(y_pred, y_test))*100])
     result = np.where(np.logical_and(out >= 80, out <= 120))
-    print("Values 80 <= result <= 120: ", len(result[1]))
+    #print("Values 80 <= result <= 120: ", len(result[1]))
 
+    # reporting accuracy
     from sklearn.metrics import mean_absolute_error, mean_squared_error
     linreg_rmse = np.sqrt(mean_squared_error(y_pred, y_test))
     linreg_mae = mean_absolute_error(y_pred, y_test)
@@ -80,9 +85,11 @@ def multiple_regression():
 
     from datetime import datetime, timedelta
 
+    # getting todays date
     dt = datetime.now()
 
     future_data = X_test
+    month_array = []
 
     for i in range(0, len(future_data)):
 
@@ -90,33 +97,42 @@ def multiple_regression():
         my_date = dt + td
 
         my_date = datetime.strptime(str(my_date)[:10], '%Y-%m-%d')
+
+        #print(my_date)
         
         year = int(str(my_date)[:4])
         month = int(str(my_date)[5:7])
         day = int(str(my_date)[8:10])
 
+        month_array.append(month)
+
+        # replacing the date, month, year column with new date values
         future_data[i][2] = day
         future_data[i][3] = month
         future_data[i][4] = year
 
+    # predicting sales with new dates
     y_pred2 = regressor.predict(future_data)
 
+    #print(month_array)
     #print(future_data)
 
     #################################################################
 
-    result_values = [dates.tolist(), y_test.tolist(), y_pred2.tolist()]
+    #result_values = [dates.tolist(), y_test.tolist(), y_pred2.tolist()]
 
     result_values = []
 
     for i in range(0, len(y_test)):
         temp_values = []
-        temp_values.append(dates[i])
+        temp_values.append(month_array[i])
         #temp_values.append(y_test[i])
         temp_values.append(y_pred2[i])
 
+        # appending the month and prediction result as an array to another array
         result_values.append(temp_values)
 
+    # grouping the result by month and adding prediction result for the relevant month
     from itertools import groupby
     groups = groupby(result_values, key=lambda v:v[0])
     result = [[i, sum(v[1] for v in g)] for i, g in groups]
