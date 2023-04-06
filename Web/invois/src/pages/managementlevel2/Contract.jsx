@@ -193,7 +193,7 @@ function Contract() {
                                             {/* Customer Name */}
                                             <th scope='col' colSpan={2}>
                                                 <div className="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
-                                                    <input type="text" id="customerName" className="form-control" value={customerName} onChange={(e) => setCustomerName(e.target.value)} />
+                                                    <input type="text" id="customerName" data-testid="cusName-text-box" className="form-control" value={customerName} onChange={(e) => setCustomerName(e.target.value)} />
                                                     <label className="form-label" htmlFor="customerName">Customer Name</label>
                                                 </div>
                                             </th>
@@ -201,7 +201,7 @@ function Contract() {
                                             {/* Validity Period */}
                                             <th scope='col'>
                                                 <div className="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
-                                                    <input type="date" id="validity" className="form-control" min={todayDate} value={validity} onChange={(e) => setValidity(e.target.value)} />
+                                                    <input type="date" id="validity" data-testid="validity-text-box" className="form-control" min={todayDate} value={validity} onChange={(e) => setValidity(e.target.value)} />
                                                     <label className="form-label" htmlFor="validity">Validity Period</label>
                                                 </div>
                                             </th>
@@ -225,7 +225,7 @@ function Contract() {
                                             {/* Destination */}
                                             <th scope='row'>
                                                 <div className="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
-                                                    <select name="destination" id="destination" className="form-control" value={destination} onChange={(e) => setDestination(e.target.value)}  >
+                                                    <select name="destination" data-testid="destination-input" id="destination" className="form-control" value={destination} onChange={(e) => setDestination(e.target.value)}  >
                                                         <option value="">Destination</option>
                                                         <option value="ALGECIRAS">ALGECIRAS</option>
                                                         <option value="BANGKOK">BANGKOK</option>
@@ -269,7 +269,7 @@ function Contract() {
                                             {/* Container Size */}
                                             <td>
                                                 <div className="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
-                                                    <select name="containerSize" id="containerSize" className="form-control" value={containerSize} onChange={(e) => setContainerSize(e.target.value)}  >
+                                                    <select name="containerSize" id="containerSize" data-testid="container-input" className="form-control" value={containerSize} onChange={(e) => setContainerSize(e.target.value)}  >
                                                         <option value="">Size</option>
                                                         <option value="20">20</option>
                                                         <option value="40">40</option>
@@ -280,21 +280,21 @@ function Contract() {
                                             {/* Freight */}
                                             <td>
                                                 <div className="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
-                                                    <input type="number" id="freightRate" className="form-control" min={0} onChange={handleChangeFreight} value={freight} />
+                                                    <input type="number" id="freightRate" data-testid="freight-input" className="form-control" min={0} onChange={handleChangeFreight} value={freight} />
                                                 </div>
                                             </td>
 
                                             {/* EFF/BAF */}
                                             <td>
                                                 <div className="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
-                                                    <input type="number" id="effRate" className="form-control" min={0} onChange={handleChangeEff} value={eff} />
+                                                    <input type="number" id="effRate" data-testid="eff-input" className="form-control" min={0} onChange={handleChangeEff} value={eff} />
                                                 </div>
                                             </td>
 
                                             {/* Other */}
                                             <td>
                                                 <div className="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
-                                                    <input type="number" id="otherRate" className="form-control" min={0} onChange={handleChangeOther} value={other} />
+                                                    <input type="number" id="otherRate" data-testid="other-input" className="form-control" min={0} onChange={handleChangeOther} value={other} />
                                                 </div>
                                             </td>
 
@@ -304,7 +304,7 @@ function Contract() {
                                             {/* Shipping Line */}
                                             <td>
                                                 <div className="form-outline" style={{ border: '1px solid #cbcbcb', borderRadius: '5px' }}>
-                                                    <select name="shippingLine" id="shippingLine" className="form-control" value={shippingLine} onChange={(e) => setShippingLine(e.target.value)} >
+                                                    <select name="shippingLine" id="shippingLine" data-testid="shippingLine-input" className="form-control" value={shippingLine} onChange={(e) => setShippingLine(e.target.value)} >
                                                         <option value="">Line</option>
                                                         <option value="COSCO">COSCO</option>
                                                         <option value="DELMEGE">DELMEGE</option>

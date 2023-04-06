@@ -716,6 +716,7 @@ export default function Upload() {
                                                         accept='application/pdf'
                                                         style={fileUpload}
                                                         id='customerInvoiceContract'
+                                                        data-testid="contract-cusInv-input"
                                                         onChange={setCustomerInvoice} />
                                                 </td>
 
@@ -727,12 +728,13 @@ export default function Upload() {
                                                         accept='application/pdf'
                                                         style={fileUpload}
                                                         id='paymentRequisitionContract'
+                                                        data-testid="contract-payReq-input"
                                                         onChange={setPaymentRequisition} />
                                                 </td>
 
                                                 {/* Rate */}
                                                 <td>
-                                                    <select style={rateStyle} id='rateContract' onChange={setRate} >
+                                                    <select style={rateStyle} id='rateContract' data-testid="contract-rate-input" onChange={setRate} >
                                                         {
                                                             showData.map(({ id, post }) => {
                                                                 const destination = [];
@@ -793,7 +795,7 @@ export default function Upload() {
                                             <tr></tr>
 
                                             <tr>
-                                                {/* Payment Requisition Upload */}
+                                                {/* Customer Invoice Upload */}
                                                 <td>
                                                     <input type='file'
                                                         name='customerInvoiceSpot'
@@ -801,10 +803,11 @@ export default function Upload() {
                                                         accept='application/pdf'
                                                         id="customerInvoiceSpot"
                                                         style={fileUpload}
+                                                        data-testid="spot-cusInv-input"
                                                         onChange={setCustomerInvoice} />
                                                 </td>
 
-                                                {/* Customer Invoice Upload */}
+                                                {/* Payment Requisition Upload */}
                                                 <td>
                                                     <input type='file'
                                                         name='paymentRequisitionSpot'
@@ -812,6 +815,7 @@ export default function Upload() {
                                                         accept='application/pdf'
                                                         id="paymentRequisitionSpot"
                                                         style={fileUpload}
+                                                        data-testid="spot-payReq-input"
                                                         onChange={setPaymentRequisition} />
                                                 </td>
                                             </tr>
