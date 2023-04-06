@@ -26,15 +26,9 @@ import { async } from '@firebase/util';
 import { collection, getDocs, query, where, doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from './firebase'
 
-import Trial from '../src/pages/trial';
-
-
 /**
  * @jest-environment node
  */
-
-
-//afterAll(() => setTimeout(() => process.exit(1), 1000))
 
 describe('Firebase Util Test Suite', () => {
     beforeAll(async () => {
@@ -561,33 +555,4 @@ describe("This suite is to test the Finance", () => {
     });
 
 });
-
-/*describe("Test firestore", () => {
-    beforeAll(async () => {
-        jest.setTimeout(10000);
-    });
-
-    test('retrieving data', async () => {
-
-
-        const auth = getAuth()
-
-        const getDataRefContract = collection(db, "Contract");
-        const qry = query(getDataRefContract, where("status", "==", "Approved"), where("paymentStatus", "==", "Pending"));
-
-        const data = await getDocs(qry);
-        //setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
-
-    });
-});*/
-
-
-
-//render(<FirstTest />);
-//const element = screen.getByText(/First test/i);
-//expect(element).toBeInTheDocument();
-
-//const { getByText } = render(<FirstTest />);
-//expect(getByText("First test")).toBeInTheDocument("First test")
-
 
