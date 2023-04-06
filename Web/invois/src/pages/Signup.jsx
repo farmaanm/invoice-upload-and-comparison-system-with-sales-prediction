@@ -126,19 +126,19 @@ const Signup = () => {
 
                                 {/*<!-- Email input -->*/}
                                 <div className="form-outline mb-4">
-                                    <input type="email" id="form3Example3c" className="form-control" onChange={e => setEmail(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
+                                    <input type="email" id="form3Example3c" data-testid="email-input" className="form-control" onChange={e => setEmail(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
                                     <label className="form-label" htmlFor="form3Example3c">Email</label>
                                 </div>
 
                                 {/*<!-- Password input -->*/}
                                 <div className="form-outline mb-4">
-                                    <input type="password" id="form3Example4c" className="form-control" onChange={e => setPassword(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
+                                    <input type="password" id="form3Example4c" data-testid="password-input" className="form-control" onChange={e => setPassword(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
                                     <label className="form-label" htmlFor="form3Example4c">Password</label>
                                 </div>
 
                                 {/*<!-- Repeat Password input -->*/}
                                 <div className="form-outline mb-4">
-                                    <input type="password" id="form3Example4cd" className="form-control" onChange={e => setRepeatPassword(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
+                                    <input type="password" id="form3Example4cd" data-testid="repeat-password-input" className="form-control" onChange={e => setRepeatPassword(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
                                     <label className="form-label" htmlFor="form3Example4cd">Repeat your password</label>
                                 </div>
 

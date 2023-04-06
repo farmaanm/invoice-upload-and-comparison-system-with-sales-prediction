@@ -106,6 +106,7 @@ function Login() {
                                         name='userEmail'
                                         required
                                         value={userEmail}
+                                        data-testid="email-input"
                                         onChange={e => setUserEmail(e.target.value)}
                                         style={{ border: '1px solid #c4c4c4' }} />
                                     <label className="form-label" htmlFor="userEmail">Email</label>
@@ -122,6 +123,7 @@ function Login() {
                                         name='userPassword'
                                         required
                                         value={userPassword}
+                                        data-testid="password-input"
                                         onChange={e => setUserPassword(e.target.value)}
                                         style={{ border: '1px solid #c4c4c4' }} />
                                     <label className="form-label" htmlFor="userPassword" >Password</label>
