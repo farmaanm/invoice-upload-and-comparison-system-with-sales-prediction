@@ -2,6 +2,8 @@ import { MDBIcon } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react'
 import { Chart } from "react-google-charts";
 import LoadingScreen from '../../loading/LoadingScreen';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase'
 
 function Sales() {
 
@@ -123,7 +125,7 @@ function Sales() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/">Log out</a>
+                        <a href="/" onClick={() => signOut(auth)}>Log out</a>
                     </div>
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>

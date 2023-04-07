@@ -15,7 +15,7 @@ import successGif from '../../images/successGif.gif';
 import unsuccessGif from '../../images/unsuccessGif.gif';
 import processingGif from '../../images/processingGif.gif';
 
-import 'firebase/auth';
+import { signOut } from 'firebase/auth';
 import { db, storage, auth } from '../../firebase'
 import { collection, addDoc, doc, getDoc, getDocs, updateDoc, query, orderBy } from 'firebase/firestore'
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -440,7 +440,7 @@ export default function Upload() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/">Log out</a>
+                        <a href="/" onClick={() => signOut(auth)}>Log out</a>
                     </div>
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>

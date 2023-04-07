@@ -1,7 +1,8 @@
 import { MDBBadge, MDBIcon } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react'
 import { collection, getDocs, doc, getDoc, updateDoc, query, orderBy } from 'firebase/firestore'
-import { db } from '../../firebase'
+import { db, auth } from '../../firebase'
+import { signOut } from 'firebase/auth';
 import LoadingScreen from '../../loading/LoadingScreen';
 //import { async } from '@firebase/util';
 
@@ -105,7 +106,7 @@ function Approve() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/">Log out</a>
+                        <a href="/" onClick={() => signOut(auth)}>Log out</a>
                     </div>
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>

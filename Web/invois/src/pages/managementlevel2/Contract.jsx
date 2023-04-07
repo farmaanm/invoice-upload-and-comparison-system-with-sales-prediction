@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { MDBIcon } from 'mdb-react-ui-kit';
 import { collection, doc, getDocs, addDoc, updateDoc, query, orderBy, where } from 'firebase/firestore'
-import { db } from '../../firebase'
+import { db, auth } from '../../firebase'
+import { signOut } from 'firebase/auth';
 import LoadingScreen from '../../loading/LoadingScreen';
 
 function Contract() {
@@ -157,7 +158,7 @@ function Contract() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/">Log out</a>
+                        <a href="/" onClick={() => signOut(auth)}>Log out</a>
                     </div>
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>

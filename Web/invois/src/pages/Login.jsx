@@ -13,6 +13,14 @@ import { useNavigate } from 'react-router-dom'
 
 function Login() {
 
+    let user = auth.currentUser
+    if (user) {
+        
+        let useremail = user.email
+        console.log('email: ' + useremail)
+        //username = useremail.split('@')[0]
+    }
+
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
     const [error, setError] = useState("");
