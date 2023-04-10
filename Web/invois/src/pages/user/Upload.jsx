@@ -33,6 +33,10 @@ export default function Upload() {
     const getDataRefCustomer = collection(db, "Customer");
     const [showData, setShowData] = useState([]);
 
+    const [mismatchedData, setMismatchedData] = useState('Global variable');
+
+    //var mismatchedData = 'Global variable'
+
     useEffect(() => {
         /* Timeout for Loading Screen */
         setTimeout(() => setLoading(false), 4000) //4s
@@ -49,6 +53,9 @@ export default function Upload() {
         if (payReq !== "" && cusInv !== "") {
             validateData()
             displayMessage(validationStatus)
+            if(validationStatus !== "True"){
+                setMismatchedData(validationStatus)
+            }
         }
     }, [validationStatus, cusInv, payReq]);
 
@@ -227,7 +234,7 @@ export default function Upload() {
             if (parseFloat(obj.total_value) === parseFloat(rateValue)) {
                 data = "True"
             } else {
-                data = "False"
+                data = "Rate: False"
             }
         }
 
@@ -281,6 +288,8 @@ export default function Upload() {
     let payReqUrl = ""
     let cusInvUrl = ""
 
+    //var mismatchedData = 'Global variable'
+
     /* Displaying Validtion Message and Send to DB */
     async function displayMessage(validation) {
 
@@ -332,40 +341,40 @@ export default function Upload() {
 
                 setTimeout(async () => {
 
-                /* Send all data to DB */
-                const docRef = await addDoc(getDataRefContract, {
-                    dateTime: getDateTime(),
-                    paymentDoneAt: '',
-                    paymentRequisitionName: filePaymentRequisition.name,
-                    paymentRequisitionUrl: 'payReqUrl',
-                    paymentStatus: 'Pending',
-                    status: 'Pending',
-                    statusMessage: 'warning',
-                    uploadedBy: username,
-                    vendorInvoiceName: fileCustomerInvoice.name,
-                    vendorInvoiceUrl: 'cusInvUrl'
-                });
-
-                console.log("Pay Req = " + payReqUrl)
-                console.log("Cus Inv = " + cusInvUrl)
-
-                console.log("Document written with ID: ", docRef.id);
-
-                /* Update URL */
-                const contractRef = doc(db, "Contract", docRef.id);
-                const docSnap = await getDoc(contractRef);
-
-                if (docSnap.exists()) {
-                    //console.log("Document data:", docSnap.data());
-                    await updateDoc(contractRef, {
-                        paymentRequisitionUrl: payReqUrl,
-                        vendorInvoiceUrl: cusInvUrl
+                    /* Send all data to DB */
+                    const docRef = await addDoc(getDataRefContract, {
+                        dateTime: getDateTime(),
+                        paymentDoneAt: '',
+                        paymentRequisitionName: filePaymentRequisition.name,
+                        paymentRequisitionUrl: 'payReqUrl',
+                        paymentStatus: 'Pending',
+                        status: 'Pending',
+                        statusMessage: 'warning',
+                        uploadedBy: username,
+                        vendorInvoiceName: fileCustomerInvoice.name,
+                        vendorInvoiceUrl: 'cusInvUrl'
                     });
-                } else {
-                    // doc.data() will be undefined in this case
-                    console.log("No such document!");
-                }
-            },6000)
+
+                    console.log("Pay Req = " + payReqUrl)
+                    console.log("Cus Inv = " + cusInvUrl)
+
+                    console.log("Document written with ID: ", docRef.id);
+
+                    /* Update URL */
+                    const contractRef = doc(db, "Contract", docRef.id);
+                    const docSnap = await getDoc(contractRef);
+
+                    if (docSnap.exists()) {
+                        //console.log("Document data:", docSnap.data());
+                        await updateDoc(contractRef, {
+                            paymentRequisitionUrl: payReqUrl,
+                            vendorInvoiceUrl: cusInvUrl
+                        });
+                    } else {
+                        // doc.data() will be undefined in this case
+                        console.log("No such document!");
+                    }
+                },6000)
 
             } catch (e) {
                 console.error("Error adding document: ", e);
@@ -388,7 +397,10 @@ export default function Upload() {
             fileValidateContract();
         }
         /* If Validation == False */
-        else if (validation === "False") {
+        else if (validation.includes("False")) {
+
+            //mismatchedData = 'This is the mismatched data'
+
             toggleShowProccessing();
             toggleShowUnuccess();
             document.getElementById('customerInvoiceSpot').value = "";
@@ -621,6 +633,9 @@ export default function Upload() {
                                         <p style={{ color: '#ab5473', fontFamily: "Tahoma", fontSize: '20px' }}>
                                             <br />
                                             Data mismatched. Please try again!
+                                        </p>
+                                        <p style={{ fontFamily: "Tahoma", fontSize: '15px' }}>
+                                            {mismatchedData}
                                         </p>
                                     </MDBModalBody>
 

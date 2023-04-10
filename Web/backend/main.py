@@ -283,7 +283,6 @@ def dataComparison(cusInvStr=None, payReqStr=None):
 
     print(cusInvStr)
     print(payReqStr)
-
     
     if cusInvStr is None and payReqStr is None:
         result = "Empty"
@@ -334,23 +333,27 @@ def dataComparison(cusInvStr=None, payReqStr=None):
         print('Bill Value -> ', cusInv_total_value == payReq_total_value)
 
         # Customer Address
-        cusInv_customer_address = set(cusInv_customer_address.split())
-        payReq_customer_address = set(payReq_customer_address.split())
+        cusInv_customer_address = set(cusInv_customer_address.lower().split())
+        payReq_customer_address = set(payReq_customer_address.lower().split())
         customer_address = cusInv_customer_address & payReq_customer_address
         
         print(customer_address)
 
         # Shipper Address
-        cusInv_shipper_address = set(cusInv_shipper_address.split())
-        payReq_shipper_address = set(payReq_shipper_address.split())
+        cusInv_shipper_address = set(cusInv_shipper_address.lower().split())
+        payReq_shipper_address = set(payReq_shipper_address.lower().split())
         shipper_address = cusInv_shipper_address & payReq_shipper_address
 
         print(shipper_address)
     
-        if((cusInv_invoice_date == payReq_invoice_date) and (cusInv_invoice_number == payReq_invoice_number) and (cusInv_total_value == payReq_total_value)):
+        if((cusInv_invoice_date == payReq_invoice_date) and (cusInv_invoice_number == payReq_invoice_number) and (cusInv_total_value == payReq_total_value) and len(shipper_address) >= 2 and len(customer_address) >= 2):
             result = "True"
         else:
-            result = "False"
+            ans = ["Invoice Date: " + str(cusInv_invoice_date == payReq_invoice_date) , "Invoice No.: " + str(cusInv_invoice_number == payReq_invoice_number) , "Total Value: " + str(cusInv_total_value == payReq_total_value)]
+            stringVal = 'True'
+
+            result = f"{[ x for x in ans if stringVal not in x ]}"
+            result = str(result).replace('[','').replace("]","").replace("'","")
 
         return result
    
