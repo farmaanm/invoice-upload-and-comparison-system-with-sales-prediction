@@ -1,6 +1,6 @@
 import { MDBBadge, MDBIcon } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react'
-import { collection, getDocs, query, where, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { collection, getDocs, query, where, doc, getDoc, updateDoc, orderBy } from 'firebase/firestore'
 import { db, auth } from '../../firebase'
 import LoadingScreen from '../../loading/LoadingScreen';
 import { signOut } from 'firebase/auth'
@@ -216,11 +216,11 @@ function Payment() {
 
                     {/* Add Button */}
                     <div align="right" width="100%" style={{ marginRight: '20px' }}>
-                        <button className="btn btn-primary" type="button" onClick={paymentUpdateStatus()} >UPDATE RECORDS</button>
+                        <button className="btn btn-primary" style={{ backgroundColor: '#381ce4' }} type="button" onClick={paymentUpdateStatus()} >UPDATE RECORDS</button>
                     </div>
 
                     <hr />
-                    <p class="text-uppercase fs-5 text-start" style={{ paddingLeft: '10px' }}>Payment Completed</p>
+                    <p className="text-uppercase fs-5 text-start" style={{ paddingLeft: '10px' }}>Payment Completed</p>
 
                     <div>
                         <div style={{ padding: '10px' }}>

@@ -9,6 +9,8 @@ import { auth } from '../firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom';
 
+import signupImage from '../images/signupImage.jpeg'
+
 const Signup = () => {
 
     const [email, setEmail] = useState("");
@@ -154,7 +156,7 @@ const Signup = () => {
                     </MDBCol>
 
                     <MDBCol sm='6' className='d-none d-sm-block px-0'>
-                        <img src="https://images.pexels.com/photos/8777703/pexels-photo-8777703.jpeg"
+                        <img src={signupImage}
                             class="img-fluid" alt="Signup-port-cover" className="w-100" height={721} style={{ objectPosition: 'left' }} />
 
                     </MDBCol>

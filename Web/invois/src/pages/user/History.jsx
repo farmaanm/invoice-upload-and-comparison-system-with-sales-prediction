@@ -21,7 +21,7 @@ function History() {
         setTimeout(() => setLoading(false), 4000) //4s
 
         /* To retrieve data */
-        const q = query(getDataRefContract, orderBy('dateTime', 'asc'));
+        const q = query(getDataRefContract, orderBy('timestamp', 'desc'));
 
         const getData = async () => {
             const data = await getDocs(q);

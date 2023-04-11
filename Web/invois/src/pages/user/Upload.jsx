@@ -17,7 +17,7 @@ import processingGif from '../../images/processingGif.gif';
 
 import { signOut } from 'firebase/auth';
 import { db, storage, auth } from '../../firebase'
-import { collection, addDoc, doc, getDoc, getDocs, updateDoc, query, orderBy } from 'firebase/firestore'
+import { collection, addDoc, doc, getDoc, getDocs, updateDoc, query, orderBy, serverTimestamp } from 'firebase/firestore'
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
@@ -68,6 +68,7 @@ export default function Upload() {
         let useremail = user.email
         console.log(useremail)
         username = useremail.split('@')[0]
+        username = username.charAt(0).toUpperCase() + username.slice(1);
     }
 
     /*File Upload Style*/
@@ -234,7 +235,7 @@ export default function Upload() {
             if (parseFloat(obj.total_value) === parseFloat(rateValue)) {
                 data = "True"
             } else {
-                data = "Rate: False"
+                data = data.concat(", Rate: False")
             }
         }
 
@@ -352,7 +353,8 @@ export default function Upload() {
                         statusMessage: 'warning',
                         uploadedBy: username,
                         vendorInvoiceName: fileCustomerInvoice.name,
-                        vendorInvoiceUrl: 'cusInvUrl'
+                        vendorInvoiceUrl: 'cusInvUrl',
+                        timestamp: serverTimestamp()
                     });
 
                     console.log("Pay Req = " + payReqUrl)
@@ -697,7 +699,7 @@ export default function Upload() {
 
                         <br />
 
-                        <div className="tab-content" id="ex2-content">
+                        <div className="tab-content" id="ex2-content" >
 
                             {/* Contract Invoice Upload */}
                             <div className="tab-pane fade show active"
@@ -783,7 +785,7 @@ export default function Upload() {
                                     <p><br /></p>
 
                                     <div>
-                                        <button className="btn btn-primary" disabled={disabledContract} onClick={validateSpot}>VALIDATE</button>
+                                        <button className="btn btn-primary" style={{ backgroundColor: '#381ce4' }} disabled={disabledContract} onClick={validateSpot}>VALIDATE</button>
                                     </div>
                                 </div>
                             </div>
@@ -842,7 +844,7 @@ export default function Upload() {
                                     <div>
                                         {/* Submit Button */}
                                         {/*<MDBBtn disabled={disabledSpot} type='button' onClick={validateSpot}>VALIDATE</MDBBtn>*/}
-                                        <button disabled={disabledSpot} type='button' className="btn btn-primary" onClick={validateSpot}>VALIDATE</button>
+                                        <button disabled={disabledSpot} style={{ backgroundColor: '#381ce4' }} type='button' className="btn btn-primary" onClick={validateSpot}>VALIDATE</button>
                                     </div>
                                 </div>
                             </div>

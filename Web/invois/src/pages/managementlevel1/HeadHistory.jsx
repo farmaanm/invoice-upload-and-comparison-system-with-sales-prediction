@@ -20,7 +20,7 @@ function HeadHistory() {
         setTimeout(() => setLoading(false), 3000) //3s
 
         /* To retrieve data */
-        const q = query(getDataRefContract, orderBy('dateTime', 'asc'));
+        const q = query(getDataRefContract, orderBy('timestamp', 'desc'));
 
         const getData = async () => {
             const data = await getDocs(q);

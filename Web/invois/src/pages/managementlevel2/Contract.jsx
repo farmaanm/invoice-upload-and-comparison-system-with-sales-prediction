@@ -181,6 +181,7 @@ function Contract() {
                                     data-mdb-target="#collapseExample"
                                     aria-expanded="false"
                                     aria-controls="collapseExample"
+                                    style={{ backgroundColor: '#381ce4' }}
                                 >
                                     ADD CUSTOMER
                                 </button>
@@ -322,7 +323,7 @@ function Contract() {
 
                                 {/* Add Button */}
                                 <div align="right" width="100%">
-                                    <button className="btn btn-primary" type="button" onClick={addcustomer} disabled={!validateForm()}>ADD RECORD</button>
+                                    <button className="btn btn-primary" style={{ backgroundColor: '#381ce4' }} type="button" onClick={addcustomer} disabled={!validateForm()}>ADD RECORD</button>
                                 </div>
 
                             </div>
