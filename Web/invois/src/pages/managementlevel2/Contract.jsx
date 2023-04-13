@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MDBIcon } from 'mdb-react-ui-kit';
-import { collection, doc, getDocs, addDoc, updateDoc, query, orderBy, where } from 'firebase/firestore'
+import { collection, doc, getDocs, addDoc, updateDoc, query, orderBy, where, arrayRemove, getDoc } from 'firebase/firestore'
 import { db, auth } from '../../firebase'
 import { signOut } from 'firebase/auth';
 import LoadingScreen from '../../loading/LoadingScreen';
@@ -48,7 +48,6 @@ function Contract() {
     function validateForm() {
         return customerName.length > 0 && validity.length > 0 && destination.length > 0 && containerSize.length > 0 && shippingLine.length > 0;
     }
-
 
     async function addcustomer() {
 
@@ -114,6 +113,29 @@ function Contract() {
 
     };
 
+    async function deleteRecord(event, id, index) {
+        //event.preventDefault()
+        //alert(id + ' ' + index)
+
+        const listingRef = doc(db, 'Customer', id);
+
+        const docData = await getDoc(listingRef);
+        //console.log(docData)
+        
+        //console.log(docData.data().records[index])
+
+        const objectToBeRemoved = docData.data().records[index]
+        
+        try {
+            await updateDoc(listingRef, {
+                records: arrayRemove(objectToBeRemoved)
+            });
+        } catch (e) {
+            console.log(e.message);
+        }
+
+    }
+
     /* OnLoad */
     useEffect(() => {
         /* Timeout for Loading Screen */
@@ -132,12 +154,13 @@ function Contract() {
 
     });
 
+
     return (
         <>
 
             {/* Navigation Bar */}
 
-            <div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4', zIndex:'1'}}>
+            <div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4', zIndex: '1' }}>
                 <div style={{
                     //position: 'relative',
                     height: '100px',
@@ -166,7 +189,7 @@ function Contract() {
 
             {loading === false ? (
 
-                <div style={{marginTop:'130px'}}>
+                <div style={{ marginTop: '130px' }}>
 
                     {/* Customer Records */}
                     <div style={{ padding: '2%' }}>
@@ -333,7 +356,7 @@ function Contract() {
                         <br />
 
                         {/* Customer Records */}
-                        <div className="accordion" id="accordionExample" style={{zIndex:'0'}}>
+                        <div className="accordion" id="accordionExample" style={{ zIndex: '0' }}>
 
                             {showData.map(({ id, post }) => {
                                 const destination = [];
@@ -374,6 +397,7 @@ function Contract() {
                                                             <th scope='col'>Container Size</th>
                                                             <th scope='col'>Rate (USD)</th>
                                                             <th scope='col'>Shipping Line</th>
+                                                            <th scope='col'>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -385,6 +409,7 @@ function Contract() {
                                                                         <td>{rows.containerSize}</td>
                                                                         <td>{rows.rate}</td>
                                                                         <td>{rows.shippingLine}</td>
+                                                                        <td><i className="fas fa-trash-can" onClick={(event) => deleteRecord(event, id, index)} ></i></td>
                                                                     </tr>
                                                                 )
                                                             })}

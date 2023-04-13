@@ -53,7 +53,7 @@ export default function Upload() {
         if (payReq !== "" && cusInv !== "") {
             validateData()
             displayMessage(validationStatus)
-            if(validationStatus !== "True"){
+            if (validationStatus !== "True") {
                 setMismatchedData(validationStatus)
             }
         }
@@ -234,7 +234,9 @@ export default function Upload() {
 
             if (parseFloat(obj.total_value) === parseFloat(rateValue)) {
                 data = "True"
-            } else {
+            } else if (data === 'True' && parseFloat(obj.total_value) !== parseFloat(rateValue)) {
+                data = "Rate: False"
+            } else if (data !== 'True' && parseFloat(obj.total_value) !== parseFloat(rateValue)) {
                 data = data.concat(", Rate: False")
             }
         }
@@ -376,7 +378,7 @@ export default function Upload() {
                         // doc.data() will be undefined in this case
                         console.log("No such document!");
                     }
-                },6000)
+                }, 4500)
 
             } catch (e) {
                 console.error("Error adding document: ", e);
@@ -433,7 +435,7 @@ export default function Upload() {
 
             {/* Navigation Bar */}
 
-            <div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4'}}>
+            <div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4' }}>
                 <div style={{
                     //position: 'relative',
                     height: '100px',
@@ -461,7 +463,7 @@ export default function Upload() {
             </div>
 
             {loading === false ? (
-                <div style={{marginTop:'130px'}}>
+                <div style={{ marginTop: '130px' }}>
 
                     {/* File Upload */}
                     <div style={{ padding: '5%' }}>
