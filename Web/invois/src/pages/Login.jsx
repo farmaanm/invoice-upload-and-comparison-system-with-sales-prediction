@@ -49,19 +49,19 @@ function Login() {
         e.preventDefault()
         signInWithEmailAndPassword(auth, userEmail, userPassword)
             .then(() => {
-                if (userEmail.includes('@user.com')) {
+                if (userEmail.includes('@user')) {
                     //userType('user')
                     navigate('/upload')
                     //UserNav('user')
-                } else if (userEmail.includes('@management.com')) {
+                } else if (userEmail.includes('@management')) {
                     //userType('management')
                     navigate('/approve')
                     //UserNav('management')
-                } else if (userEmail.includes('@head.com')) {
+                } else if (userEmail.includes('@head')) {
                     //userType('head')
                     navigate('/sales')
                     //UserNav('head')
-                } else if (userEmail.includes('@finance.com')) {
+                } else if (userEmail.includes('@finance')) {
                     //userType('finance')
                     navigate('/payment')
                     //UserNav('finance')

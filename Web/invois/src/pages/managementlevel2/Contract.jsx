@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MDBIcon } from 'mdb-react-ui-kit';
-import { collection, doc, getDocs, addDoc, updateDoc, query, orderBy, where, arrayRemove, getDoc } from 'firebase/firestore'
+import { collection, doc, getDocs, addDoc, updateDoc, query, orderBy, where, arrayRemove, getDoc, deleteDoc } from 'firebase/firestore'
 import { db, auth } from '../../firebase'
 import { signOut } from 'firebase/auth';
 import LoadingScreen from '../../loading/LoadingScreen';
@@ -14,6 +14,13 @@ function Contract() {
     const [freight, setFreight] = useState(0);
     const [eff, setEff] = useState(0);
     const [other, setOther] = useState(0);
+
+    const [alertMsg, setAlertMsg] = useState('');
+    const alertMsgStyle = {
+        color: '#546ca2',
+        textAlign: 'left',
+        paddingLeft: '2%'
+    }
 
     const handleChangeFreight = event => {
         setFreight(event.target.value);
@@ -31,7 +38,6 @@ function Contract() {
     const month = today.getMonth();
     const year = today.getFullYear();
     const todayDate = year + '-' + (month + 1) + '-' + day;
-
 
     /*DB Refrence*/
     const getDataRefContract = collection(db, "Customer");
@@ -77,6 +83,7 @@ function Contract() {
                     records: records_array,
                     validity: validity
                 });
+                setAlertMsg('Recorded updated successfully!')
             });
 
         } else {
@@ -88,6 +95,7 @@ function Contract() {
                     validity: validity,
                     records: record
                 });
+                setAlertMsg('Recorded added successfully!')
                 console.log("Document written with ID: ", docRef.id);
             } catch (e) {
                 console.error("Error adding document: ", e);
@@ -95,6 +103,7 @@ function Contract() {
 
         }
 
+        
         /* Clearing text boxes after execution */
         setCustomerName("");
         setValidity("");
@@ -121,19 +130,28 @@ function Contract() {
 
         const docData = await getDoc(listingRef);
         //console.log(docData)
-        
+
         //console.log(docData.data().records[index])
 
         const objectToBeRemoved = docData.data().records[index]
-        
+
         try {
             await updateDoc(listingRef, {
                 records: arrayRemove(objectToBeRemoved)
             });
+            setAlertMsg('Recorded deleted successfully!')
         } catch (e) {
             console.log(e.message);
         }
 
+    }
+
+    async function deleteCustomer(event, id) {
+        //event.preventDefault()
+        //alert(id + ' ' )
+
+        await deleteDoc(doc(db, "Customer", id));
+        setAlertMsg('Customer deleted successfully!')
     }
 
     /* OnLoad */
@@ -191,8 +209,10 @@ function Contract() {
 
                 <div style={{ marginTop: '130px' }}>
 
+                    <p style={alertMsgStyle}>{alertMsg}</p>
+
                     {/* Customer Records */}
-                    <div style={{ padding: '2%' }}>
+                    <div style={{ padding: '1% 2% 2% 2%' }}>
 
                         {/* Add Customer Toggle Button */}
                         <div>
@@ -385,7 +405,7 @@ function Contract() {
                                                 aria-expanded="false"
                                                 aria-controls="collapseOne"
                                             >
-                                                {post.customerName} | {post.validity}
+                                                {post.customerName} | {post.validity} |<span style={{ marginLeft: '1150px' }}> <i className="fas fa-trash-can" onClick={(event) => deleteCustomer(event, id)}></i> </span>
                                             </button>
                                         </h2>
                                         <div id={id} className="accordion-collapse collapse" aria-labelledby="headingOne" data-mdb-parent="#accordionExample">
