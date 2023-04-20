@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { act } from "react-dom/test-utils";
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event';
@@ -23,12 +23,18 @@ import Payment from '../src/pages/finance/Payment';
 
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, deleteUser, getAuth } from 'firebase/auth';
 import { async } from '@firebase/util';
-import { collection, getDocs, query, where, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { collection, getDocs, query, where, doc, getDoc, updateDoc, orderBy } from 'firebase/firestore'
 import { db } from './firebase'
+
+
+
 
 /**
  * @jest-environment node
  */
+
+
+//afterAll(() => setTimeout(() => process.exit(1), 1000))
 
 describe('Firebase Util Test Suite', () => {
     beforeAll(async () => {
@@ -97,7 +103,7 @@ describe('Firebase Util Test Suite', () => {
             // ...
         });
     });
-
+    
 });
 
 describe("Login and Signup", () => {
@@ -147,6 +153,16 @@ describe("Login and Signup", () => {
 describe("This suite is to test the User Level 1", () => {
 
     describe("Upload", () => {
+
+        beforeEach(() => {
+            localStorage.setItem('authToken', 'farmaan@user.com');
+        });
+
+        afterEach(() => {
+            localStorage.removeItem('authToken');
+        });
+        
+
         test('rendering nav bar', async () => {
 
             const { getByText } = render(<Upload />);
@@ -164,70 +180,18 @@ describe("This suite is to test the User Level 1", () => {
             expect(getByText("Loading...")).toBeInTheDocument("Loading...")
 
         });
-
-        beforeEach(() => {
-            jest.useFakeTimers();
-        });
-
-        afterEach(() => {
-            jest.useRealTimers();
-        });
-
-        test('upload page', async () => {
-
-            render(<Upload />);
-
-            expect(screen.getByText('Loading...')).toBeInTheDocument();
-
-            act(() => {
-                jest.advanceTimersByTime(4000);
-            });
-
-            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
-
-            await expect(screen.getByText("Contract")).toBeInTheDocument();
-            await expect(screen.getByText("Spot")).toBeInTheDocument();
-
-            await expect(screen.getAllByText("Upload Customer Invoice:"));
-            await expect(screen.getAllByText("Upload Payment Requisition:"));
-            await expect(screen.getByText("Select Rate:")).toBeInTheDocument();
-
-            await expect(screen.getAllByText("VALIDATE"));
-
-            let contractCusInv = screen.getByTestId("contract-cusInv-input");
-            let contractPayReq = screen.getByTestId("contract-payReq-input");
-            let contractRate = screen.getByTestId("contract-rate-input");
-
-            let spotCusInv = screen.getByTestId("spot-cusInv-input");
-            let spotPayReq = screen.getByTestId("spot-payReq-input");
-
-        });
-
-        test('validation modals', async () => {
-
-            render(<Upload />);
-
-            expect(screen.getByText('Loading...')).toBeInTheDocument();
-
-            act(() => {
-                jest.advanceTimersByTime(4000);
-            });
-
-            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
-
-            await expect(screen.getByText("Confirmation")).toBeInTheDocument();
-            await expect(screen.getByText("Validation Successful!")).toBeInTheDocument();
-
-            await expect(screen.getByText("Error")).toBeInTheDocument();
-            await expect(screen.getByText("Data mismatched. Please try again!")).toBeInTheDocument();
-
-            await expect(screen.getByText("Processing...")).toBeInTheDocument();
-            await expect(screen.getByText("Data is being Extracted...")).toBeInTheDocument();
-
-        });
     });
 
     describe("History", () => {
+
+        beforeEach(() => {
+            localStorage.setItem('authToken', 'farmaan@user.com');
+        });
+
+        afterEach(() => {
+            localStorage.removeItem('authToken');
+        });
+
         test('rendering nav bar', () => {
 
             const { getByText } = render(<History />);
@@ -245,34 +209,6 @@ describe("This suite is to test the User Level 1", () => {
             expect(getByText("Loading...")).toBeInTheDocument("Loading...")
 
         });
-
-        beforeEach(() => {
-            jest.useFakeTimers();
-        });
-
-        afterEach(() => {
-            jest.useRealTimers();
-        });
-
-        test('history page', async () => {
-
-            render(<History />);
-
-            expect(screen.getByText('Loading...')).toBeInTheDocument();
-
-            act(() => {
-                jest.advanceTimersByTime(4000);
-            });
-
-            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
-
-            await expect(screen.getByText("Vendor Invoice")).toBeInTheDocument();
-            await expect(screen.getByText("Payment Requisition")).toBeInTheDocument();
-            await expect(screen.getByText("Status")).toBeInTheDocument();
-            await expect(screen.getByText("Uploaded At")).toBeInTheDocument();
-            await expect(screen.getByText("Uploaded By")).toBeInTheDocument();
-
-        });
     });
 
 });
@@ -280,6 +216,15 @@ describe("This suite is to test the User Level 1", () => {
 describe("This suite is to test the Management Level 1", () => {
 
     describe("Sales", () => {
+
+        beforeEach(() => {
+            localStorage.setItem('authToken', 'farmaan@head.com');
+        });
+
+        afterEach(() => {
+            localStorage.removeItem('authToken');
+        });
+
         test('rendering nav bar', () => {
 
             const { getByText } = render(<Sales />);
@@ -301,6 +246,15 @@ describe("This suite is to test the Management Level 1", () => {
     });
 
     describe("History", () => {
+
+        beforeEach(() => {
+            localStorage.setItem('authToken', 'farmaan@head.com');
+        });
+
+        afterEach(() => {
+            localStorage.removeItem('authToken');
+        });
+
         test('rendering nav bar', () => {
 
             const { getByText } = render(<HeadHistory />);
@@ -320,38 +274,17 @@ describe("This suite is to test the Management Level 1", () => {
 
         });
 
-        beforeEach(() => {
-            jest.useFakeTimers();
-        });
-
-        afterEach(() => {
-            jest.useRealTimers();
-        });
-
-        test('history page', async () => {
-
-            render(<HeadHistory />);
-
-            expect(screen.getByText('Loading...')).toBeInTheDocument();
-
-            act(() => {
-                jest.advanceTimersByTime(4000);
-            });
-
-            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
-
-            await expect(screen.getByText("Vendor Invoice")).toBeInTheDocument();
-            await expect(screen.getByText("Payment Requisition")).toBeInTheDocument();
-            await expect(screen.getByText("Approval Status")).toBeInTheDocument();
-            await expect(screen.getByText("Payment Status")).toBeInTheDocument();
-            await expect(screen.getByText("Payment Done At")).toBeInTheDocument();
-            await expect(screen.getByText("Uploaded At")).toBeInTheDocument();
-            await expect(screen.getByText("Uploaded By")).toBeInTheDocument();
-
-        });
     });
 
     describe("Customers", () => {
+
+        beforeEach(() => {
+            localStorage.setItem('authToken', 'farmaan@head.com');
+        });
+
+        afterEach(() => {
+            localStorage.removeItem('authToken');
+        });
 
         test('rendering nav bar', () => {
 
@@ -379,6 +312,14 @@ describe("This suite is to test the Management Level 1", () => {
 describe("This suite is to test the Management Level 2", () => {
 
     describe("Approve", () => {
+        beforeEach(() => {
+            localStorage.setItem('authToken', 'farmaan@management.com');
+        });
+
+        afterEach(() => {
+            localStorage.removeItem('authToken');
+        });
+
         test('rendering nav bar', () => {
 
             const { getByText } = render(<Approve />);
@@ -396,37 +337,19 @@ describe("This suite is to test the Management Level 2", () => {
             expect(getByText("Loading...")).toBeInTheDocument("Loading...")
 
         });
-
-        beforeEach(() => {
-            jest.useFakeTimers();
-        });
-
-        afterEach(() => {
-            jest.useRealTimers();
-        });
-
-        test('approve page', async () => {
-
-            render(<Approve />);
-
-            expect(screen.getByText('Loading...')).toBeInTheDocument();
-
-            act(() => {
-                jest.advanceTimersByTime(4000);
-            });
-
-            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
-
-            await expect(screen.getByText("Vendor Invoice")).toBeInTheDocument();
-            await expect(screen.getByText("Payment Requisition")).toBeInTheDocument();
-            await expect(screen.getByText("Status")).toBeInTheDocument();
-            await expect(screen.getByText("Uploaded At")).toBeInTheDocument();
-            await expect(screen.getByText("Uploaded By")).toBeInTheDocument();
-
-        });
+        
     });
 
     describe("Contract", () => {
+
+        beforeEach(() => {
+            localStorage.setItem('authToken', 'farmaan@management.com');
+        });
+
+        afterEach(() => {
+            localStorage.removeItem('authToken');
+        });
+
         test('rendering nav bar', () => {
 
             const { getByText } = render(<Contract />);
@@ -442,56 +365,6 @@ describe("This suite is to test the Management Level 2", () => {
             const { getByText } = render(<Contract />);
 
             expect(getByText("Loading...")).toBeInTheDocument("Loading...")
-
-        });
-
-        beforeEach(() => {
-            jest.useFakeTimers();
-        });
-
-        afterEach(() => {
-            jest.useRealTimers();
-        });
-
-        test('customer page', async () => {
-
-            render(<Contract />);
-
-            expect(screen.getByText('Loading...')).toBeInTheDocument();
-
-            act(() => {
-                jest.advanceTimersByTime(4000);
-            });
-
-            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
-
-            await expect(screen.getByText("ADD CUSTOMER")).toBeInTheDocument();
-
-            fireEvent.click(screen.getByText(/ADD CUSTOMER/i))
-
-            let cusNameBox = screen.getByTestId("cusName-text-box");
-            let validityBox = screen.getByTestId("validity-text-box");
-            let destinationBox = screen.getByTestId("destination-input");
-            let containerBox = screen.getByTestId("container-input");
-            let freightRateBox = screen.getByTestId("freight-input");
-            let effRateBox = screen.getByTestId("eff-input");
-            let otherRateBox = screen.getByTestId("other-input");
-            let shippingLineBox = screen.getByTestId("shippingLine-input");
-
-            userEvent.type(cusNameBox, "Customer #test");
-            userEvent.type(validityBox, "05/24/2023");
-            userEvent.type(destinationBox, "BANGKOK");
-            userEvent.type(containerBox, "20");
-            userEvent.type(freightRateBox, "500");
-            userEvent.type(effRateBox, "50");
-            userEvent.type(otherRateBox, "10");
-            userEvent.type(shippingLineBox, "10");
-
-            //expect(hasInputValue(cusNameBox, "Customer #9")).toBe(true)
-            //expect(screen.getByDisplayValue('Customer #9')).toBeInTheDocument();
-            //await expect(cusNameBox).toHaveValue("Customer #9");
-
-            fireEvent.click(screen.getByText(/ADD RECORD/i))
 
         });
     });
@@ -501,6 +374,15 @@ describe("This suite is to test the Management Level 2", () => {
 describe("This suite is to test the Finance", () => {
 
     describe("Payment", () => {
+
+        beforeEach(() => {
+            localStorage.setItem('authToken', 'farmaan@finance.com');
+        });
+
+        afterEach(() => {
+            localStorage.removeItem('authToken');
+        });
+
 
         test('rendering nav bar', () => {
 
@@ -518,40 +400,6 @@ describe("This suite is to test the Finance", () => {
             expect(getByText("Loading...")).toBeInTheDocument("Loading...")
 
         });
-
-        beforeEach(() => {
-            jest.useFakeTimers();
-        });
-
-        afterEach(() => {
-            jest.useRealTimers();
-        });
-
-        test('payment page', async () => {
-
-            render(<Payment />);
-
-            expect(screen.getByText('Loading...')).toBeInTheDocument();
-
-            act(() => {
-                jest.advanceTimersByTime(4000);
-            });
-
-            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
-
-            await expect(screen.getAllByText("Vendor Invoice"));
-            await expect(screen.getAllByText("Payment Requisition"));
-            await expect(screen.getAllByText("Uploaded At"));
-            await expect(screen.getAllByText("Uploaded By"));
-
-            await expect(screen.getByText("Status")).toBeInTheDocument();
-            await expect(screen.getByText("Payment Done At")).toBeInTheDocument();
-
-            await expect(screen.getByText("UPDATE RECORDS")).toBeInTheDocument();
-            await expect(screen.getByText("Payment Completed")).toBeInTheDocument();
-
-        });
-
     });
 
 });

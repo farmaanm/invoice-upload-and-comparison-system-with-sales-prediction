@@ -5,6 +5,9 @@ import { db, auth } from '../../firebase'
 import LoadingScreen from '../../loading/LoadingScreen';
 import { signOut } from 'firebase/auth'
 
+import { getPaymentPending, getPaymentDone, updatePaymentStatus } from '../utils/dbOperations/dbOperations'
+import NavigationBar from '../utils/navBar/navigationBar'
+
 function Payment() {
 
     /* Append array of ID user checked boxes */
@@ -48,9 +51,9 @@ function Payment() {
     const [loading, setLoading] = useState(true)
 
     /*DB Refrence*/
-    const getDataRefContract = collection(db, "Contract");
-    const qry = query(getDataRefContract, where("status", "==", "Approved"), where("paymentStatus", "==", "Pending"));
-    const qryDone = query(getDataRefContract, where("status", "==", "Approved"), where("paymentStatus", "==", "Done"));
+    //const getDataRefContract = collection(db, "Contract");
+    //const qry = query(getDataRefContract, where("status", "==", "Approved"), where("paymentStatus", "==", "Pending"));
+    //const qryDone = query(getDataRefContract, where("status", "==", "Approved"), where("paymentStatus", "==", "Done"));
 
     const [showData, setShowData] = useState([]);
     const [showDoneData, setShowDoneData] = useState([]);
@@ -58,10 +61,10 @@ function Payment() {
     /* On Load */
     useEffect(() => {
         /* Timeout for Loadin Screen */
-        setTimeout(() => setLoading(false), 4000) //4s
+        //setTimeout(() => setLoading(false), 4000) //4s
 
         /*To retrieve Pending records */
-        const getData = async () => {
+        /*const getData = async () => {
             const data = await getDocs(qry);
             setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
 
@@ -69,11 +72,27 @@ function Payment() {
             setShowDoneData(dataDone.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
         };
 
-        getData();
+        getData();*/
+
+        getPaymentPending()
+            .then(data => {
+                setShowData(data);
+                setLoading(false);
+            })
+            .catch(error => console.log(error));
+
+        getPaymentDone()
+            .then(data => {
+                setShowDoneData(data);
+                //setLoading(false);
+            })
+            .catch(error => console.log(error));
+
+
     });
 
     /* Get Date and Time */
-    function getDateTime() {
+    /*function getDateTime() {
         var now = new Date();
         var year = now.getFullYear();
         var month = now.getMonth() + 1;
@@ -98,12 +117,13 @@ function Payment() {
         }
         var dateTime = day + '/' + month + '/' + year + ' ' + hour + ':' + minute + ':' + second;
         return dateTime;
-    }
+    }*/
 
     /* Updating Payment Status Pending / Done */
     const paymentUpdateStatus = () => async () => {
 
-        for (var key of Object.keys(userinfo.response)) {
+        updatePaymentStatus(userinfo)
+        /*for (var key of Object.keys(userinfo.response)) {
 
             //console.log(key + " -> " + userinfo.response[key])
 
@@ -120,7 +140,7 @@ function Payment() {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
             }
-        }
+        }*/
 
         /*
             paymentStatus: "Pending",
@@ -132,8 +152,8 @@ function Payment() {
     return (
         <>
             {/* Navigation Bar */}
-
-            <div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4'}}>
+            <NavigationBar/>
+            {/*<div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4' }}>
                 <div style={{
                     //position: 'relative',
                     height: '100px',
@@ -150,14 +170,15 @@ function Payment() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/" onClick={() => signOut(auth)}>Log out</a>
+                        <a href="/" onClick={() => { signOut(auth); localStorage.removeItem('authToken'); }}>Log out</a>
                     </div>
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-            </div>
+            </div>*/}
 
-            {loading === false ? (
-                <div style={{marginTop:'130px'}}>
+            {loading === false ? (<>
+                
+                <div style={{ marginTop: '130px' }}>
 
                     {/* List of Files */}
                     <div>
@@ -278,7 +299,7 @@ function Payment() {
                     </div>
 
                 </div>
-            ) : (
+            </>) : (
                 <LoadingScreen />
             )}
         </>

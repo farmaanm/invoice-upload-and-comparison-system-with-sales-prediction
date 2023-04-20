@@ -5,6 +5,8 @@ import LoadingScreen from '../../loading/LoadingScreen';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase'
 
+import NavigationBar from '../utils/navBar/navigationBar'
+
 function Sales() {
 
     /* Loading Screen */
@@ -99,8 +101,8 @@ function Sales() {
         <>
 
             {/* Navigation Bar */}
-
-            <div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4'}}>
+            <NavigationBar/>
+            {/*<div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4'}}>
                 <div style={{
                     //position: 'relative',
                     height: '100px',
@@ -125,11 +127,11 @@ function Sales() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/" onClick={() => signOut(auth)}>Log out</a>
+                        <a href="/" onClick={() => {signOut(auth); localStorage.removeItem('authToken');}}>Log out</a>
                     </div>
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-            </div>
+            </div>*/}
 
             {loading === false ? (
                 <div style={{marginTop:'135px'}}>

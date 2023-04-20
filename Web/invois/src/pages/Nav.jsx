@@ -13,7 +13,7 @@ import HeadHistory from './managementlevel1/HeadHistory'
 import HeadContract from './managementlevel1/HeadContract'
 
 import Protected from './utils/Protected';
-import Trial from './trial';
+
 
 export default function UserNav() {
 
@@ -182,17 +182,17 @@ export default function UserNav() {
                 <Route exact path='/signup' element={< Signup />}></Route>
 
                 {/* User Level 1 */}
-                <Route exact path='/upload' element={< Upload />}></Route>
-                <Route exact path='/history' element={< History />}></Route>
+                <Route exact path='/upload' element={<Protected>< Upload /></Protected>}></Route>
+                <Route exact path='/history' element={<Protected>< History /></Protected>}></Route>
 
                 {/* Management Level 2 */}
-                <Route exact path='/approve' element={< Approve />}></Route>
-                <Route exact path='/contract' element={< Contract />}></Route>
+                <Route exact path='/approve' element={<Protected>< Approve /></Protected>}></Route>
+                <Route exact path='/contract' element={<Protected>< Contract /></Protected>}></Route>
 
                 {/* Management Level 1 */}
-                <Route exact path='/sales' element={< Sales />}></Route>
-                <Route exact path='/hhistory' element={< HeadHistory />}></Route>
-                <Route exact path='/hcontract' element={< HeadContract />}></Route>
+                <Route exact path='/sales' element={<Protected>< Sales /></Protected>}></Route>
+                <Route exact path='/hhistory' element={<Protected>< HeadHistory /></Protected>}></Route>
+                <Route exact path='/hcontract' element={<Protected>< HeadContract /></Protected>}></Route>
 
                 {/* Finance */}
                 <Route exact path='/payment' element={<Protected>< Payment /></Protected>}></Route>

@@ -4,8 +4,9 @@ import { collection, getDocs, doc, getDoc, updateDoc, query, orderBy } from 'fir
 import { db, auth } from '../../firebase'
 import { signOut } from 'firebase/auth';
 import LoadingScreen from '../../loading/LoadingScreen';
-//import { async } from '@firebase/util';
 
+import { getHistoryRecords, updateContractStatus } from '../utils/dbOperations/dbOperations'
+import NavigationBar from '../utils/navBar/navigationBar'
 
 function Approve() {
 
@@ -13,35 +14,44 @@ function Approve() {
     const [loading, setLoading] = useState(true)
 
     /*DB Refrence*/
-    const getDataRefContract = collection(db, "Contract");
+    //const getDataRefContract = collection(db, "Contract");
 
     const [showData, setShowData] = useState([]);
 
     /* On Load */
     useEffect(() => {
         /* Timeout for Loadin Screen */
-        setTimeout(() => setLoading(false), 4000) //4s
+        //setTimeout(() => setLoading(false), 4000) //4s
 
         /*To retrieve data */
-        const q = query(getDataRefContract, orderBy('timestamp', 'desc'));
+        /*const q = query(getDataRefContract, orderBy('timestamp', 'desc'));
 
         const getData = async () => {
             const data = await getDocs(q);
             setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
         };
 
-        getData();
+        getData();*/
+
+        getHistoryRecords()
+            .then(data => {
+                setShowData(data);
+                setLoading(false);
+            })
+            .catch(error => console.log(error));
     });
 
     /* Updating Status Approved / Rejected */
     const updateStatus = (id, fileStatus) => async () => {
         //alert('Working ' + id)
 
-        const contractRef = doc(db, "Contract", id);
+        updateContractStatus(id, fileStatus)
+
+        /*const contractRef = doc(db, "Contract", id);
         const docSnap = await getDoc(contractRef);
 
         /* If status == Approved */
-        if (fileStatus === "Approved") {
+        /*if (fileStatus === "Approved") {
             if (docSnap.exists()) {
                 //console.log("Document data:", docSnap.data());
                 await updateDoc(contractRef, {
@@ -53,7 +63,7 @@ function Approve() {
                 console.log("No such document!");
             }
         } else {
-            /* If status == Rejected */
+            // If status == Rejected 
             if (docSnap.exists()) {
                 //console.log("Rejected", docSnap.data());
                 await updateDoc(contractRef, {
@@ -64,7 +74,7 @@ function Approve() {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
             }
-        }
+        }*/
 
         /*
             status: "Rejected",
@@ -84,8 +94,8 @@ function Approve() {
         <>
 
             {/* Navigation Bar */}
-
-            <div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4'}}>
+            <NavigationBar/>
+            {/*<div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4' }}>
                 <div style={{
                     //position: 'relative',
                     height: '100px',
@@ -106,14 +116,14 @@ function Approve() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/" onClick={() => signOut(auth)}>Log out</a>
+                        <a href="/" onClick={() => { signOut(auth); localStorage.removeItem('authToken'); }}>Log out</a>
                     </div>
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-            </div>
+            </div>*/}
 
             {loading === false ? (
-                <div style={{marginTop:'130px'}}>
+                <div style={{ marginTop: '130px' }}>
 
                     {/* Approve List of Files */}
                     <div>
@@ -147,7 +157,7 @@ function Approve() {
                                                         <a href={post.paymentRequisitionUrl}><p className='fw-normal mb-1'>{post.paymentRequisitionName}</p></a>
                                                     </td>
                                                     <td>
-                                                        <button type="button" className="btn btn-success btn-rounded btn-sm" onClick={updateStatus(id, "Approved")} style={{'marginRight':'5px'}}>Approve</button>
+                                                        <button type="button" className="btn btn-success btn-rounded btn-sm" onClick={updateStatus(id, "Approved")} style={{ 'marginRight': '5px' }}>Approve</button>
                                                         <button type="button" className="btn btn-danger btn-rounded btn-sm" onClick={updateStatus(id, "Rejected")}>Reject</button>
                                                     </td>
                                                     <td>

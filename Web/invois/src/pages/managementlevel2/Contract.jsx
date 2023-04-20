@@ -5,6 +5,9 @@ import { db, auth } from '../../firebase'
 import { signOut } from 'firebase/auth';
 import LoadingScreen from '../../loading/LoadingScreen';
 
+import { getCustomerRecords, addUpdateCustomer, deleteCustomerArray, deleteCustomerRecord } from '../utils/dbOperations/dbOperations'
+import NavigationBar from '../utils/navBar/navigationBar'
+
 function Contract() {
 
     /* Loading Screen */
@@ -60,11 +63,11 @@ function Contract() {
         const totalValue = parseInt(freight) + parseInt(eff) + parseInt(other);
         const record = [{ containerSize: containerSize, destination: destination, rate: totalValue, shippingLine: shippingLine }];
 
-        const p = query(collection(db, "Customer"), where("customerName", "==", customerName));
-        const querySnapshot = await getDocs(p);
+        //const p = query(collection(db, "Customer"), where("customerName", "==", customerName));
+        //const querySnapshot = await getDocs(p);
 
         /* Checking if Customer name exists */
-        if (!querySnapshot.empty) {
+        /*if (!querySnapshot.empty) {
             //console.log("Found")
             const recordAdd = { containerSize: containerSize, destination: destination, rate: totalValue, shippingLine: shippingLine };
 
@@ -76,7 +79,7 @@ function Contract() {
                 //console.log("Records Array: ", records_array)
                 //console.log(typeof(records_array))
 
-                /* Appending new record to existing record */
+                // Appending new record to existing record //
                 let newRecord = records_array.push(recordAdd)
 
                 await updateDoc(customerRef, {
@@ -87,7 +90,7 @@ function Contract() {
             });
 
         } else {
-            /* If customer name does not exist, add new record */
+            // If customer name does not exist, add new record //
             //console.log("Not found")
             try {
                 const docRef = await addDoc(getDataRefContract, {
@@ -101,9 +104,14 @@ function Contract() {
                 console.error("Error adding document: ", e);
             }
 
-        }
+        }*/
 
-        
+        addUpdateCustomer(customerName, validity, record)
+            .then(message => {
+                setAlertMsg(message)
+            })
+            .catch(error => console.log(error));
+
         /* Clearing text boxes after execution */
         setCustomerName("");
         setValidity("");
@@ -126,7 +134,7 @@ function Contract() {
         //event.preventDefault()
         //alert(id + ' ' + index)
 
-        const listingRef = doc(db, 'Customer', id);
+        /*const listingRef = doc(db, 'Customer', id);
 
         const docData = await getDoc(listingRef);
         //console.log(docData)
@@ -142,43 +150,61 @@ function Contract() {
             setAlertMsg('Recorded deleted successfully!')
         } catch (e) {
             console.log(e.message);
-        }
+        }*/
 
+        deleteCustomerArray(id, index)
+            .then(message => {
+                setAlertMsg(message)
+            })
+            .catch(error => console.log(error));
     }
 
     async function deleteCustomer(event, id) {
         //event.preventDefault()
         //alert(id + ' ' )
 
-        await deleteDoc(doc(db, "Customer", id));
-        setAlertMsg('Customer deleted successfully!')
+        /*await deleteDoc(doc(db, "Customer", id));
+        setAlertMsg('Customer deleted successfully!')*/
+
+        deleteCustomerRecord(id)
+            .then(message => {
+                setAlertMsg(message)
+            })
+            .catch(error => console.log(error));
     }
 
     /* OnLoad */
     useEffect(() => {
         /* Timeout for Loading Screen */
-        setTimeout(() => setLoading(false), 4000) //4s
+        //setTimeout(() => setLoading(false), 4000) //4s
 
         /*To retrieve Customer contract data */
 
-        const q = query(getDataRefContract, orderBy("customerName"));
+        /*const q = query(getDataRefContract, orderBy("customerName"));
 
         const getData = async () => {
             const data = await getDocs(q);
             setShowData(data.docs.map((docFiles) => ({ id: docFiles.id, post: docFiles.data() })));
         };
 
-        getData();
+        getData();*/
 
-    });
+        getCustomerRecords()
+            .then(data => {
+                setShowData(data)
+                setLoading(false)
+            })
+            .catch(error => console.log(error));
+
+    }, []);
 
 
     return (
         <>
 
             {/* Navigation Bar */}
-
-            <div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4', zIndex: '1' }}>
+            <NavigationBar/>
+            {/*<div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4', zIndex: '1' }}>
                 <div style={{
                     //position: 'relative',
                     height: '100px',
@@ -199,11 +225,11 @@ function Contract() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/" onClick={() => signOut(auth)}>Log out</a>
+                        <a href="/" onClick={() => { signOut(auth); localStorage.removeItem('authToken'); }}>Log out</a>
                     </div>
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-            </div>
+            </div>*/}
 
             {loading === false ? (
 

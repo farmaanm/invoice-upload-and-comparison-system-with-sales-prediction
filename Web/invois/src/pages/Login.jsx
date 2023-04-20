@@ -49,6 +49,7 @@ function Login() {
         e.preventDefault()
         signInWithEmailAndPassword(auth, userEmail, userPassword)
             .then(() => {
+                localStorage.setItem('authToken', userEmail);
                 if (userEmail.includes('@user')) {
                     //userType('user')
                     navigate('/upload')
@@ -65,8 +66,9 @@ function Login() {
                     //userType('finance')
                     navigate('/payment')
                     //UserNav('finance')
+                } else {
+                    navigate('/')
                 }
-
             })
             .catch(err => {
                 setError(err.message)

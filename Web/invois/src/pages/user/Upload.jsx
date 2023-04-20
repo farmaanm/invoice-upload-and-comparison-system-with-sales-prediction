@@ -20,6 +20,8 @@ import { db, storage, auth } from '../../firebase'
 import { collection, addDoc, doc, getDoc, getDocs, updateDoc, query, orderBy, serverTimestamp } from 'firebase/firestore'
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
+import { getCustomerRecords } from '../utils/dbOperations/dbOperations'
+import NavigationBar from '../utils/navBar/navigationBar'
 
 export default function Upload() {
 
@@ -30,7 +32,7 @@ export default function Upload() {
     let [cusInv, setCusInv] = useState([])
     let [validationStatus, setValidationStatus] = useState([])
 
-    const getDataRefCustomer = collection(db, "Customer");
+    //const getDataRefCustomer = collection(db, "Customer");
     const [showData, setShowData] = useState([]);
 
     const [mismatchedData, setMismatchedData] = useState('Global variable');
@@ -39,16 +41,23 @@ export default function Upload() {
 
     useEffect(() => {
         /* Timeout for Loading Screen */
-        setTimeout(() => setLoading(false), 4000) //4s
+        //setTimeout(() => setLoading(false), 4000) //4s
 
-        const q = query(getDataRefCustomer, orderBy("customerName"));
+        /*const q = query(getDataRefCustomer, orderBy("customerName"));
 
         const getData = async () => {
             const data = await getDocs(q);
             setShowData(data.docs.map((docFiles) => ({ id: docFiles.id, post: docFiles.data() })));
         };
 
-        getData();
+        getData();*/
+
+        getCustomerRecords()
+            .then(data => {
+                setShowData(data)
+                setLoading(false)
+            })
+            .catch(error => console.log(error));
 
         if (payReq !== "" && cusInv !== "") {
             validateData()
@@ -434,8 +443,8 @@ export default function Upload() {
         <>
 
             {/* Navigation Bar */}
-
-            <div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4' }}>
+            <NavigationBar/>
+            {/*<div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4' }}>
                 <div style={{
                     //position: 'relative',
                     height: '100px',
@@ -456,11 +465,11 @@ export default function Upload() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/" onClick={() => signOut(auth)}>Log out</a>
+                        <a href="/" onClick={() => {signOut(auth); localStorage.removeItem('authToken');}}>Log out</a>
                     </div>
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-            </div>
+            </div>*/}
 
             {loading === false ? (
                 <div style={{ marginTop: '130px' }}>

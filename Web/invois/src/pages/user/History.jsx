@@ -5,6 +5,8 @@ import { db, auth } from '../../firebase'
 import LoadingScreen from '../../loading/LoadingScreen';
 import { signOut } from 'firebase/auth';
 
+import { getHistoryRecords } from '../utils/dbOperations/dbOperations'
+import NavigationBar from '../utils/navBar/navigationBar'
 
 function History() {
 
@@ -18,17 +20,24 @@ function History() {
 
     useEffect(() => {
         /* Timeout for Loadin Screen */
-        setTimeout(() => setLoading(false), 4000) //4s
+        //setTimeout(() => setLoading(false), 4000) //4s
 
         /* To retrieve data */
-        const q = query(getDataRefContract, orderBy('timestamp', 'desc'));
+        /*const q = query(getDataRefContract, orderBy('timestamp', 'desc'));
 
         const getData = async () => {
             const data = await getDocs(q);
             setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
         };
 
-        getData();
+        getData();*/
+    
+        getHistoryRecords()
+            .then(data => { 
+                setShowData(data); 
+                setLoading(false); 
+            })
+            .catch(error => console.log(error));
     });
 
     /*useEffect(() => {
@@ -48,8 +57,8 @@ function History() {
         <>
 
             {/* Navigation Bar */}
-
-            <div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4'}}>
+            <NavigationBar/>
+            {/*<div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4'}}>
                 <div style={{
                     //position: 'relative',
                     height: '100px',
@@ -70,11 +79,11 @@ function History() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/" onClick={() => signOut(auth)}>Log out</a>
+                        <a href="/" onClick={() => {signOut(auth); localStorage.removeItem('authToken');}}>Log out</a>
                     </div>
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-            </div>
+            </div>*/}
 
             {loading === false ? (
                 <div style={{marginTop:'130px'}}>

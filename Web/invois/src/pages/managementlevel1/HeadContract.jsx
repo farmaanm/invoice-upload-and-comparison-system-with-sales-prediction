@@ -5,40 +5,54 @@ import { db, auth } from '../../firebase'
 import LoadingScreen from '../../loading/LoadingScreen';
 import { signOut } from 'firebase/auth';
 
+import { getCustomerRecords } from '../utils/dbOperations/dbOperations'
+import NavigationBar from '../utils/navBar/navigationBar'
+
 function HeadContract() {
 
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
 
     /*DB Refrence*/
-    const getDataRefContract = collection(db, "Customer");
+    //const getDataRefContract = collection(db, "Customer");
 
     const [showData, setShowData] = useState([]);
+    
 
     /* OnLoad */
     useEffect(() => {
         /* Timeout for Loading Screen */
-        setTimeout(() => setLoading(false), 3000) //3s
+        //setTimeout(() => setLoading(false), 3000) //3s
 
         /*To retrieve Customer contract data */
 
-        const q = query(getDataRefContract, orderBy("customerName"));
+        /*const q = query(getDataRefContract, orderBy("customerName"));
 
         const getData = async () => {
             const data = await getDocs(q);
             setShowData(data.docs.map((docFiles) => ({ id: docFiles.id, post: docFiles.data() })));
         };
 
-        getData();
+        getData();*/
 
-    });
+        //const data = headCustomerRecords;
+        //setShowData(headCustomerRecords)
+
+        getCustomerRecords()
+            .then(data => {
+                setShowData(data)
+                setLoading(false)
+            })
+            .catch(error => console.log(error));
+
+    }, []);
 
     return (
         <>
 
             {/* Navigation Bar */}
-
-            <div style={{position:'fixed', top:'0', width: '100%', backgroundColor:'#F4F4F4'}}>
+            <NavigationBar/>
+            {/*<div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4' }}>
                 <div style={{
                     //position: 'relative',
                     height: '100px',
@@ -63,15 +77,15 @@ function HeadContract() {
                     </div>
 
                     <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/" onClick={() => signOut(auth)}>Log out</a>
+                        <a href="/" onClick={() => { signOut(auth); localStorage.removeItem('authToken'); }}>Log out</a>
                     </div>
                 </div>
                 <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-            </div>
+            </div>*/}
 
             {loading === false ? (
 
-                <div style={{marginTop:'130px'}}>
+                <div style={{ marginTop: '130px' }}>
 
                     {/* Customer Records */}
                     <div style={{ padding: '2%' }}>
