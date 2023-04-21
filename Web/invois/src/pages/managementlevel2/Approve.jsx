@@ -18,6 +18,10 @@ function Approve() {
 
     const [showData, setShowData] = useState([]);
 
+    Approve.setLoadingFalse = () => {
+        setLoading(false)
+    };
+
     /* On Load */
     useEffect(() => {
         /* Timeout for Loadin Screen */
@@ -36,7 +40,7 @@ function Approve() {
         getHistoryRecords()
             .then(data => {
                 setShowData(data);
-                setLoading(false);
+                Approve.setLoadingFalse();
             })
             .catch(error => console.log(error));
     });

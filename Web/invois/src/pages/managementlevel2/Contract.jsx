@@ -59,7 +59,7 @@ function Contract() {
     }
 
     async function addcustomer() {
-
+        
         const totalValue = parseInt(freight) + parseInt(eff) + parseInt(other);
         const record = [{ containerSize: containerSize, destination: destination, rate: totalValue, shippingLine: shippingLine }];
 
@@ -105,7 +105,7 @@ function Contract() {
             }
 
         }*/
-
+        
         addUpdateCustomer(customerName, validity, record)
             .then(message => {
                 setAlertMsg(message)
@@ -173,6 +173,10 @@ function Contract() {
             .catch(error => console.log(error));
     }
 
+    Contract.setLoadingFalse = () => {
+        setLoading(false)
+    };
+
     /* OnLoad */
     useEffect(() => {
         /* Timeout for Loading Screen */
@@ -192,7 +196,7 @@ function Contract() {
         getCustomerRecords()
             .then(data => {
                 setShowData(data)
-                setLoading(false)
+                Contract.setLoadingFalse()
             })
             .catch(error => console.log(error));
 

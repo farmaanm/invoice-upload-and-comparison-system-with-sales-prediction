@@ -58,6 +58,10 @@ function Payment() {
     const [showData, setShowData] = useState([]);
     const [showDoneData, setShowDoneData] = useState([]);
 
+    Payment.setLoadingFalse = () => {
+        setLoading(false)
+    };
+
     /* On Load */
     useEffect(() => {
         /* Timeout for Loadin Screen */
@@ -77,7 +81,8 @@ function Payment() {
         getPaymentPending()
             .then(data => {
                 setShowData(data);
-                setLoading(false);
+                //setLoading(false);
+                Payment.setLoadingFalse()
             })
             .catch(error => console.log(error));
 

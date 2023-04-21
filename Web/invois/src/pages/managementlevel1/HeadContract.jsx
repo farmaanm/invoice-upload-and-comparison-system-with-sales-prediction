@@ -18,6 +18,9 @@ function HeadContract() {
 
     const [showData, setShowData] = useState([]);
     
+    HeadContract.setLoadingFalse = () => {
+        setLoading(false)
+    };
 
     /* OnLoad */
     useEffect(() => {
@@ -41,7 +44,7 @@ function HeadContract() {
         getCustomerRecords()
             .then(data => {
                 setShowData(data)
-                setLoading(false)
+                HeadContract.setLoadingFalse()
             })
             .catch(error => console.log(error));
 

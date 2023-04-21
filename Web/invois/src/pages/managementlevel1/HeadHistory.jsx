@@ -18,6 +18,10 @@ function HeadHistory() {
 
     const [showData, setShowData] = useState([]);
 
+    HeadHistory.setLoadingFalse = () => {
+        setLoading(false)
+    };
+
     useEffect(() => {
         /* Timeout for Loadin Screen */
         //setTimeout(() => setLoading(false), 3000) //3s
@@ -34,7 +38,8 @@ function HeadHistory() {
 
         getHistoryRecords()
             .then(data => { 
-                setShowData(data); setLoading(false); 
+                setShowData(data); 
+                HeadHistory.setLoadingFalse(); 
             })
             .catch(error => console.log(error));
 

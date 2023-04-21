@@ -18,6 +18,10 @@ function History() {
 
     const [showData, setShowData] = useState([]);
 
+    History.setLoadingFalse = () => {
+        setLoading(false)
+    };
+
     useEffect(() => {
         /* Timeout for Loadin Screen */
         //setTimeout(() => setLoading(false), 4000) //4s
@@ -35,7 +39,7 @@ function History() {
         getHistoryRecords()
             .then(data => { 
                 setShowData(data); 
-                setLoading(false); 
+                History.setLoadingFalse(); 
             })
             .catch(error => console.log(error));
     });

@@ -56,7 +56,7 @@ export async function updateContractStatus(id, fileStatus) {
 }
 
 export async function addUpdateCustomer(customerName, validity, record) {
-
+    
     const dataRef = collection(db, "Customer");
     let message = ''
 

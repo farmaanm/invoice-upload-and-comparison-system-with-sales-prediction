@@ -39,6 +39,10 @@ export default function Upload() {
 
     //var mismatchedData = 'Global variable'
 
+    Upload.setLoadingFalse = () => {
+        setLoading(false)
+    };
+
     useEffect(() => {
         /* Timeout for Loading Screen */
         //setTimeout(() => setLoading(false), 4000) //4s
@@ -55,7 +59,7 @@ export default function Upload() {
         getCustomerRecords()
             .then(data => {
                 setShowData(data)
-                setLoading(false)
+                Upload.setLoadingFalse()
             })
             .catch(error => console.log(error));
 

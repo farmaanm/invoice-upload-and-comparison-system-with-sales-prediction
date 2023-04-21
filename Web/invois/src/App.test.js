@@ -26,13 +26,12 @@ import { async } from '@firebase/util';
 import { collection, getDocs, query, where, doc, getDoc, updateDoc, orderBy } from 'firebase/firestore'
 import { db } from './firebase'
 
-
+import { addUpdateCustomer } from './pages/utils/dbOperations/dbOperations'
 
 
 /**
  * @jest-environment node
  */
-
 
 //afterAll(() => setTimeout(() => process.exit(1), 1000))
 
@@ -106,6 +105,7 @@ describe('Firebase Util Test Suite', () => {
     
 });
 
+
 describe("Login and Signup", () => {
 
     test('login page', async () => {
@@ -161,7 +161,7 @@ describe("This suite is to test the User Level 1", () => {
         afterEach(() => {
             localStorage.removeItem('authToken');
         });
-        
+
 
         test('rendering nav bar', async () => {
 
@@ -178,6 +178,67 @@ describe("This suite is to test the User Level 1", () => {
             const { getByText } = render(<Upload />);
 
             expect(getByText("Loading...")).toBeInTheDocument("Loading...")
+
+        });
+
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
+        test('upload page', async () => {
+
+            render(<Upload />);
+
+            expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+            act(() => {
+                Upload.setLoadingFalse();
+            });
+
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
+
+            await expect(screen.getByText("Contract")).toBeInTheDocument();
+            await expect(screen.getByText("Spot")).toBeInTheDocument();
+
+            await expect(screen.getAllByText("Upload Customer Invoice:"));
+            await expect(screen.getAllByText("Upload Payment Requisition:"));
+            await expect(screen.getByText("Select Rate:")).toBeInTheDocument();
+
+            await expect(screen.getAllByText("VALIDATE"));
+
+            let contractCusInv = screen.getByTestId("contract-cusInv-input");
+            let contractPayReq = screen.getByTestId("contract-payReq-input");
+            let contractRate = screen.getByTestId("contract-rate-input");
+
+            let spotCusInv = screen.getByTestId("spot-cusInv-input");
+            let spotPayReq = screen.getByTestId("spot-payReq-input");
+
+        });
+
+        test('validation modals', async () => {
+
+            render(<Upload />);
+
+            expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+            act(() => {
+                Upload.setLoadingFalse();
+            });
+
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
+
+            await expect(screen.getByText("Confirmation")).toBeInTheDocument();
+            await expect(screen.getByText("Validation Successful!")).toBeInTheDocument();
+
+            await expect(screen.getByText("Error")).toBeInTheDocument();
+            await expect(screen.getByText("Data mismatched. Please try again!")).toBeInTheDocument();
+
+            await expect(screen.getByText("Processing...")).toBeInTheDocument();
+            await expect(screen.getByText("Data is being Extracted...")).toBeInTheDocument();
 
         });
     });
@@ -207,6 +268,34 @@ describe("This suite is to test the User Level 1", () => {
             const { getByText } = render(<History />);
 
             expect(getByText("Loading...")).toBeInTheDocument("Loading...")
+
+        });
+
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
+        test('history page', async () => {
+
+            render(<History />);
+
+            expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+            act(() => {
+                History.setLoadingFalse();
+            });
+
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
+
+            await expect(screen.getByText("Vendor Invoice")).toBeInTheDocument();
+            await expect(screen.getByText("Payment Requisition")).toBeInTheDocument();
+            await expect(screen.getByText("Status")).toBeInTheDocument();
+            await expect(screen.getByText("Uploaded At")).toBeInTheDocument();
+            await expect(screen.getByText("Uploaded By")).toBeInTheDocument();
 
         });
     });
@@ -274,6 +363,35 @@ describe("This suite is to test the Management Level 1", () => {
 
         });
 
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
+        test('history page', async () => {
+
+            render(<HeadHistory />);
+
+            expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+            act(() => {
+                HeadHistory.setLoadingFalse();
+            });
+
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
+
+            await expect(screen.getByText("Vendor Invoice")).toBeInTheDocument();
+            await expect(screen.getByText("Payment Requisition")).toBeInTheDocument();
+            await expect(screen.getByText("Approval Status")).toBeInTheDocument();
+            await expect(screen.getByText("Payment Status")).toBeInTheDocument();
+            await expect(screen.getByText("Payment Done At")).toBeInTheDocument();
+            await expect(screen.getByText("Uploaded At")).toBeInTheDocument();
+            await expect(screen.getByText("Uploaded By")).toBeInTheDocument();
+
+        });
     });
 
     describe("Customers", () => {
@@ -337,7 +455,34 @@ describe("This suite is to test the Management Level 2", () => {
             expect(getByText("Loading...")).toBeInTheDocument("Loading...")
 
         });
-        
+
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
+        test('approve page', async () => {
+
+            render(<Approve />);
+
+            expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+            act(() => {
+                Approve.setLoadingFalse();
+            });
+
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
+
+            await expect(screen.getByText("Vendor Invoice")).toBeInTheDocument();
+            await expect(screen.getByText("Payment Requisition")).toBeInTheDocument();
+            await expect(screen.getByText("Status")).toBeInTheDocument();
+            await expect(screen.getByText("Uploaded At")).toBeInTheDocument();
+            await expect(screen.getByText("Uploaded By")).toBeInTheDocument();
+
+        });
     });
 
     describe("Contract", () => {
@@ -365,6 +510,56 @@ describe("This suite is to test the Management Level 2", () => {
             const { getByText } = render(<Contract />);
 
             expect(getByText("Loading...")).toBeInTheDocument("Loading...")
+
+        });
+
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
+        test('customer page', async () => {
+
+            render(<Contract />);
+
+            expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+            act(() => {
+                Contract.setLoadingFalse();
+            });
+
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
+
+            await expect(screen.getByText("ADD CUSTOMER")).toBeInTheDocument();
+
+            fireEvent.click(screen.getByText(/ADD CUSTOMER/i))
+
+            let cusNameBox = screen.getByTestId("cusName-text-box");
+            let validityBox = screen.getByTestId("validity-text-box");
+            let destinationBox = screen.getByTestId("destination-input");
+            let containerBox = screen.getByTestId("container-input");
+            let freightRateBox = screen.getByTestId("freight-input");
+            let effRateBox = screen.getByTestId("eff-input");
+            let otherRateBox = screen.getByTestId("other-input");
+            let shippingLineBox = screen.getByTestId("shippingLine-input");
+
+            userEvent.type(cusNameBox, "Customer #test");
+            userEvent.type(validityBox, "05/24/2023");
+            userEvent.type(destinationBox, "BANGKOK");
+            userEvent.type(containerBox, "20");
+            userEvent.type(freightRateBox, "500");
+            userEvent.type(effRateBox, "50");
+            userEvent.type(otherRateBox, "10");
+            userEvent.type(shippingLineBox, "10");
+
+            //expect(hasInputValue(cusNameBox, "Customer #9")).toBe(true)
+            //expect(screen.getByDisplayValue('Customer #9')).toBeInTheDocument();
+            //await expect(cusNameBox).toHaveValue("Customer #9");
+
+            fireEvent.click(screen.getByText(/ADD RECORD/i))
 
         });
     });
@@ -400,7 +595,162 @@ describe("This suite is to test the Finance", () => {
             expect(getByText("Loading...")).toBeInTheDocument("Loading...")
 
         });
+
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+    
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
+        test('payment page', async () => {
+
+
+            render(<Payment />);
+            expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+            act(() => {
+                Payment.setLoadingFalse();
+            });
+
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
+           
+            await expect(screen.getAllByText("Vendor Invoice"));
+            await expect(screen.getAllByText("Payment Requisition"));
+            await expect(screen.getAllByText("Uploaded At"));
+            await expect(screen.getAllByText("Uploaded By"));
+
+            await expect(screen.getByText("Status")).toBeInTheDocument();
+            await expect(screen.getByText("Payment Done At")).toBeInTheDocument();
+
+            await expect(screen.getByText("UPDATE RECORDS")).toBeInTheDocument();
+            await expect(screen.getByText("Payment Completed")).toBeInTheDocument();
+
+        });
+
     });
 
 });
+
+
+
+
+
+
+/*
+describe("firestore customer add", () => {
+
+    beforeEach(() => {
+        localStorage.setItem('authToken', 'farmaan@management.com');
+        jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        localStorage.removeItem('authToken');
+        jest.useRealTimers();
+    });
+
+
+    function hasInputValue(inputElement, expectedValue) {
+        return inputElement.value === expectedValue;
+    }
+
+    test('firestore customer add', async () => {
+
+        const addCustomer = jest.fn();
+        //const spy = jest.spyOn(Contract.prototype, 'addcustomer');
+
+        render(<Contract />);
+
+        expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+        act(() => {
+            Contract.setLoadingFalse();
+        });
+
+        expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
+
+        await expect(screen.getByText("ADD CUSTOMER")).toBeInTheDocument();
+
+        fireEvent.click(screen.getByText(/ADD CUSTOMER/i))
+
+        let customerName = screen.getByTestId("cusName-text-box");
+        let validity = screen.getByTestId("validity-text-box");
+        let destinationBox = screen.getByTestId("destination-input");
+        let containerBox = screen.getByTestId("container-input");
+        let freightRateBox = screen.getByTestId("freight-input");
+        let effRateBox = screen.getByTestId("eff-input");
+        let otherRateBox = screen.getByTestId("other-input");
+        let shippingLineBox = screen.getByTestId("shippingLine-input");
+
+        let addRecordButton = screen.getByText(/ADD RECORD/i);
+
+        expect(addRecordButton).toBeDisabled();
+
+        fireEvent.change(customerName, { target: { value: 'Customer #test' } })
+        fireEvent.change(validity, { target: { value: '2023-02-17' } })
+        fireEvent.change(destinationBox, { target: { value: 'BANGKOK' } })
+        fireEvent.change(containerBox, { target: { value: '20' } })
+        fireEvent.change(freightRateBox, { target: { value: 500 } })
+        fireEvent.change(effRateBox, { target: { value: 50 } })
+        fireEvent.change(otherRateBox, { target: { value: 10 } })
+        fireEvent.change(shippingLineBox, { target: { value: 'ONE' } })
+
+        expect(hasInputValue(customerName, "Customer #test")).toBe(true)
+        //expect(screen.getByDisplayValue('Customer #9')).toBeInTheDocument();
+        //await expect(cusNameBox).toHaveValue("Customer #9");
+
+        expect(addRecordButton).toBeEnabled();
+
+        //console.log("addRecordButton is enabled:", addRecordButton.disabled === false);
+        fireEvent.click(addRecordButton)
+        //console.log("clicked ADD RECORD button");
+        
+        //await Contract.addCustomer();
+
+        //expect(spy).toHaveBeenCalledWith();
+
+        //spy.mockRestore();
+        const totalValue = freightRateBox + effRateBox + otherRateBox;
+        const record = [{ containerSize: 'containerBox', destination: 'destinationBox', rate: 'totalValue', shippingLine: 'shippingLineBox' }];
+
+        awaitaddUpdateCustomer('customerName', 'validity', record)
+            .then(message => {
+                console.log(message)
+            })
+            .catch(error => console.log(error));
+
+    });
+});
+*/
+/*describe("Test firestore", () => {
+    beforeAll(async () => {
+        jest.setTimeout(10000);
+    });
+
+    test('retrieving data', async () => {
+
+
+        const auth = getAuth()
+
+        const getDataRefContract = collection(db, "Contract");
+        const qry = query(getDataRefContract, where("status", "==", "Approved"), where("paymentStatus", "==", "Pending"));
+
+        const data = await getDocs(qry);
+        //setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
+
+    });
+});*/
+
+
+
+//render(<FirstTest />);
+//const element = screen.getByText(/First test/i);
+//expect(element).toBeInTheDocument();
+
+//const { getByText } = render(<FirstTest />);
+//expect(getByText("First test")).toBeInTheDocument("First test")
+
+
 
