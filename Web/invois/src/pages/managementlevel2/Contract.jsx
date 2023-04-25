@@ -8,7 +8,7 @@ import LoadingScreen from '../../loading/LoadingScreen';
 import { getCustomerRecords, addUpdateCustomer, deleteCustomerArray, deleteCustomerRecord } from '../utils/dbOperations/dbOperations'
 import NavigationBar from '../utils/navBar/navigationBar'
 
-function Contract() {
+const Contract = () => {
 
     /* Loading Screen */
     const [loading, setLoading] = useState(true)

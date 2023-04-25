@@ -3,9 +3,7 @@ import { MDBIcon } from 'mdb-react-ui-kit';
 import { signOut } from 'firebase/auth'
 import { auth } from '../../../firebase'
 
-function NavigationBar() {
-
-
+const NavigationBar = () => {
 
     const currentPath = window.location.pathname;
     console.log(currentPath);

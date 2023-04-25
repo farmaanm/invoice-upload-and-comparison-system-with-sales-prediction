@@ -13,7 +13,7 @@ import loginImage from '../images/loginImage.jpg'
 
 //import { default as UserNav } from './Nav'
 
-function Login() {
+const Login = () => {
 
     let user = auth.currentUser
     if (user) {

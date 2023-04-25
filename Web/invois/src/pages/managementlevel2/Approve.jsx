@@ -5,7 +5,7 @@ import { db, auth } from '../../firebase'
 import { signOut } from 'firebase/auth';
 import LoadingScreen from '../../loading/LoadingScreen';
 
-import { getHistoryRecords, updateContractStatus } from '../utils/dbOperations/dbOperations'
+import { getHistoryRecords, updateContractStatus, deleteInvoiceRecord } from '../utils/dbOperations/dbOperations'
 import NavigationBar from '../utils/navBar/navigationBar'
 
 function Approve() {
@@ -93,6 +93,15 @@ function Approve() {
 
     }
 
+    async function deleteRecord(event, id) {
+        
+        deleteInvoiceRecord(id)
+            .then(message => {
+                //setAlertMsg(message)
+            })
+            .catch(error => console.log(error));
+    }
+
 
     return (
         <>
@@ -142,6 +151,7 @@ function Approve() {
                                         <th scope='col'>Status</th>
                                         <th scope='col'>Uploaded At</th>
                                         <th scope='col'>Uploaded By</th>
+                                        <th scope='col'>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -170,6 +180,9 @@ function Approve() {
                                                     <td>
                                                         <p className='fw-normal mb-1'>{post.uploadedBy}</p>
                                                     </td>
+                                                    <td>
+                                                        <i className="fas fa-trash-can" onClick={(event) => deleteRecord(event, id)} ></i>
+                                                    </td>
                                                 </tr>
 
                                             )
@@ -197,6 +210,9 @@ function Approve() {
                                                     </td>
                                                     <td>
                                                         <p className='fw-normal mb-1'>{post.uploadedBy}</p>
+                                                    </td>
+                                                    <td>
+                                                        <i className="fas fa-trash-can" onClick={(event) => deleteRecord(event, id)} ></i>
                                                     </td>
                                                 </tr>
 

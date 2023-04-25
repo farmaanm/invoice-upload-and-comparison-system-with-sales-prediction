@@ -1,20 +1,17 @@
-import { MDBBadge, MDBIcon } from 'mdb-react-ui-kit';
+import { MDBBadge } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react'
-import { collection, getDocs, query, orderBy } from 'firebase/firestore'
-import { db, auth } from '../../firebase'
 import LoadingScreen from '../../loading/LoadingScreen';
-import { signOut } from 'firebase/auth';
 
 import { getHistoryRecords } from '../utils/dbOperations/dbOperations'
 import NavigationBar from '../utils/navBar/navigationBar'
 
-function History() {
+const History = () => {
 
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
 
     /*DB Refrence*/
-    const getDataRefContract = collection(db, "Contract");
+    //const getDataRefContract = collection(db, "Contract");
 
     const [showData, setShowData] = useState([]);
 

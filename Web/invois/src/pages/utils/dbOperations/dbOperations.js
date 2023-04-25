@@ -213,3 +213,13 @@ export async function updatePaymentStatus(userinfo) {
 
 }
 
+export async function deleteInvoiceRecord(id) {
+
+    let message = ''
+
+    await deleteDoc(doc(db, "Contract", id));
+
+    message = 'Invoice record deleted successfully!'
+
+    return message
+}

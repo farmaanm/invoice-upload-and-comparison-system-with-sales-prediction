@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-    MDBIcon,
     MDBModal,
     MDBModalDialog,
     MDBModalContent,
@@ -15,7 +14,6 @@ import successGif from '../../images/successGif.gif';
 import unsuccessGif from '../../images/unsuccessGif.gif';
 import processingGif from '../../images/processingGif.gif';
 
-import { signOut } from 'firebase/auth';
 import { db, storage, auth } from '../../firebase'
 import { collection, addDoc, doc, getDoc, getDocs, updateDoc, query, orderBy, serverTimestamp } from 'firebase/firestore'
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -23,7 +21,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getCustomerRecords } from '../utils/dbOperations/dbOperations'
 import NavigationBar from '../utils/navBar/navigationBar'
 
-export default function Upload() {
+const Upload = () => {
 
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
@@ -441,13 +439,112 @@ export default function Upload() {
 
     }
 
+    async function manualRecordAdd(e) {
+        //e.preventDefault()
+        //setCentredModalProccessing(true)
+        /*setTimeout(async () => {
+            //setCentredModalProccessing(false)
+            
+            //toggleShowProccessing()
+        }, 4000)*/
+
+        //await displayMessage("True");
+
+        try {
+            const storageRefPayReq = ref(storage, `/Payment Requisitions/${filePaymentRequisition.name}`)
+            const uploadTaskPayReq = uploadBytesResumable(storageRefPayReq, filePaymentRequisition);
+
+            const storageRefCusInv = ref(storage, `/Vendor Invoice/${fileCustomerInvoice.name}`)
+            const uploadTaskCusInv = uploadBytesResumable(storageRefCusInv, fileCustomerInvoice);
+
+            /* Payment Requisition File Upload */
+            uploadTaskPayReq.on(
+                "state_changed",
+                (snapshot) => {
+                    const percent = Math.round(
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+                },
+                (err) => console.log(err),
+                () => {
+                    // download url
+                    getDownloadURL(uploadTaskPayReq.snapshot.ref).then((url) => {
+                        payReqUrl = url;
+                        console.log(url);
+                    });
+                }
+            );
+
+            /* Customer Invoice File Upload */
+            uploadTaskCusInv.on(
+                "state_changed",
+                (snapshot) => {
+                    const percent = Math.round(
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+                },
+                (err) => console.log(err),
+                () => {
+                    // download url
+                    getDownloadURL(uploadTaskCusInv.snapshot.ref).then((url) => {
+                        cusInvUrl = url;
+                        console.log(url);
+                    });
+                }
+            );
+
+            setTimeout(async () => {
+
+                /* Send all data to DB */
+                const docRef = await addDoc(getDataRefContract, {
+                    dateTime: getDateTime(),
+                    paymentDoneAt: '',
+                    paymentRequisitionName: filePaymentRequisition.name,
+                    paymentRequisitionUrl: 'payReqUrl',
+                    paymentStatus: 'Pending',
+                    status: 'Pending',
+                    statusMessage: 'warning',
+                    uploadedBy: username,
+                    vendorInvoiceName: fileCustomerInvoice.name,
+                    vendorInvoiceUrl: 'cusInvUrl',
+                    timestamp: serverTimestamp()
+                });
+
+                console.log("Pay Req = " + payReqUrl)
+                console.log("Cus Inv = " + cusInvUrl)
+
+                console.log("Document written with ID: ", docRef.id);
+
+                /* Update URL */
+                const contractRef = doc(db, "Contract", docRef.id);
+                const docSnap = await getDoc(contractRef);
+
+                if (docSnap.exists()) {
+                    //console.log("Document data:", docSnap.data());
+                    await updateDoc(contractRef, {
+                        paymentRequisitionUrl: payReqUrl,
+                        vendorInvoiceUrl: cusInvUrl
+                    });
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+                toggleShowSuccess();
+
+            }, 4500)
+
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+
+    }
 
 
     return (
         <>
 
             {/* Navigation Bar */}
-            <NavigationBar/>
+            <NavigationBar />
             {/*<div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4' }}>
                 <div style={{
                     //position: 'relative',
@@ -478,8 +575,78 @@ export default function Upload() {
             {loading === false ? (
                 <div style={{ marginTop: '130px' }}>
 
+                    {/* Add Customer Toggle Button */}
+                    <div style={{ padding: '1% 2% 2% 2%' }}>
+                        <div align="right" width="100%">
+                            <button
+                                className="btn btn-primary"
+                                type="button"
+                                data-mdb-toggle="collapse"
+                                data-mdb-target="#collapseExample"
+                                aria-expanded="false"
+                                aria-controls="collapseExample"
+                                style={{ borderColor: '#381ce4', backgroundColor: 'whitesmoke', color: '#381ce4' }}
+                            >
+                                ADD MANUALLY
+                            </button>
+                        </div>
+
+                        <br />
+
+                        <div className="collapse mt-3" id="collapseExample">
+
+                            <table width={'100%'}>
+                                <tbody>
+                                    <tr>
+
+                                        {/* Customer Invoice Upload */}
+                                        <td  >
+                                            <label htmlFor='customerInvoiceSpot'>Upload Customer Invoice:</label>
+                                        </td>
+                                        <td>
+                                            <input type='file'
+                                                name='customerInvoiceManual'
+                                                width='50px'
+                                                accept='application/pdf'
+                                                id='customerInvoiceManual'
+                                                style={fileUpload}
+                                                onChange={setCustomerInvoice} />
+                                        </td>
+
+                                        {/* Payment Requisition Upload */}
+                                        <td >
+                                            <label htmlFor='paymentRequisitionSpot'>Upload Payment Requisition:</label>
+                                        </td>
+                                        <td>
+                                            <input type='file'
+                                                name='paymentRequisitionManual'
+                                                width='50px'
+                                                accept='application/pdf'
+                                                id='payReqManual'
+                                                style={fileUpload}
+                                                onChange={setPaymentRequisition} />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <br />
+
+                            {/* Add Button */}
+                            <div align="right" width="100%">
+                                <button className="btn btn-primary" style={{ backgroundColor: '#381ce4' }} type="button" onClick={manualRecordAdd} >ADD RECORD</button>
+                            </div>
+
+                            <hr></hr>
+                        </div>
+
+
+                    </div>
+
+                    <br />
+
                     {/* File Upload */}
-                    <div style={{ padding: '5%' }}>
+                    <div style={{ padding: '1% 5% 5% 5%' }}>
                         { /*
                         <>
                         <div style={{ padding: '10px' }}>
@@ -711,7 +878,6 @@ export default function Upload() {
                             </li>
                         </ul>
 
-
                         <br />
 
                         <div className="tab-content" id="ex2-content" >
@@ -874,3 +1040,6 @@ export default function Upload() {
         </>
     );
 }
+
+
+export default Upload
