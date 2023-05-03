@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
-import { MDBIcon } from 'mdb-react-ui-kit';
+import React from 'react'
+//import { MDBIcon } from 'mdb-react-ui-kit';
 import { signOut } from 'firebase/auth'
 import { auth } from '../../../firebase'
+
+//import logo from '../../../images/logo.png'
+import splashLogo from '../../../images/splash_logo.png'
 
 const NavigationBar = () => {
 
@@ -23,9 +26,11 @@ const NavigationBar = () => {
                         width: '100%'
                     }}>
 
-                        <div style={{ position: 'absolute', top: '30px', left: '60px' }}>
-                            <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                            <span className="h1 fw-bold mb-0">Invois</span>
+                        <div style={{ position: 'absolute', top: '-15px', left: '25px' }}>
+                            {/*<MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
+                            <span className="h1 fw-bold mb-0">Invois</span>*/}
+                            <img src={splashLogo}
+                                alt="navbar-logo" height={150} />
                         </div>
                         {currentPath === '/upload' ? (
                             <>
@@ -68,9 +73,11 @@ const NavigationBar = () => {
                         width: '100%'
                     }}>
 
-                        <div style={{ position: 'absolute', top: '30px', left: '60px' }}>
-                            <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                            <span className="h1 fw-bold mb-0">Invois</span>
+                        <div style={{ position: 'absolute', top: '-15px', left: '25px' }}>
+                            {/*<MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
+                            <span className="h1 fw-bold mb-0">Invois</span>*/}
+                            <img src={splashLogo}
+                                alt="navbar-logo" height={150} />
                         </div>
                         {currentPath === '/approve' ? (
                             <>
@@ -113,9 +120,11 @@ const NavigationBar = () => {
                         width: '100%'
                     }}>
 
-                        <div style={{ position: 'absolute', top: '30px', left: '60px' }}>
-                            <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                            <span className="h1 fw-bold mb-0">Invois</span>
+                        <div style={{ position: 'absolute', top: '-15px', left: '25px' }}>
+                            {/*<MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
+                            <span className="h1 fw-bold mb-0">Invois</span>*/}
+                            <img src={splashLogo}
+                                alt="navbar-logo" height={150} />
                         </div>
                         {currentPath === '/sales' ? (
                             <>
@@ -180,9 +189,11 @@ const NavigationBar = () => {
                         width: '100%'
                     }}>
 
-                        <div style={{ position: 'absolute', top: '30px', left: '60px' }}>
-                            <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                            <span className="h1 fw-bold mb-0">Invois</span>
+                        <div style={{ position: 'absolute', top: '-15px', left: '25px' }}>
+                            {/*<MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
+                            <span className="h1 fw-bold mb-0">Invois</span>*/}
+                            <img src={splashLogo}
+                                alt="navbar-logo" height={150} />
                         </div>
 
                         <div style={{ position: 'absolute', bottom: '45px', right: '150px' }}>

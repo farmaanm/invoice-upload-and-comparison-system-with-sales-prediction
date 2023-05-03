@@ -9,10 +9,16 @@ import { auth } from '../firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom';
 
+import PasswordStrengthBar from 'react-password-strength-bar';
 import signupImage from '../images/signupImage.jpeg'
+
+import { addUser } from './utils/dbOperations/dbOperations'
 
 const Signup = () => {
 
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [role, setRole] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
@@ -21,7 +27,7 @@ const Signup = () => {
     const navigate = useNavigate()
 
     const validateForm = () => {
-        return email.length > 0 && password.length > 0 && password === repeatPassword;
+        return firstName.length > 0 && lastName.length > 0 && role != "" && email.length > 0 && password.length > 0 && password === repeatPassword;
     }
 
     const register = e => {
@@ -32,14 +38,18 @@ const Signup = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((res) => {
                 console.log(res.user)
+                addUser(firstName, lastName, role, email)
                 navigate('/')
             })
             .catch(err => setError(err.message))
 
-            if(error){
-                console.log(error)
-            }
+        if (error) {
+            console.log(error)
+        }
 
+        setFirstName(" ")
+        setLastName(" ")
+        setRole(" ")
         setEmail(" ")
         setPassword(" ")
         setRepeatPassword(" ")
@@ -126,9 +136,39 @@ const Signup = () => {
 
                             <form onSubmit={register}>
 
+                                {/*<!-- Name -->*/}
+                                <div class="row mb-4">
+                                    <div class="col">
+                                        {/*<!-- First Name -->*/}
+                                        <div class="form-outline">
+                                            <input type="text" id="form3Example1" class="form-control" onChange={e => setFirstName(e.target.value)} style={{ border: '1px solid #c4c4c4' }} required />
+                                            <label class="form-label" for="form3Example1">First name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        {/*<!-- Last Name -->*/}
+                                        <div class="form-outline">
+                                            <input type="text" id="form3Example2" class="form-control" onChange={e => setLastName(e.target.value)} style={{ border: '1px solid #c4c4c4' }} required />
+                                            <label class="form-label" for="form3Example2">Last name</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/*<!-- Role -->*/}
+                                <div className="form-outline mb-4">
+                                    <select className="form-control" onChange={(e) => setRole(e.target.value)} style={{ border: '1px solid #c4c4c4' }}>
+                                        <option className="form-control" value=""></option>
+                                        <option className="form-control" value="User Level 1">User Level 1</option>
+                                        <option className="form-control" value="Management Level 1">Management Level 1</option>
+                                        <option className="form-control" value="Management Level 2">Management Level 2</option>
+                                        <option className="form-control" value="Finance">Finance</option>
+                                    </select>
+                                    <label className="form-label" htmlFor="form3Example3c">Role</label>
+                                </div>
+
                                 {/*<!-- Email input -->*/}
                                 <div className="form-outline mb-4">
-                                    <input type="email" id="form3Example3c" data-testid="email-input" className="form-control" onChange={e => setEmail(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
+                                    <input type="email" id="form3Example3c" data-testid="email-input" className="form-control" onChange={e => setEmail(e.target.value)} style={{ border: '1px solid #c4c4c4' }} required />
                                     <label className="form-label" htmlFor="form3Example3c">Email</label>
                                 </div>
 
@@ -136,6 +176,7 @@ const Signup = () => {
                                 <div className="form-outline mb-4">
                                     <input type="password" id="form3Example4c" data-testid="password-input" className="form-control" onChange={e => setPassword(e.target.value)} style={{ border: '1px solid #c4c4c4' }} />
                                     <label className="form-label" htmlFor="form3Example4c">Password</label>
+                                    <PasswordStrengthBar password={password} />
                                 </div>
 
                                 {/*<!-- Repeat Password input -->*/}

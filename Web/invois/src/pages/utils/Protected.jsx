@@ -5,6 +5,7 @@ const Protected = ({ children }) => {
     const authToken = localStorage.getItem('authToken');
 
     //if (!isLoggedIn) {
+        
     if (!authToken) {
         return <Navigate to="/" replace />;
     }

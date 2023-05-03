@@ -1,5 +1,24 @@
 import { db } from '../../../firebase'
-import { doc, collection, getDoc, getDocs, addDoc, updateDoc, deleteDoc, arrayRemove, query, orderBy, where } from 'firebase/firestore'
+import { doc, collection, getDoc, getDocs, addDoc, updateDoc, deleteDoc, arrayRemove, query, orderBy, where, serverTimestamp } from 'firebase/firestore'
+
+export async function addUser(firstName, lastName, role, email) {
+
+    const dataRef = collection(db, "User");
+
+    try {
+        const docRef = await addDoc(dataRef, {
+            firstName: firstName,
+            lastName: lastName,
+            role: role,
+            email: email,
+            timestamp: serverTimestamp()
+        });
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+
+}
 
 export async function getCustomerRecords() {
 
@@ -56,7 +75,7 @@ export async function updateContractStatus(id, fileStatus) {
 }
 
 export async function addUpdateCustomer(customerName, validity, record) {
-    
+
     const dataRef = collection(db, "Customer");
     let message = ''
 
