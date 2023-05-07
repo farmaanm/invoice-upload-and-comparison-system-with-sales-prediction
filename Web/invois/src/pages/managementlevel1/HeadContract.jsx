@@ -13,9 +13,6 @@ function HeadContract() {
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
 
-    /*DB Refrence*/
-    //const getDataRefContract = collection(db, "Customer");
-
     const [showData, setShowData] = useState([]);
     
     HeadContract.setLoadingFalse = () => {
@@ -24,23 +21,7 @@ function HeadContract() {
 
     /* OnLoad */
     useEffect(() => {
-        /* Timeout for Loading Screen */
-        //setTimeout(() => setLoading(false), 3000) //3s
-
-        /*To retrieve Customer contract data */
-
-        /*const q = query(getDataRefContract, orderBy("customerName"));
-
-        const getData = async () => {
-            const data = await getDocs(q);
-            setShowData(data.docs.map((docFiles) => ({ id: docFiles.id, post: docFiles.data() })));
-        };
-
-        getData();*/
-
-        //const data = headCustomerRecords;
-        //setShowData(headCustomerRecords)
-
+        
         getCustomerRecords()
             .then(data => {
                 setShowData(data)

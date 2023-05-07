@@ -43,17 +43,8 @@ function Payment() {
         //console.log(userinfo.response)
     };
 
-    /*for (var key of Object.keys(userinfo.response)) {
-        console.log(key + " -> " + userinfo.response[key])
-    }*/
-
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
-
-    /*DB Refrence*/
-    //const getDataRefContract = collection(db, "Contract");
-    //const qry = query(getDataRefContract, where("status", "==", "Approved"), where("paymentStatus", "==", "Pending"));
-    //const qryDone = query(getDataRefContract, where("status", "==", "Approved"), where("paymentStatus", "==", "Done"));
 
     const [showData, setShowData] = useState([]);
     const [showDoneData, setShowDoneData] = useState([]);
@@ -64,20 +55,7 @@ function Payment() {
 
     /* On Load */
     useEffect(() => {
-        /* Timeout for Loadin Screen */
-        //setTimeout(() => setLoading(false), 4000) //4s
-
-        /*To retrieve Pending records */
-        /*const getData = async () => {
-            const data = await getDocs(qry);
-            setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
-
-            const dataDone = await getDocs(qryDone);
-            setShowDoneData(dataDone.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
-        };
-
-        getData();*/
-
+        
         getPaymentPending()
             .then(data => {
                 setShowData(data);
@@ -95,58 +73,12 @@ function Payment() {
 
 
     });
-
-    /* Get Date and Time */
-    /*function getDateTime() {
-        var now = new Date();
-        var year = now.getFullYear();
-        var month = now.getMonth() + 1;
-        var day = now.getDate();
-        var hour = now.getHours();
-        var minute = now.getMinutes();
-        var second = now.getSeconds();
-        if (month.toString().length === 1) {
-            month = '0' + month;
-        }
-        if (day.toString().length === 1) {
-            day = '0' + day;
-        }
-        if (hour.toString().length === 1) {
-            hour = '0' + hour;
-        }
-        if (minute.toString().length === 1) {
-            minute = '0' + minute;
-        }
-        if (second.toString().length === 1) {
-            second = '0' + second;
-        }
-        var dateTime = day + '/' + month + '/' + year + ' ' + hour + ':' + minute + ':' + second;
-        return dateTime;
-    }*/
-
+    
     /* Updating Payment Status Pending / Done */
     const paymentUpdateStatus = () => async () => {
 
         updatePaymentStatus(userinfo)
-        /*for (var key of Object.keys(userinfo.response)) {
-
-            //console.log(key + " -> " + userinfo.response[key])
-
-            const contractRef = doc(db, "Contract", userinfo.response[key]);
-            const docSnap = await getDoc(contractRef);
-
-            if (docSnap.exists()) {
-                //console.log("Document data:", docSnap.data());
-                await updateDoc(contractRef, {
-                    paymentStatus: "Done",
-                    paymentDoneAt: getDateTime()
-                });
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-        }*/
-
+        
         /*
             paymentStatus: "Pending",
             paymentStatus: "Done",

@@ -10,6 +10,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
 import loginImage from '../images/loginImage.jpg'
+import splashLogo from '../images/splash_logo.png'
 
 //import { default as UserNav } from './Nav'
 
@@ -97,13 +98,16 @@ const Login = () => {
 
                         <MDBCol sm='6'>
 
-                            <div className='d-flex flex-row ps-5 pt-5'>
-                                <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                                <span className="h1 fw-bold mb-0">Invois</span>
+                            <div style={{ position: 'absolute', left: '25px' }}>
+                                {/*<MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
+                            <span className="h1 fw-bold mb-0">Invois</span>*/}
+                                <img src={splashLogo}
+                                    alt="navbar-logo" height={150} />
                             </div>
 
                             <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4' style={{ margin: 'auto' }}>
 
+                                <br /><br /><br /><br />
                                 <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
 
                                 <form onSubmit={login}>

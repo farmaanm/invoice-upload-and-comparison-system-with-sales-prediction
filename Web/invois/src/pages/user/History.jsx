@@ -10,9 +10,6 @@ const History = () => {
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
 
-    /*DB Refrence*/
-    //const getDataRefContract = collection(db, "Contract");
-
     const [showData, setShowData] = useState([]);
 
     History.setLoadingFalse = () => {
@@ -20,19 +17,7 @@ const History = () => {
     };
 
     useEffect(() => {
-        /* Timeout for Loadin Screen */
-        //setTimeout(() => setLoading(false), 4000) //4s
-
-        /* To retrieve data */
-        /*const q = query(getDataRefContract, orderBy('timestamp', 'desc'));
-
-        const getData = async () => {
-            const data = await getDocs(q);
-            setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
-        };
-
-        getData();*/
-    
+       
         getHistoryRecords()
             .then(data => { 
                 setShowData(data); 
@@ -40,19 +25,6 @@ const History = () => {
             })
             .catch(error => console.log(error));
     });
-
-    /*useEffect(() => {
-        db.collection("Contract").onSnapshot((snapshot) => {
-            setShowData(
-            snapshot.docs.map((doc) => ({
-              id: doc.id,
-              data: doc.data(),
-            }))
-          );
-        });
-        console.log({ showData });
-      }, []);*/
-
 
     return (
         <>

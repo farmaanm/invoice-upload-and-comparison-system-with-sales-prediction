@@ -42,9 +42,6 @@ const Contract = () => {
     const year = today.getFullYear();
     const todayDate = year + '-' + (month + 1) + '-' + day;
 
-    /*DB Refrence*/
-    const getDataRefContract = collection(db, "Customer");
-
     const [showData, setShowData] = useState([]);
 
     /* Adding Customer Data */
@@ -63,49 +60,6 @@ const Contract = () => {
         const totalValue = parseInt(freight) + parseInt(eff) + parseInt(other);
         const record = [{ containerSize: containerSize, destination: destination, rate: totalValue, shippingLine: shippingLine }];
 
-        //const p = query(collection(db, "Customer"), where("customerName", "==", customerName));
-        //const querySnapshot = await getDocs(p);
-
-        /* Checking if Customer name exists */
-        /*if (!querySnapshot.empty) {
-            //console.log("Found")
-            const recordAdd = { containerSize: containerSize, destination: destination, rate: totalValue, shippingLine: shippingLine };
-
-            querySnapshot.forEach(async (docFile) => {
-
-                const customerRef = doc(db, "Customer", docFile.id);
-
-                let records_array = docFile.data().records
-                //console.log("Records Array: ", records_array)
-                //console.log(typeof(records_array))
-
-                // Appending new record to existing record //
-                let newRecord = records_array.push(recordAdd)
-
-                await updateDoc(customerRef, {
-                    records: records_array,
-                    validity: validity
-                });
-                setAlertMsg('Recorded updated successfully!')
-            });
-
-        } else {
-            // If customer name does not exist, add new record //
-            //console.log("Not found")
-            try {
-                const docRef = await addDoc(getDataRefContract, {
-                    customerName: customerName,
-                    validity: validity,
-                    records: record
-                });
-                setAlertMsg('Recorded added successfully!')
-                console.log("Document written with ID: ", docRef.id);
-            } catch (e) {
-                console.error("Error adding document: ", e);
-            }
-
-        }*/
-        
         addUpdateCustomer(customerName, validity, record)
             .then(message => {
                 setAlertMsg(message)
@@ -121,12 +75,6 @@ const Contract = () => {
         setFreight(0);
         setEff(0);
         setOther(0);
-
-        /*querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-        });*/
-        /************************************************************************** */
 
     };
 
@@ -179,20 +127,7 @@ const Contract = () => {
 
     /* OnLoad */
     useEffect(() => {
-        /* Timeout for Loading Screen */
-        //setTimeout(() => setLoading(false), 4000) //4s
-
-        /*To retrieve Customer contract data */
-
-        /*const q = query(getDataRefContract, orderBy("customerName"));
-
-        const getData = async () => {
-            const data = await getDocs(q);
-            setShowData(data.docs.map((docFiles) => ({ id: docFiles.id, post: docFiles.data() })));
-        };
-
-        getData();*/
-
+        
         getCustomerRecords()
             .then(data => {
                 setShowData(data)

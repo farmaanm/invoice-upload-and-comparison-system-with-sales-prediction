@@ -14,6 +14,8 @@ import signupImage from '../images/signupImage.jpeg'
 
 import { addUser } from './utils/dbOperations/dbOperations'
 
+import splashLogo from '../images/splash_logo.png'
+
 const Signup = () => {
 
     const [firstName, setFirstName] = useState("");
@@ -27,7 +29,7 @@ const Signup = () => {
     const navigate = useNavigate()
 
     const validateForm = () => {
-        return firstName.length > 0 && lastName.length > 0 && role != "" && email.length > 0 && password.length > 0 && password === repeatPassword;
+        return firstName.length > 0 && lastName.length > 0 && role !== "" && email.length > 0 && password.length > 0 && password === repeatPassword;
     }
 
     const register = e => {
@@ -125,13 +127,18 @@ const Signup = () => {
 
                     <MDBCol sm='6'>
 
-                        <div className='d-flex flex-row ps-5 pt-5'>
-                            <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                            <span className="h1 fw-bold mb-0">Invois</span>
+
+
+                        <div style={{ position: 'absolute', top: '-15px', left: '25px' }}>
+                            {/*<MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
+                            <span className="h1 fw-bold mb-0">Invois</span>*/}
+                            <img src={splashLogo}
+                                alt="navbar-logo" height={150} />
                         </div>
 
                         <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4' style={{ margin: 'auto' }}>
 
+                            <br /><br />
                             <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
                             <form onSubmit={register}>

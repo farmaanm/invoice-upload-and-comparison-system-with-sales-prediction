@@ -55,6 +55,7 @@ export async function updateContractStatus(id, fileStatus) {
                 status: "Approved",
                 statusMessage: "success"
             });
+            //console.log("Updated doc id: ", id);
         } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
@@ -67,6 +68,7 @@ export async function updateContractStatus(id, fileStatus) {
                 status: "Rejected",
                 statusMessage: "danger"
             });
+            //console.log("Updated doc id: ", id);
         } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
@@ -103,6 +105,7 @@ export async function addUpdateCustomer(customerName, validity, record) {
                 validity: validity
             });
             message = 'Recorded updated successfully!'
+            //console.log("Document with id " + docFile.id + " updated")
         });
 
     } else {
@@ -115,7 +118,7 @@ export async function addUpdateCustomer(customerName, validity, record) {
                 records: record
             });
             message = 'Recorded added successfully!'
-            console.log("Document written with ID: ", docRef.id);
+            //console.log("Document written with ID: ", docRef.id);
         } catch (e) {
             console.error("Error adding document: ", e);
         }
@@ -154,7 +157,7 @@ export async function deleteCustomerRecord(id) {
     let message = ''
 
     await deleteDoc(doc(db, "Customer", id));
-
+    //console.log("Document deleted with id: " + id)
     message = 'Customer deleted successfully!'
 
     return message
@@ -224,6 +227,7 @@ export async function updatePaymentStatus(userinfo) {
                 paymentStatus: "Done",
                 paymentDoneAt: getDateTime()
             });
+            //console.log("Document updated with id: " + userinfo.response[key])
         } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
@@ -237,7 +241,7 @@ export async function deleteInvoiceRecord(id) {
     let message = ''
 
     await deleteDoc(doc(db, "Contract", id));
-
+    //console.log("Deleted document with id: " + id)
     message = 'Invoice record deleted successfully!'
 
     return message

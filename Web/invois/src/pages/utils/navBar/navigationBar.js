@@ -9,7 +9,7 @@ import splashLogo from '../../../images/splash_logo.png'
 const NavigationBar = () => {
 
     const currentPath = window.location.pathname;
-    console.log(currentPath);
+    //console.log(currentPath);
 
     const authToken = localStorage.getItem('authToken');
 

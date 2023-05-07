@@ -13,9 +13,6 @@ function Approve() {
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
 
-    /*DB Refrence*/
-    //const getDataRefContract = collection(db, "Contract");
-
     const [showData, setShowData] = useState([]);
 
     Approve.setLoadingFalse = () => {
@@ -24,19 +21,7 @@ function Approve() {
 
     /* On Load */
     useEffect(() => {
-        /* Timeout for Loadin Screen */
-        //setTimeout(() => setLoading(false), 4000) //4s
-
-        /*To retrieve data */
-        /*const q = query(getDataRefContract, orderBy('timestamp', 'desc'));
-
-        const getData = async () => {
-            const data = await getDocs(q);
-            setShowData(data.docs.map((doc) => ({ post: doc.data(), id: doc.id })));
-        };
-
-        getData();*/
-
+        
         getHistoryRecords()
             .then(data => {
                 setShowData(data);
@@ -47,49 +32,8 @@ function Approve() {
 
     /* Updating Status Approved / Rejected */
     const updateStatus = (id, fileStatus) => async () => {
-        //alert('Working ' + id)
-
+        
         updateContractStatus(id, fileStatus)
-
-        /*const contractRef = doc(db, "Contract", id);
-        const docSnap = await getDoc(contractRef);
-
-        /* If status == Approved */
-        /*if (fileStatus === "Approved") {
-            if (docSnap.exists()) {
-                //console.log("Document data:", docSnap.data());
-                await updateDoc(contractRef, {
-                    status: "Approved",
-                    statusMessage: "success"
-                });
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-        } else {
-            // If status == Rejected 
-            if (docSnap.exists()) {
-                //console.log("Rejected", docSnap.data());
-                await updateDoc(contractRef, {
-                    status: "Rejected",
-                    statusMessage: "danger"
-                });
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-        }*/
-
-        /*
-            status: "Rejected",
-            statusMessage: "danger"
-
-            status: "Approved",
-            statusMessage: "success"
-
-            status: "Pending",
-            statusMessage: "warning"
-        */
 
     }
 
