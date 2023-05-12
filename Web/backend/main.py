@@ -26,15 +26,14 @@ def multiple_regression():
     # read csv file
     dataset = pd.read_csv('Sales Data.csv')
 
-    dates = dataset["month"].values[591:843]
-    #print(dates)
-
     # dropping unwanted columns
     dataset = dataset.drop(['date', 'Invoice No.', 'vendor', 'destination', 'LKR per USD', 'Total Value LKR'], axis=1)
 
+    # seperating input variables and output variables
     X = dataset.iloc[:, :-1].values
     y = dataset.iloc[:, -1].values
 
+    # transforming string values to number values
     ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [3])], remainder='passthrough')
     X = np.array(ct.fit_transform(X))
 
@@ -46,18 +45,13 @@ def multiple_regression():
     X_test = X[591:843, :]
     y_test = y[591:843]
 
+    # training the model
     regressor = LinearRegression()
     regressor.fit(X_train, y_train)
 
     # predicting sales
     y_pred = regressor.predict(X_test)
     df = pd.DataFrame({'Real Values': y_test, 'Predicted Values': y_pred, 'Difference': (y_pred/y_test)*100})
-    #print(df)
-
-    # Counting number of predicted results where % difference >80 and <120
-    out = np.array([(np.divide(y_pred, y_test))*100])
-    result = np.where(np.logical_and(out >= 80, out <= 120))
-    #print("Values 80 <= result <= 120: ", len(result[1]))
 
     # reporting accuracy
     from sklearn.metrics import mean_absolute_error, mean_squared_error
@@ -88,10 +82,10 @@ def multiple_regression():
     # getting todays date
     dt = datetime.now()
 
-    future_data = X_test
+    future_data = []    #X_test
     month_array = []
 
-    for i in range(0, len(future_data)):
+    for i in range(0, 300):
 
         td = timedelta(days=i+1)
         my_date = dt + td
@@ -104,26 +98,31 @@ def multiple_regression():
         month = int(str(my_date)[5:7])
         day = int(str(my_date)[8:10])
 
+        selected_rows = X[(X[:, 2] == day) & (X[:, 3] == month)]
+        if selected_rows != []:
+            for j in selected_rows:
+                temp_future_data = []
+                for p in range(0, len(j)):
+                    temp_future_data.append(j[p])
+                    if p == 4:
+                        temp_future_data[4] = year
+                future_data.append(temp_future_data)
+        
         month_array.append(month)
 
         # replacing the date, month, year column with new date values
-        future_data[i][2] = day
-        future_data[i][3] = month
-        future_data[i][4] = year
+        #future_data[i][2] = day
+        #future_data[i][3] = month
+        #future_data[i][4] = year
 
     # predicting sales with new dates
     y_pred2 = regressor.predict(future_data)
 
-    #print(month_array)
-    #print(future_data)
-
     #################################################################
-
-    #result_values = [dates.tolist(), y_test.tolist(), y_pred2.tolist()]
 
     result_values = []
 
-    for i in range(0, len(y_test)):
+    for i in range(0, 300):
         temp_values = []
         temp_values.append(month_array[i])
         #temp_values.append(y_test[i])
@@ -247,6 +246,10 @@ def paymentRequisition(pdfname=None):
     q0: LocationFilter = LocationFilter(r5)
     q1: SimpleTextExtraction = SimpleTextExtraction()
     q0.add_listener(q1)
+
+    if "Cost Confirmation Document" not in file_name:
+        return "File format not supported"
+    
 
     with open(file_name, "rb") as pdf_in_handle:
         d = PDF.loads(pdf_in_handle, [l0])  # Invoice No.

@@ -234,26 +234,36 @@ const Upload = () => {
         cusInv = String(cusInv)
         payReq = String(payReq)
 
-        cusInv = cusInv.replace("&", "%26");
-        payReq = payReq.replace("&", "%26");
+        if(payReq == "File format not supported"){
+            let data = "False: File format not supported"
+            setTimeout(() => {
+                setValidationStatus(data)
+                console.log(data)
+              }, 5000);
+            
+        } else {
+            cusInv = cusInv.replace("&", "%26");
+            payReq = payReq.replace("&", "%26");
 
-        let response = await fetch('http://127.0.0.1:8000/validateData?cusInvStr=' + cusInv + '&payReqStr=' + payReq)
-        let data = await response.json()
+            let response = await fetch('http://127.0.0.1:8000/validateData?cusInvStr=' + cusInv + '&payReqStr=' + payReq)
+            let data = await response.json()
 
-        if (rateValue !== 0) {
-            const obj = JSON.parse(cusInv);
+            if (rateValue !== 0) {
+                const obj = JSON.parse(cusInv);
 
-            if (parseFloat(obj.total_value) === parseFloat(rateValue)) {
-                data = "True"
-            } else if (data === 'True' && parseFloat(obj.total_value) !== parseFloat(rateValue)) {
-                data = "Rate: False"
-            } else if (data !== 'True' && parseFloat(obj.total_value) !== parseFloat(rateValue)) {
-                data = data.concat(", Rate: False")
+                if (parseFloat(obj.total_value) === parseFloat(rateValue)) {
+                    data = "True"
+                } else if (data === 'True' && parseFloat(obj.total_value) !== parseFloat(rateValue)) {
+                    data = "Rate: False"
+                } else if (data !== 'True' && parseFloat(obj.total_value) !== parseFloat(rateValue)) {
+                    data = data.concat(", Rate: False")
+                }
             }
-        }
 
-        setValidationStatus(data)
-        console.log(data)
+            setValidationStatus(data)
+            console.log(data)
+        }
+        
     }
     console.log(validationStatus)
 

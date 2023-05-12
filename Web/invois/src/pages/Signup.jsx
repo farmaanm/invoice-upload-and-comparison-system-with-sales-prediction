@@ -15,6 +15,7 @@ import signupImage from '../images/signupImage.jpeg'
 import { addUser } from './utils/dbOperations/dbOperations'
 
 import splashLogo from '../images/splash_logo.png'
+import invoisLogo from '../images/invois_logo.png'
 
 const Signup = () => {
 
@@ -132,8 +133,8 @@ const Signup = () => {
                         <div style={{ position: 'absolute', top: '-15px', left: '25px' }}>
                             {/*<MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
                             <span className="h1 fw-bold mb-0">Invois</span>*/}
-                            <img src={splashLogo}
-                                alt="navbar-logo" height={150} />
+                            <img src={invoisLogo}
+                                alt="navbar-logo" height={135} />
                         </div>
 
                         <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4' style={{ margin: 'auto' }}>
