@@ -1,10 +1,6 @@
 import React from 'react'
-//import { MDBIcon } from 'mdb-react-ui-kit';
 import { signOut } from 'firebase/auth'
 import { auth } from '../../../firebase'
-
-//import logo from '../../../images/logo.png'
-import splashLogo from '../../../images/splash_logo.png'
 import invoisLogo from '../../../images/invois_logo.png'
 
 const NavigationBar = () => {
@@ -13,8 +9,6 @@ const NavigationBar = () => {
     //console.log(currentPath);
 
     const authToken = localStorage.getItem('authToken');
-
-    //style={{ textDecoration: 'underline' }}
 
     if (authToken.includes('@user')) {
 
@@ -28,8 +22,6 @@ const NavigationBar = () => {
                     }}>
 
                         <div style={{ position: 'absolute', top: '-5px', left: '25px' }}>
-                            {/*<MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                            <span className="h1 fw-bold mb-0">Invois</span>*/}
                             <img src={invoisLogo}
                                 alt="navbar-logo" height={120} />
                         </div>
@@ -75,8 +67,6 @@ const NavigationBar = () => {
                     }}>
 
                         <div style={{ position: 'absolute', top: '-5px', left: '25px' }}>
-                            {/*<MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                            <span className="h1 fw-bold mb-0">Invois</span>*/}
                             <img src={invoisLogo}
                                 alt="navbar-logo" height={120} />
                         </div>
@@ -122,8 +112,6 @@ const NavigationBar = () => {
                     }}>
 
                         <div style={{ position: 'absolute', top: '-5px', left: '25px' }}>
-                            {/*<MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                            <span className="h1 fw-bold mb-0">Invois</span>*/}
                             <img src={invoisLogo}
                                 alt="navbar-logo" height={120} />
                         </div>
@@ -191,8 +179,6 @@ const NavigationBar = () => {
                     }}>
 
                         <div style={{ position: 'absolute', top: '-5px', left: '25px' }}>
-                            {/*<MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                            <span className="h1 fw-bold mb-0">Invois</span>*/}
                             <img src={invoisLogo}
                                 alt="navbar-logo" height={120} />
                         </div>

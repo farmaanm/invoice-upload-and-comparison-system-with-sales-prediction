@@ -58,7 +58,7 @@ class SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(
         const Duration(seconds: 3), //3
-            () => Navigator.pushReplacement(
+        () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => const MyLoginPage(title: ''))));
@@ -75,7 +75,8 @@ class SplashScreenState extends State<SplashScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Image.asset(
-            'assets/images/splash_logo.png',
+            //'assets/images/splash_logo.png',
+            'assets/images/invois_logo.png',
             height: 200,
             scale: 1,
             // color: Color.fromARGB(255, 15, 147, 59),
@@ -85,4 +86,3 @@ class SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-

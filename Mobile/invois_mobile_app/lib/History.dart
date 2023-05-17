@@ -44,7 +44,6 @@ class MyApp extends StatelessWidget {
 }
 */
 
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -55,8 +54,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
-  final Stream<QuerySnapshot> _usersStream =
-  FirebaseFirestore.instance.collection('Contract').orderBy('timestamp', descending: true).snapshots();
+  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
+      .collection('Contract')
+      .orderBy('timestamp', descending: true)
+      .snapshots();
   String payReqName = '';
   String payReqUrl = '';
   String vendInvName = '';
@@ -65,7 +66,12 @@ class MyHomePageState extends State<MyHomePage> {
 
   String userEmail = '';
 
+  String defaultPayReq = "Cost Confirmation Document - SCMBXXXXXXX.pdf";
+  String defaultVendInv = "Customer Invoice No-CMBBXXXXXXXX.pdf";
+  String defaultPaymentDoneAt = "XX/XX/XXXX XX:XX:XX";
+
   TextStyle defaultStyle = const TextStyle(fontSize: 16.0, color: Colors.grey);
+  TextStyle disableStyle = const TextStyle(fontSize: 16.0, color: Color(0xa4d3d3d3));
   TextStyle linkStyle = const TextStyle(color: Color(0xFF0D47A1));
 
   @override
@@ -126,32 +132,39 @@ class MyHomePageState extends State<MyHomePage> {
                                 children: snapshot.data!.docs
                                     .map((DocumentSnapshot document) {
                                   Map<String, dynamic> data =
-                                  document.data()! as Map<String, dynamic>;
+                                      document.data()! as Map<String, dynamic>;
                                   return ListTile(
                                     title: Text(data['uploadedBy']),
-                                    subtitle: Text(data['dateTime']),
+                                    subtitle: Text(data['dateTime'] +
+                                        " | " +
+                                        data['status']),
                                     trailing: data['paymentStatus'] == 'Done'
                                         ? const Icon(
-                                      Icons.done,
-                                      color: Colors.green,
-                                    )
-                                        : const Icon(
-                                      Icons.access_time_filled,
-                                      color: Color(0xFFe09c1c),
-                                    ),
+                                            Icons.done,
+                                            color: Colors.green,
+                                          )
+                                        : data['status'] == 'Rejected'
+                                            ? const Icon(
+                                                Icons.close,
+                                                color: Colors.red,
+                                              )
+                                            : const Icon(
+                                                Icons.access_time_filled,
+                                                color: Color(0xFFe09c1c),
+                                              ),
                                     onTap: () {
                                       setState(() {
                                         if (data['paymentStatus'] == 'Done') {
                                           //if (payReqName == '') {
                                           payReqName =
-                                          data['paymentRequisitionName'];
+                                              data['paymentRequisitionName'];
                                           payReqUrl =
-                                          data['paymentRequisitionUrl'];
+                                              data['paymentRequisitionUrl'];
                                           vendInvName =
-                                          data['vendorInvoiceName'];
+                                              data['vendorInvoiceName'];
                                           vendInvUrl = data['vendorInvoiceUrl'];
                                           paymentDoneAt =
-                                          data['paymentDoneAt']!;
+                                              data['paymentDoneAt']!;
                                           /*} else {
                                         payReqName = '';
                                         payReqUrl = '';
@@ -162,11 +175,11 @@ class MyHomePageState extends State<MyHomePage> {
                                         } else {
                                           //if (payReqName == '') {
                                           payReqName =
-                                          data['paymentRequisitionName'];
+                                              data['paymentRequisitionName'];
                                           payReqUrl =
-                                          data['paymentRequisitionUrl'];
+                                              data['paymentRequisitionUrl'];
                                           vendInvName =
-                                          data['vendorInvoiceName'];
+                                              data['vendorInvoiceName'];
                                           vendInvUrl = data['vendorInvoiceUrl'];
                                           paymentDoneAt = '';
                                           /*} else {
@@ -187,7 +200,7 @@ class MyHomePageState extends State<MyHomePage> {
                             vertical: MediaQuery.of(context).size.height *
                                 0.002, //0.04
                             horizontal:
-                            MediaQuery.of(context).size.width * 0.04),
+                                MediaQuery.of(context).size.width * 0.04),
                         child: RichText(
                           text: TextSpan(
                             style: defaultStyle,
@@ -199,16 +212,21 @@ class MyHomePageState extends State<MyHomePage> {
                                     color: Color(0xFF4f4f4f),
                                     height: 2),
                               ),
-                              TextSpan(
-                                  text: payReqName,
-                                  style: linkStyle,
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () async {
-                                      //launchUrl(Uri.parse('https://www.google.com'));
-                                      await launch(payReqUrl,
-                                          forceSafariVC: false,
-                                          forceWebView: false);
-                                    }),
+                              payReqName == ""
+                                  ? TextSpan(
+                                      text: defaultPayReq,
+                                      style: disableStyle,
+                                    )
+                                  : TextSpan(
+                                      text: payReqName,
+                                      style: linkStyle,
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          //launchUrl(Uri.parse('https://www.google.com'));
+                                          await launch(payReqUrl,
+                                              forceSafariVC: false,
+                                              forceWebView: false);
+                                        }),
                               const TextSpan(
                                 text: '\nVend Inv: ',
                                 style: TextStyle(
@@ -216,16 +234,21 @@ class MyHomePageState extends State<MyHomePage> {
                                     color: Color(0xFF4f4f4f),
                                     height: 2),
                               ),
-                              TextSpan(
-                                  text: vendInvName,
-                                  style: linkStyle,
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () async {
-                                      //launchUrl(Uri.parse(vendInvUrl));
-                                      await launch(vendInvUrl,
-                                          forceSafariVC: false,
-                                          forceWebView: false);
-                                    }),
+                              vendInvName == ""
+                                  ? TextSpan(
+                                      text: defaultVendInv,
+                                      style: disableStyle,
+                                    )
+                                  : TextSpan(
+                                      text: vendInvName,
+                                      style: linkStyle,
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          //launchUrl(Uri.parse(vendInvUrl));
+                                          await launch(vendInvUrl,
+                                              forceSafariVC: false,
+                                              forceWebView: false);
+                                        }),
                               const TextSpan(
                                 text: '\nPayment Done At: ',
                                 style: TextStyle(
@@ -233,12 +256,17 @@ class MyHomePageState extends State<MyHomePage> {
                                     color: Color(0xFF4f4f4f),
                                     height: 2),
                               ),
-                              TextSpan(
-                                text: paymentDoneAt,
-                                style: const TextStyle(
-                                  color: Color(0xFF4f4f4f),
-                                ),
-                              ),
+                              paymentDoneAt == ""
+                                  ? TextSpan(
+                                      text: defaultPaymentDoneAt,
+                                      style: disableStyle,
+                                    )
+                                  : TextSpan(
+                                      text: paymentDoneAt,
+                                      style: const TextStyle(
+                                        color: Color(0xFF4f4f4f),
+                                      ),
+                                    ),
                             ],
                           ),
                         )),
@@ -263,88 +291,89 @@ class MyHomePageState extends State<MyHomePage> {
           ),
           drawer: Drawer(
               child: Container(
-                color: const Color(0xFFF5F5F5),
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    DrawerHeader(
-                      //padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 30.0),
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFf8f4f4),
-                          image: DecorationImage(
-                            fit: BoxFit.scaleDown,
-                            scale: 5,
-                            image: AssetImage(
-                              "assets/images/splash_logo.png",
-                            ),
-                          ),
+            color: const Color(0xFFF5F5F5),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                DrawerHeader(
+                    //padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 30.0),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFf8f4f4),
+                      image: DecorationImage(
+                        fit: BoxFit.scaleDown,
+                        scale: 2,
+                        image: AssetImage(
+                          "assets/images/invois_logo.png",
                         ),
-                        child: Container(
-                          alignment: Alignment.bottomCenter,
-                          child: Text(
-                            'Welcome\n$userEmail',
-                            style: const TextStyle(
-                              fontSize: 17,
-                              letterSpacing: 3,
-                              color: Color(0xFF4f4f4f),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        )),
-                    const SizedBox(
-                      height: 3,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(color: Color(0xFF381ce4)),
                       ),
                     ),
-                    ListTile(
-                      selected: true,
-                      leading: const Icon(Icons.history),
-                      title: const Text(
-                        ' History',
-                        style: TextStyle(fontSize: 16),
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Text(
+                        'Welcome\n$userEmail',
+                        style: const TextStyle(
+                          fontSize: 17,
+                          letterSpacing: 3,
+                          color: Color(0xFF4f4f4f),
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      selected: false,
-                      leading: const Icon(Icons.person_pin_outlined),
-                      title: const Text(
-                        ' Customer',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      onTap: () {
-                        Navigator.push(context,
-                          MaterialPageRoute(
-                              builder: (context) => const MyCustomerPage(
+                    )),
+                const SizedBox(
+                  height: 3,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(color: Color(0xFF381ce4)),
+                  ),
+                ),
+                ListTile(
+                  selected: true,
+                  leading: const Icon(Icons.history),
+                  title: const Text(
+                    ' History',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  selected: false,
+                  leading: const Icon(Icons.person_pin_outlined),
+                  title: const Text(
+                    ' Customer',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MyCustomerPage(
                                 title: 'Customer',
-                              )),);
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.logout),
-                      title: const Text(
-                        ' LogOut',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      onTap: () async {
-                        //Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MyLoginPage(
+                              )),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text(
+                    ' LogOut',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  onTap: () async {
+                    //Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MyLoginPage(
                                 title: '',
                               )),
-                        );
-                        await FirebaseAuth.instance.signOut();
-                      },
-                    ),
-                  ],
+                    );
+                    await FirebaseAuth.instance.signOut();
+                  },
                 ),
-              ))),
+              ],
+            ),
+          ))),
     );
   }
 }
-

@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { MDBIcon } from 'mdb-react-ui-kit';
-import { collection, doc, getDocs, addDoc, updateDoc, query, orderBy, where, arrayRemove, getDoc, deleteDoc } from 'firebase/firestore'
-import { db, auth } from '../../firebase'
-import { signOut } from 'firebase/auth';
-import LoadingScreen from '../../loading/LoadingScreen';
-
 import { getCustomerRecords, addUpdateCustomer, deleteCustomerArray, deleteCustomerRecord } from '../utils/dbOperations/dbOperations'
+import LoadingScreen from '../../loading/LoadingScreen';
 import NavigationBar from '../utils/navBar/navigationBar'
 
 const Contract = () => {
@@ -19,12 +14,14 @@ const Contract = () => {
     const [other, setOther] = useState(0);
 
     const [alertMsg, setAlertMsg] = useState('');
+    /* Alert message CSS style */
     const alertMsgStyle = {
         color: '#546ca2',
         textAlign: 'left',
         paddingLeft: '2%'
     }
 
+    /* On Change set value */
     const handleChangeFreight = event => {
         setFreight(event.target.value);
     };
@@ -51,10 +48,12 @@ const Contract = () => {
     const [containerSize, setContainerSize] = useState("");
     const [shippingLine, setShippingLine] = useState("");
 
+    /* Validating form to enable add button */
     function validateForm() {
         return customerName.length > 0 && validity.length > 0 && destination.length > 0 && containerSize.length > 0 && shippingLine.length > 0;
     }
 
+    /* Add customer function */
     async function addcustomer() {
         
         const totalValue = parseInt(freight) + parseInt(eff) + parseInt(other);
@@ -78,27 +77,8 @@ const Contract = () => {
 
     };
 
+    /* Delete customer sub record function */
     async function deleteRecord(event, id, index) {
-        //event.preventDefault()
-        //alert(id + ' ' + index)
-
-        /*const listingRef = doc(db, 'Customer', id);
-
-        const docData = await getDoc(listingRef);
-        //console.log(docData)
-
-        //console.log(docData.data().records[index])
-
-        const objectToBeRemoved = docData.data().records[index]
-
-        try {
-            await updateDoc(listingRef, {
-                records: arrayRemove(objectToBeRemoved)
-            });
-            setAlertMsg('Recorded deleted successfully!')
-        } catch (e) {
-            console.log(e.message);
-        }*/
 
         deleteCustomerArray(id, index)
             .then(message => {
@@ -107,12 +87,8 @@ const Contract = () => {
             .catch(error => console.log(error));
     }
 
+    /* Delete customer record function */
     async function deleteCustomer(event, id) {
-        //event.preventDefault()
-        //alert(id + ' ' )
-
-        /*await deleteDoc(doc(db, "Customer", id));
-        setAlertMsg('Customer deleted successfully!')*/
 
         deleteCustomerRecord(id)
             .then(message => {
@@ -121,6 +97,7 @@ const Contract = () => {
             .catch(error => console.log(error));
     }
 
+    /* Loading Screen */
     Contract.setLoadingFalse = () => {
         setLoading(false)
     };
@@ -128,6 +105,7 @@ const Contract = () => {
     /* OnLoad */
     useEffect(() => {
         
+        /* Retrieve Customer Records */
         getCustomerRecords()
             .then(data => {
                 setShowData(data)
@@ -143,32 +121,6 @@ const Contract = () => {
 
             {/* Navigation Bar */}
             <NavigationBar/>
-            {/*<div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4', zIndex: '1' }}>
-                <div style={{
-                    //position: 'relative',
-                    height: '100px',
-                    width: '100%'
-                }}>
-
-                    <div style={{ position: 'absolute', top: '30px', left: '60px' }}>
-                        <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                        <span className="h1 fw-bold mb-0">Invois</span>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '250px' }}>
-                        <a href='/approve'>Approve</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '150px' }}>
-                        <a href="/contract" style={{ textDecoration: 'underline' }}>Contract</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/" onClick={() => { signOut(auth); localStorage.removeItem('authToken'); }}>Log out</a>
-                    </div>
-                </div>
-                <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-            </div>*/}
 
             {loading === false ? (
 
@@ -357,7 +309,6 @@ const Contract = () => {
                                     rate.push(post.records[i].rate)
                                     shippingLine.push(post.records[i].shippingLine)
                                 }
-
 
                                 return (
                                     <div className="accordion-item" key={id}>

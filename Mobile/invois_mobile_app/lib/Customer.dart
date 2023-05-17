@@ -99,7 +99,7 @@ class MyCustomerPageState extends State<MyCustomerPage> {
                 //height: 1500,
                 margin: EdgeInsets.symmetric(
                     vertical: MediaQuery.of(context).size.height * 0.04, //0.04
-                    horizontal: MediaQuery.of(context).size.width * 0.06),
+                    horizontal: MediaQuery.of(context).size.width * 0.04),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,11 +128,6 @@ class MyCustomerPageState extends State<MyCustomerPage> {
                                 .map((DocumentSnapshot document) {
                               Map<String, dynamic> data =
                                   document.data()! as Map<String, dynamic>;
-                              List<String> items = [
-                                'Item 1',
-                                'Item 2',
-                                'Item 3'
-                              ];
 
                               return ExpansionTile(
                                 title: Text(data['customerName']),
@@ -194,9 +189,9 @@ class MyCustomerPageState extends State<MyCustomerPage> {
                       color: Color(0xFFf8f4f4),
                       image: DecorationImage(
                         fit: BoxFit.scaleDown,
-                        scale: 5,
+                        scale: 2,
                         image: AssetImage(
-                          "assets/images/splash_logo.png",
+                          "assets/images/invois_logo.png",
                         ),
                       ),
                     ),

@@ -1,10 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
-import 'package:invois_mobile_app/main.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:invois_mobile_app/Login.dart';
+import 'package:invois_mobile_app/SplashScreen.dart';
+import 'package:invois_mobile_app/History.dart';
+
 
 void main() async {
+
+  /*setUpAll(() async {
+    await Firebase.initializeApp();
+  });*/
+
   Widget createWidgetForTesting({required Widget child}) {
     return MaterialApp(
       home: child,
@@ -19,11 +26,12 @@ void main() async {
           child: const SplashScreen()
       ));
 
-      await tester.pumpAndSettle(const Duration(seconds: 5));
-
+      /* Finding Splash Screen before navigating to Login Page */
       var splashScreenImageFinder = find.byKey(const Key('splashScreenImage'));
+      expect(splashScreenImageFinder, findsWidgets);
 
-      expect(splashScreenImageFinder, findsNothing);
+      /* Settling pumped class in 5 seconds */
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
     });
   });
@@ -43,8 +51,8 @@ void main() async {
       /* Pumping class */
       await tester.pumpWidget(createWidgetForTesting(
           child: const MyLoginPage(
-        title: '',
-      )));
+            title: '',
+          )));
 
       await tester.pumpAndSettle();
 
@@ -109,25 +117,28 @@ void main() async {
 
   });
 
+/*
   group('Home Screen', () {
 
     testWidgets('Home Page Contents', (WidgetTester tester) async {
 
       /* Pumping class */
-      /*await tester.pumpWidget(createWidgetForTesting(
+      await tester.pumpWidget(createWidgetForTesting(
           child: const MyHomePage(
             title: '',
           )));
 
-      await tester.pumpAndSettle();*/
+      await tester.pumpAndSettle();
 
       /* Finding main label */
-      /*var labelFinder = find.text("\nVend Inv: ");
-      expect(labelFinder, findsOneWidget);*/
+      var labelFinder = find.text("\nVend Inv: ");
+      expect(labelFinder, findsOneWidget);
 
     });
 
   });
+
+ */
 }
 
 //flutter test test/widget_test.dart

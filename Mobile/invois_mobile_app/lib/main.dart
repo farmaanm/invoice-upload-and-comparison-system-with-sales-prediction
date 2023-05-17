@@ -15,8 +15,6 @@ import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'History.dart';
 
-
-
 FirebaseAuth auth = FirebaseAuth.instance;
 
 /*Future<void> main() async {
@@ -51,5 +49,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

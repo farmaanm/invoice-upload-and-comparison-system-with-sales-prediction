@@ -26,14 +26,15 @@ import { async } from '@firebase/util';
 import { collection, getDocs, query, where, doc, getDoc, updateDoc, orderBy } from 'firebase/firestore'
 import { db } from './firebase'
 
-import { addUpdateCustomer } from './pages/utils/dbOperations/dbOperations'
+import { addUpdateCustomer, getHistoryRecords } from './pages/utils/dbOperations/dbOperations'
 
 
 /**
  * @jest-environment node
  */
 
-//afterAll(() => setTimeout(() => process.exit(1), 1000))
+afterAll(() => setTimeout(() => process.exit(1), 1000))
+
 
 describe('Firebase Util Test Suite', () => {
     beforeAll(async () => {
@@ -102,9 +103,8 @@ describe('Firebase Util Test Suite', () => {
             // ...
         });
     });
-    
-});
 
+});
 
 describe("Login and Signup", () => {
 
@@ -599,7 +599,7 @@ describe("This suite is to test the Finance", () => {
         beforeEach(() => {
             jest.useFakeTimers();
         });
-    
+
         afterEach(() => {
             jest.useRealTimers();
         });
@@ -615,7 +615,7 @@ describe("This suite is to test the Finance", () => {
             });
 
             expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
-           
+
             await expect(screen.getAllByText("Vendor Invoice"));
             await expect(screen.getAllByText("Payment Requisition"));
             await expect(screen.getAllByText("Uploaded At"));
@@ -638,11 +638,53 @@ describe("This suite is to test the Finance", () => {
 
 
 
+
+
+
+
+
+
+
 /*
-describe("firestore customer add", () => {
+beforeEach(() => {
+    localStorage.setItem('authToken', 'farmaan@user.com');
+});
+
+afterEach(() => {
+    localStorage.removeItem('authToken');
+});
+
+test("renders data from Firestore", async () => {
+    render(<History />);
+    const listItems = await screen.findAllByRole("row");
+    expect(listItems).toHaveLength(2); // Assumes there are two items in the "myCollection" collection
+});
+*/
+
+
+
+
+/*
+// Mock Firestore data
+jest.mock('firebase', () => {
+    const firebase = jest.requireActual('firebase');
+    const firestore = jest.fn(() => ({
+        collection: jest.fn(() => ({
+            doc: jest.fn(() => ({
+                get: jest.fn(() => Promise.resolve({ data: () => ({ uploadedBy: 'Fazil' }) })),
+            })),
+        })),
+    }));
+    return {
+        ...firebase,
+        firestore,
+    };
+});
+
+describe("firestore retrieve data", () => {
 
     beforeEach(() => {
-        localStorage.setItem('authToken', 'farmaan@management.com');
+        localStorage.setItem('authToken', 'farmaan@user.com');
         jest.useFakeTimers();
     });
 
@@ -651,14 +693,67 @@ describe("firestore customer add", () => {
         jest.useRealTimers();
     });
 
+    test('firestore retrieve history', async () => {
+
+        const getHistoryRecords = jest.fn();
+        //const spy = jest.spyOn(Contract.prototype, 'addcustomer');
+
+        const { getByText } = render(<History />);
+
+        expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+        act(() => {
+            History.setLoadingFalse();
+        });
+
+        expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
+
+        // const mockDb = {
+        //     collection: jest.fn(() => ({
+        //         getDocs: jest.fn(() => ({
+        //             docs: [{ data: () => ({ id: 'AwxQyaaiLp32Y9pWPvbX', dateTime: "24/04/2023 23:20:00" }) }],
+        //         })),
+        //     })),
+        // };
+
+        // jest.mock('firebase/firestore', () => ({
+        //     getFirestore: jest.fn(() => mockDb),
+        //     collection: jest.fn(() => mockDb.collection()),
+        //     getDocs: jest.fn(() => mockDb.collection().getDocs()),
+        // }));
+
+        // Wait for data to load
+        await waitFor(() => expect(getByText('Fazil')).toBeInTheDocument());
+
+        // Check that data is rendered
+        expect(getByText('Fazil')).toBeInTheDocument();
+
+    });
+
+});
+*/
+
+/*
+describe("firestore customer add", () => {
+
+    beforeEach(() => {
+        localStorage.setItem('authToken', 'farmaan@management.com');
+        //jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        localStorage.removeItem('authToken');
+        //jest.useRealTimers();
+    });
 
     function hasInputValue(inputElement, expectedValue) {
         return inputElement.value === expectedValue;
     }
 
+    const addUpdateCustomer = jest.fn();
+
     test('firestore customer add', async () => {
 
-        const addCustomer = jest.fn();
         //const spy = jest.spyOn(Contract.prototype, 'addcustomer');
 
         render(<Contract />);
@@ -706,7 +801,7 @@ describe("firestore customer add", () => {
         //console.log("addRecordButton is enabled:", addRecordButton.disabled === false);
         fireEvent.click(addRecordButton)
         //console.log("clicked ADD RECORD button");
-        
+
         //await Contract.addCustomer();
 
         //expect(spy).toHaveBeenCalledWith();
@@ -715,15 +810,27 @@ describe("firestore customer add", () => {
         const totalValue = freightRateBox + effRateBox + otherRateBox;
         const record = [{ containerSize: 'containerBox', destination: 'destinationBox', rate: 'totalValue', shippingLine: 'shippingLineBox' }];
 
-        awaitaddUpdateCustomer('customerName', 'validity', record)
-            .then(message => {
-                console.log(message)
+        // await addUpdateCustomer('customerName', 'validity', record)
+        //     .then(message => {
+        //         console.log(message)
+        //     })
+        //     .catch(error => console.log(error));
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await waitFor(() =>
+            expect(addUpdateCustomer).toHaveBeenCalledWith({
+                customerName: 'Customer #test',
+                validity: '2023-02-17',
+                records: record
             })
-            .catch(error => console.log(error));
+        )
 
     });
 });
 */
+
+
+
 /*describe("Test firestore", () => {
     beforeAll(async () => {
         jest.setTimeout(10000);

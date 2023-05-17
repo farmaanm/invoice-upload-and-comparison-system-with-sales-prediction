@@ -1,27 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { MDBIcon } from 'mdb-react-ui-kit';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore'
-import { db, auth } from '../../firebase'
 import LoadingScreen from '../../loading/LoadingScreen';
-import { signOut } from 'firebase/auth';
-
 import { getCustomerRecords } from '../utils/dbOperations/dbOperations'
 import NavigationBar from '../utils/navBar/navigationBar'
 
-function HeadContract() {
+const HeadContract = () => {
 
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
 
     const [showData, setShowData] = useState([]);
-    
+
+    /* Loading Screen */
     HeadContract.setLoadingFalse = () => {
         setLoading(false)
     };
 
     /* OnLoad */
     useEffect(() => {
-        
+
+        /* Retrieve Customer Records */
         getCustomerRecords()
             .then(data => {
                 setShowData(data)
@@ -35,37 +32,7 @@ function HeadContract() {
         <>
 
             {/* Navigation Bar */}
-            <NavigationBar/>
-            {/*<div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4' }}>
-                <div style={{
-                    //position: 'relative',
-                    height: '100px',
-                    width: '100%'
-                }}>
-
-                    <div style={{ position: 'absolute', top: '30px', left: '60px' }}>
-                        <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                        <span className="h1 fw-bold mb-0">Invois</span>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '320px' }}>
-                        <a href='/sales' >Sales</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '240px' }}>
-                        <a href='/hhistory'>History</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '140px' }}>
-                        <a href="/hcontract" style={{ textDecoration: 'underline' }}>Customers</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/" onClick={() => { signOut(auth); localStorage.removeItem('authToken'); }}>Log out</a>
-                    </div>
-                </div>
-                <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-            </div>*/}
+            <NavigationBar />
 
             {loading === false ? (
 
@@ -91,7 +58,6 @@ function HeadContract() {
                                     rate.push(post.records[i].rate)
                                     shippingLine.push(post.records[i].shippingLine)
                                 }
-
 
                                 return (
                                     <div className="accordion-item" key={id}>

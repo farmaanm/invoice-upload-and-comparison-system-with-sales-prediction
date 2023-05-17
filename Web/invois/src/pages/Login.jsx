@@ -2,25 +2,21 @@ import React, { useState } from 'react';
 import {
     MDBContainer,
     MDBRow,
-    MDBCol,
-    MDBIcon
+    MDBCol
 } from 'mdb-react-ui-kit';
 import { auth } from '../firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
 import loginImage from '../images/loginImage.jpg'
-import splashLogo from '../images/splash_logo.png'
 import invoisLogo from '../images/invois_logo.png'
-
-//import { default as UserNav } from './Nav'
 
 const Login = () => {
 
     let user = auth.currentUser
     if (user) {
         let useremail = user.email
-        console.log('email: ' + useremail)
+        //console.log('email: ' + useremail)
         //username = useremail.split('@')[0]
     }
 
@@ -30,11 +26,12 @@ const Login = () => {
 
     const navigate = useNavigate()
 
+    {/* Enable button if fields not empty */ }
     function validateForm() {
         return userEmail.length > 0 && userPassword.length > 0;
     }
 
-    /* Style for Email and Password Error messages */
+    /* CSS Style for Email and Password Error messages */
     const emailerror = {
         color: 'red',
         textAlign: 'left',
@@ -47,27 +44,20 @@ const Login = () => {
     const [emailErrorMsg, setEmailErrorMsg] = useState('');
     const [passwordErrorMsg, setPasswordErrorMsg] = useState('');
 
+    {/* Login Function */ }
     const login = e => {
         e.preventDefault()
         signInWithEmailAndPassword(auth, userEmail, userPassword)
             .then(() => {
                 localStorage.setItem('authToken', userEmail);
                 if (userEmail.includes('@user')) {
-                    //userType('user')
                     navigate('/upload')
-                    //UserNav('user')
                 } else if (userEmail.includes('@management')) {
-                    //userType('management')
                     navigate('/approve')
-                    //UserNav('management')
                 } else if (userEmail.includes('@head')) {
-                    //userType('head')
                     navigate('/sales')
-                    //UserNav('head')
                 } else if (userEmail.includes('@finance')) {
-                    //userType('finance')
                     navigate('/payment')
-                    //UserNav('finance')
                 } else {
                     navigate('/')
                 }
@@ -88,8 +78,6 @@ const Login = () => {
 
     }
 
-
-
     return (
         <>
             <div>
@@ -100,8 +88,6 @@ const Login = () => {
                         <MDBCol sm='6'>
 
                             <div style={{ position: 'absolute', left: '25px' }}>
-                                {/*<MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                            <span className="h1 fw-bold mb-0">Invois</span>*/}
                                 <img src={invoisLogo}
                                     alt="navbar-logo" height={135} />
                             </div>
@@ -129,7 +115,6 @@ const Login = () => {
                                         <p style={emailerror} id="email-error">{emailErrorMsg}</p>
                                     </div>
 
-
                                     {/*<!-- Password input -->*/}
                                     <div className="form-outline mb-4">
                                         <input
@@ -145,7 +130,6 @@ const Login = () => {
                                         <label className="form-label" htmlFor="userPassword" >Password</label>
                                         <p style={passworderror} id="password-error">{passwordErrorMsg}</p>
                                     </div>
-
 
                                     {/*<!-- Submit button -->*/}
                                     <button type="submit" className="btn btn-primary btn-block mb-4 btn-lg" style={{ backgroundColor: '#381ce4' }} disabled={!validateForm()}>Login</button>

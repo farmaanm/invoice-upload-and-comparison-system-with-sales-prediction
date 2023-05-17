@@ -1,10 +1,6 @@
-import { MDBBadge, MDBIcon } from 'mdb-react-ui-kit';
+import { MDBBadge } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from 'react'
-import { collection, getDocs, doc, getDoc, updateDoc, query, orderBy } from 'firebase/firestore'
-import { db, auth } from '../../firebase'
-import { signOut } from 'firebase/auth';
 import LoadingScreen from '../../loading/LoadingScreen';
-
 import { getHistoryRecords, updateContractStatus, deleteInvoiceRecord } from '../utils/dbOperations/dbOperations'
 import NavigationBar from '../utils/navBar/navigationBar'
 
@@ -15,13 +11,15 @@ function Approve() {
 
     const [showData, setShowData] = useState([]);
 
+    /* Loading Screen */
     Approve.setLoadingFalse = () => {
         setLoading(false)
     };
 
     /* On Load */
     useEffect(() => {
-        
+
+        /* Retrieve History Records */
         getHistoryRecords()
             .then(data => {
                 setShowData(data);
@@ -32,13 +30,11 @@ function Approve() {
 
     /* Updating Status Approved / Rejected */
     const updateStatus = (id, fileStatus) => async () => {
-        
         updateContractStatus(id, fileStatus)
-
     }
 
+    /* Delete Invoice Record */
     async function deleteRecord(event, id) {
-        
         deleteInvoiceRecord(id)
             .then(message => {
                 //setAlertMsg(message)
@@ -51,33 +47,7 @@ function Approve() {
         <>
 
             {/* Navigation Bar */}
-            <NavigationBar/>
-            {/*<div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4' }}>
-                <div style={{
-                    //position: 'relative',
-                    height: '100px',
-                    width: '100%'
-                }}>
-
-                    <div style={{ position: 'absolute', top: '30px', left: '60px' }}>
-                        <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                        <span className="h1 fw-bold mb-0">Invois</span>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '250px' }}>
-                        <a href='/approve' style={{ textDecoration: 'underline' }}>Approve</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '150px' }}>
-                        <a href="/contract">Contract</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/" onClick={() => { signOut(auth); localStorage.removeItem('authToken'); }}>Log out</a>
-                    </div>
-                </div>
-                <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-            </div>*/}
+            <NavigationBar />
 
             {loading === false ? (
                 <div style={{ marginTop: '130px' }}>

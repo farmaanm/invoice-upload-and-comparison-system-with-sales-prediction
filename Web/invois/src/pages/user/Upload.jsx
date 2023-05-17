@@ -8,17 +8,17 @@ import {
     MDBModalBody,
     MDBModalFooter,
 } from 'mdb-react-ui-kit';
+import { db, storage, auth } from '../../firebase'
+import { collection, addDoc, doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore'
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 import LoadingScreen from '../../loading/LoadingScreen';
 
 import successGif from '../../images/successGif.gif';
 import unsuccessGif from '../../images/unsuccessGif.gif';
 import processingGif from '../../images/processingGif.gif';
 
-import { db, storage, auth } from '../../firebase'
-import { collection, addDoc, doc, getDoc, getDocs, updateDoc, query, orderBy, serverTimestamp } from 'firebase/firestore'
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-
-import { getCustomerRecords } from '../utils/dbOperations/dbOperations'
+import { getCustomerRecords, getDateTime } from '../utils/dbOperations/dbOperations'
 import NavigationBar from '../utils/navBar/navigationBar'
 
 const Upload = () => {
@@ -26,33 +26,21 @@ const Upload = () => {
     /* Loading Screen */
     const [loading, setLoading] = useState(true)
 
+    /* Extracted Data */
     let [payReq, setPayReq] = useState([])
     let [cusInv, setCusInv] = useState([])
     let [validationStatus, setValidationStatus] = useState([])
 
-    //const getDataRefCustomer = collection(db, "Customer");
+    /* Customer Records */
     const [showData, setShowData] = useState([]);
 
     const [mismatchedData, setMismatchedData] = useState('Global variable');
-
-    //var mismatchedData = 'Global variable'
 
     Upload.setLoadingFalse = () => {
         setLoading(false)
     };
 
     useEffect(() => {
-        /* Timeout for Loading Screen */
-        //setTimeout(() => setLoading(false), 4000) //4s
-
-        /*const q = query(getDataRefCustomer, orderBy("customerName"));
-
-        const getData = async () => {
-            const data = await getDocs(q);
-            setShowData(data.docs.map((docFiles) => ({ id: docFiles.id, post: docFiles.data() })));
-        };
-
-        getData();*/
 
         getCustomerRecords()
             .then(data => {
@@ -77,12 +65,12 @@ const Upload = () => {
     let user = auth.currentUser
     if (user) {
         let useremail = user.email
-        console.log(useremail)
+        //console.log(useremail)
         username = useremail.split('@')[0]
         username = username.charAt(0).toUpperCase() + username.slice(1);
     }
 
-    /*File Upload Style*/
+    /*File Upload CSS Style*/
     const fileUpload = {
         border: '1px solid #381ce4',
         color: '#4f4f4f',
@@ -93,7 +81,7 @@ const Upload = () => {
         fontFamily: 'Roboto'
     }
 
-    /*Rate Style*/
+    /*Rate CSS Style*/
     const rateStyle = {
         border: '1px solid #381ce4',
         color: '#4f4f4f',
@@ -104,7 +92,7 @@ const Upload = () => {
         fontFamily: 'Roboto'
     }
 
-    /*Contract, Validation Button Enable, Disable*/
+    /* Contract, Validation Button Enable, Disable */
     const [disabledContract, setDisabledContract] = useState(true)
 
     function fileValidateContract() {
@@ -160,7 +148,6 @@ const Upload = () => {
     const toggleShowSuccess = () => setCentredModalSuccess(!centredModalSuccess);
     const toggleShowUnuccess = () => setCentredModalUnuccess(!centredModalUnuccess);
     const toggleShowProccessing = () => setCentredModalProccessing(!centredModalProccessing);
-
 
 
     /* Extracting Payment Requisition Data */
@@ -234,13 +221,13 @@ const Upload = () => {
         cusInv = String(cusInv)
         payReq = String(payReq)
 
-        if(payReq == "File format not supported"){
-            let data = "False: File format not supported"
+        if (payReq === "File format not supported") {
+            let data = "False: Please upload correct Payment Requisition"
             setTimeout(() => {
                 setValidationStatus(data)
                 console.log(data)
-              }, 5000);
-            
+            }, 5000);
+
         } else {
             cusInv = cusInv.replace("&", "%26");
             payReq = payReq.replace("&", "%26");
@@ -263,7 +250,7 @@ const Upload = () => {
             setValidationStatus(data)
             console.log(data)
         }
-        
+
     }
     console.log(validationStatus)
 
@@ -276,43 +263,11 @@ const Upload = () => {
         }, delayInMilliseconds);
     }
 
-    /* Get Current Date and Time */
-    function getDateTime() {
-        var now = new Date();
-        var year = now.getFullYear();
-        var month = now.getMonth() + 1;
-        var day = now.getDate();
-        var hour = now.getHours();
-        var minute = now.getMinutes();
-        var second = now.getSeconds();
-
-        if (month.toString().length === 1) {
-            month = '0' + month;
-        }
-        if (day.toString().length === 1) {
-            day = '0' + day;
-        }
-        if (hour.toString().length === 1) {
-            hour = '0' + hour;
-        }
-        if (minute.toString().length === 1) {
-            minute = '0' + minute;
-        }
-        if (second.toString().length === 1) {
-            second = '0' + second;
-        }
-
-        var dateTime = day + '/' + month + '/' + year + ' ' + hour + ':' + minute + ':' + second;
-
-        return dateTime;
-    }
 
     const getDataRefContract = collection(db, "Contract");
 
     let payReqUrl = ""
     let cusInvUrl = ""
-
-    //var mismatchedData = 'Global variable'
 
     /* Displaying Validtion Message and Send to DB */
     async function displayMessage(validation) {
@@ -405,7 +360,7 @@ const Upload = () => {
                 console.error("Error adding document: ", e);
             }
 
-            //if database success: 
+            /* If database success */
             toggleShowProccessing();
             toggleShowSuccess();
             document.getElementById('customerInvoiceSpot').value = "";
@@ -424,8 +379,6 @@ const Upload = () => {
         /* If Validation == False */
         else if (validation.includes("False")) {
 
-            //mismatchedData = 'This is the mismatched data'
-
             toggleShowProccessing();
             toggleShowUnuccess();
             document.getElementById('customerInvoiceSpot').value = "";
@@ -439,7 +392,7 @@ const Upload = () => {
         }
     }
 
-    /* Extracting Spot Invoice Data Function Call */
+    /* Call Functions for Contract / Spot Invoice Data Extraction */
     async function validateSpot(e) {
         e.preventDefault();
 
@@ -450,15 +403,6 @@ const Upload = () => {
     }
 
     async function manualRecordAdd(e) {
-        //e.preventDefault()
-        //setCentredModalProccessing(true)
-        /*setTimeout(async () => {
-            //setCentredModalProccessing(false)
-            
-            //toggleShowProccessing()
-        }, 4000)*/
-
-        //await displayMessage("True");
 
         try {
             const storageRefPayReq = ref(storage, `/Payment Requisitions/${filePaymentRequisition.name}`)
@@ -555,37 +499,11 @@ const Upload = () => {
 
             {/* Navigation Bar */}
             <NavigationBar />
-            {/*<div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: '#F4F4F4' }}>
-                <div style={{
-                    //position: 'relative',
-                    height: '100px',
-                    width: '100%'
-                }}>
-
-                    <div style={{ position: 'absolute', top: '30px', left: '60px' }}>
-                        <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#381ce4' }} />
-                        <span className="h1 fw-bold mb-0">Invois</span>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '240px' }}>
-                        <a href='/upload' style={{ textDecoration: 'underline' }}>Upload File</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '150px' }}>
-                        <a href="/history">History</a>
-                    </div>
-
-                    <div style={{ position: 'absolute', bottom: '45px', right: '60px' }}>
-                        <a href="/" onClick={() => {signOut(auth); localStorage.removeItem('authToken');}}>Log out</a>
-                    </div>
-                </div>
-                <hr style={{ height: '5px', backgroundColor: '#381ce4' }}></hr>
-            </div>*/}
 
             {loading === false ? (
                 <div style={{ marginTop: '130px' }}>
 
-                    {/* Add Customer Toggle Button */}
+                    {/* Add Manually Toggle Button */}
                     <div style={{ padding: '1% 2% 2% 2%' }}>
                         <div align="right" width="100%">
                             <button
@@ -657,134 +575,6 @@ const Upload = () => {
 
                     {/* File Upload */}
                     <div style={{ padding: '1% 5% 5% 5%' }}>
-                        { /*
-                        <>
-                        <div style={{ padding: '10px' }}>
-
-                            <table width={'70%'} align='center'>
-                                <tbody>
-                                    <tr style={{ height: '50px' }}>
-                                        <td colSpan={2} align='left' style={{ paddingLeft: '100px' }}>Select Contract Type:</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <button
-                                                onClick={contractData}
-                                                style={contract}
-                                                id='contractBtn'>
-                                                Contract</button>
-                                        </td>
-                                        <td>
-                                            <button
-                                                onClick={spotData}
-                                                style={spot}
-                                                id='spotBtn'>
-                                                Spot</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                        </div> 
-
-                        <p><br /></p>
-
-                        <div style={{ padding: '10px' }} id="contractDataDisplay">
-                            <table width={'100%'}>
-                                <tbody>
-                                    <tr style={{ height: '50px' }}>
-                                        <td width={'33%'} >
-                                            <label htmlFor='customerInvoiceContract'>Upload Customer Invoice:</label>
-                                        </td>
-                                        <td width={'33%'}>
-                                            <label htmlFor='paymentRequisitionContract'>Upload Payment Requisition:</label>
-                                        </td>
-                                        <td width={'33%'}>
-                                            Select Rate:
-                                        </td>
-                                    </tr>
-                                    <tr><td></td><td></td></tr>
-                                    <tr>
-                                        <td>
-                                            <input type='file'
-                                                name='customerInvoiceContract'
-                                                width='50px'
-                                                accept='application/pdf'
-                                                style={fileUpload}
-                                                id='customerInvoiceContract'
-                                                onChange={fileValidateContract} />
-                                        </td>
-                                        <td>
-                                            <input type='file'
-                                                name='paymentRequisitionContract'
-                                                width='50px'
-                                                accept='application/pdf'
-                                                style={fileUpload}
-                                                id='paymentRequisitionContract'
-                                                onChange={fileValidateContract} />
-                                        </td>
-                                        <td>
-                                            <select style={fileUpload} id='rateContract' onChange={fileValidateContract} >
-                                                <option value={0}>Rate</option>
-                                                <option value={1}>Rate 1</option>
-                                                <option value={2}>Rate 2</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <p><br /></p>
-
-                            <div>
-                                <MDBBtn disabled={disabledContract} onClick={validateContract}>VALIDATE</MDBBtn>
-                            </div>
-                        </div>
-
-
-                        <div style={{ padding: '10px' }} id="spotDataDisplay">
-                            <table width={'100%'}>
-                                <tbody>
-                                    <tr>
-                                        <td width={'33%'} >
-                                            <label htmlFor='customerInvoiceSpot'>Upload Customer Invoice:</label>
-                                        </td>
-                                        <td width={'33%'}>
-                                            <label htmlFor='paymentRequisitionSpot'>Upload Payment Requisition:</label>
-                                        </td>
-                                    </tr>
-                                    <tr><td></td><td></td></tr>
-                                    <tr>
-                                        <td>
-                                            <input type='file'
-                                                name='customerInvoiceSpot'
-                                                width='50px'
-                                                accept='application/pdf'
-                                                id="customerInvoiceSpot"
-                                                style={fileUpload}
-                                                onChange={fileValidateSpot} />
-                                        </td>
-                                        <td>
-                                            <input type='file'
-                                                name='paymentRequisitionSpot'
-                                                width='50px'
-                                                accept='application/pdf'
-                                                id="paymentRequisitionSpot"
-                                                style={fileUpload}
-                                                onChange={fileValidateSpot} />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <p><br /></p>
-
-                            <div>
-                                <MDBBtn disabled={disabledSpot} type='submit' onClick={validateSpot}>VALIDATE</MDBBtn>
-                            </div>
-                        </div>
-                        </>
-                        */ }
 
                         {/* Success Modal */}
                         <MDBModal tabIndex='-1' show={centredModalSuccess} setShow={setCentredModalSuccess}>
@@ -866,6 +656,7 @@ const Upload = () => {
 
 
                         <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                            {/* Contract Button */}
                             <li className="nav-item" role="presentation">
                                 <a className="nav-link active"
                                     id="ex3-tab-1"
@@ -876,6 +667,7 @@ const Upload = () => {
                                     aria-selected="true"
                                 >Contract</a>
                             </li>
+                            {/* Spot Button */}
                             <li className="nav-item" role="presentation">
                                 <a className="nav-link"
                                     id="ex3-tab-2"
@@ -975,6 +767,7 @@ const Upload = () => {
 
                                     <p><br /></p>
 
+                                    {/* Validate Button */}
                                     <div>
                                         <button className="btn btn-primary" style={{ backgroundColor: '#381ce4' }} disabled={disabledContract} onClick={validateSpot}>VALIDATE</button>
                                     </div>
@@ -1032,6 +825,7 @@ const Upload = () => {
 
                                     <p><br /></p>
 
+                                    {/* Validate Button */}
                                     <div>
                                         {/* Submit Button */}
                                         {/*<MDBBtn disabled={disabledSpot} type='button' onClick={validateSpot}>VALIDATE</MDBBtn>*/}

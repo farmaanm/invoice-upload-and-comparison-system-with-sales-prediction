@@ -1,5 +1,6 @@
 import 'dart:async';
 /* Android 5 to Android 11 */
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -126,7 +127,7 @@ class MyLoginPageState extends State<MyLoginPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Image.asset(
-                        'assets/images/splash_logo.png',
+                        'assets/images/invois_logo.png',
                         height: 150,
                         scale: 1,
                       ),
@@ -158,11 +159,11 @@ class MyLoginPageState extends State<MyLoginPage> {
                           enabledBorder: OutlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
                             borderSide:
-                            BorderSide(color: Colors.grey, width: 0.0),
+                                BorderSide(color: Colors.grey, width: 0.0),
                           ),
                           border: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(6.0)),
+                                BorderRadius.all(Radius.circular(6.0)),
                           ),
                         ),
                       ),
@@ -192,11 +193,11 @@ class MyLoginPageState extends State<MyLoginPage> {
                           enabledBorder: OutlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
                             borderSide:
-                            BorderSide(color: Colors.grey, width: 0.0),
+                                BorderSide(color: Colors.grey, width: 0.0),
                           ),
                           border: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(6.0)),
+                                BorderRadius.all(Radius.circular(6.0)),
                           ),
                         ),
                       ),
@@ -216,19 +217,29 @@ class MyLoginPageState extends State<MyLoginPage> {
                         child: ElevatedButton(
                           key: const Key('loginButton'),
                           onPressed: () async {
+                            /*final connectivityResult = await (Connectivity().checkConnectivity());
+                            if (connectivityResult == ConnectivityResult.none) {
+                              Fluttertoast.showToast(
+                                msg: "Please have an active Internet connection.",
+                                toastLength: Toast.LENGTH_SHORT,
+                                textColor: Colors.black,
+                                fontSize: 14,
+                                backgroundColor: Colors.grey[200],
+                              );
+                            }*/
                             //setState(() async {
                             try {
                               final credential = await FirebaseAuth.instance
                                   .signInWithEmailAndPassword(
-                                  email: emailController.text,
-                                  password: passwordController.text);
+                                      email: emailController.text,
+                                      password: passwordController.text);
                               if (!context.mounted) return;
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => const MyHomePage(
-                                      title: 'History',
-                                    )),
+                                          title: 'History',
+                                        )),
                               );
                             } on FirebaseAuthException catch (e) {
                               /*if (e.code == 'user-not-found') {
@@ -281,7 +292,7 @@ class MyLoginPageState extends State<MyLoginPage> {
                   ),
                 ))
           ]
-            /*margin: EdgeInsets.symmetric(
+              /*margin: EdgeInsets.symmetric(
                 //vertical: MediaQuery.of(context).size.height * 0.25,
                 horizontal: MediaQuery.of(context).size.width * 0.04),
             child: Column(
@@ -398,7 +409,7 @@ class MyLoginPageState extends State<MyLoginPage> {
                 )
               ],
             ),*/
-          ),
+              ),
         ),
       ),
     );
